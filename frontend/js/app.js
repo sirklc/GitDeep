@@ -1,14 +1,14 @@
 import { analyzeRepository, getHistory, login, register, logout } from './api.js';
 import { elements, addLog, resetUI, displayResults, displayError, restoreUIState, renderHistory } from './ui.js';
 
-async function handleAnalyze(url) {
+async function handleAnalyze(url, language) {
     if (!url) return;
 
     resetUI();
-    addLog(`Initiating analysis for: ${url}`);
+    addLog(`Initiating analysis for: ${url} (Language: ${language})`);
 
     try {
-        const data = await analyzeRepository(url, (msg) => {
+        const data = await analyzeRepository(url, language, (msg) => {
             addLog(`Status Update: ${msg}`);
         });
 
@@ -30,7 +30,8 @@ async function handleAnalyze(url) {
 elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const url = elements.urlInput.value.trim();
-    handleAnalyze(url);
+    const language = document.getElementById('report-language').value;
+    handleAnalyze(url, language);
 });
 
 async function loadHistory() {
@@ -64,7 +65,8 @@ async function loadHistory() {
             elements.urlInput.value = repoUrl;
             if (!elements.submitBtn.disabled) {
                 // Simulate form submission visually
-                handleAnalyze(repoUrl);
+                const language = document.getElementById('report-language') ? document.getElementById('report-language').value : 'English';
+                handleAnalyze(repoUrl, language);
             }
         });
 

@@ -22,7 +22,7 @@ class AnalysisOrchestrator:
         self.git_analyzer = GitAnalyzer()
         self.plagiarism_engine = PlagiarismEngine(self.git_analyzer.tmp_dir)
 
-    def analyze_repository(self, url: str, owner: str, repo: str, db):
+    def analyze_repository(self, url: str, owner: str, repo: str, db, user_id: int = None, language: str = "English"):
         # In Phase 1, we just do a dry-run check to see if we can fetch it
         repo_data = self.github_service.get_repo_info(owner, repo)
         commits_data = self.github_service.get_recent_commits(owner, repo, limit=200)
@@ -65,10 +65,11 @@ class AnalysisOrchestrator:
             "code_quality": code_quality_res
         }
         
-        pdf_path = self.report_generator.generate_report(f"{owner}/{repo}", details, reasoning_res, nlp_res, decay_res)
+        pdf_path = self.report_generator.generate_report(f"{owner}/{repo}", details, reasoning_res, nlp_res, decay_res, language=language)
         filename = os.path.basename(pdf_path)
-        # Point to the backend server's reports directory
-        pdf_url = f"http://localhost:8000/reports/{filename}"
+        # Read BASE_URL from environment so it works in Docker / production
+        base_url = os.getenv("BASE_URL", "http://localhost:8000")
+        pdf_url = f"{base_url}/reports/{filename}"
         
         # Save to SQLite Database
         db_record = RepoAnalysisRecord(
@@ -77,7 +78,8 @@ class AnalysisOrchestrator:
             health_score=reasoning_res.get("health_score", 0),
             summary_text=reasoning_res.get("summary", ""),
             metrics_json=json.dumps(details),
-            pdf_url=pdf_url
+            pdf_url=pdf_url,
+            user_id=user_id
         )
         db.add(db_record)
         db.commit()

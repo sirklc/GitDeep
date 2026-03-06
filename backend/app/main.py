@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,14 +11,31 @@ from app.db.database import engine, Base
 # Create tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title=settings.PROJECT_NAME)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan: initialise Redis-backed rate limiter on startup."""
+    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    try:
+        import redis.asyncio as aioredis
+        from fastapi_limiter import FastAPILimiter
+        redis_conn = await aioredis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis_conn)
+        print("✅ FastAPILimiter initialised with Redis.")
+    except Exception as e:
+        print(f"⚠️  FastAPILimiter could not connect to Redis ({e}). Rate limiting disabled.")
+
+    yield  # application runs here
+
+    # Teardown (optional cleanup)
+
+app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
 
 os.makedirs("reports", exist_ok=True)
 app.mount("/reports", StaticFiles(directory="reports"), name="reports")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,10 +43,6 @@ app.add_middleware(
 
 app.include_router(api_router, prefix="/api")
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-
-@app.on_event("startup")
-async def startup():
-    print("Starting up GitDeep backend...")
 
 @app.get("/")
 def read_root():

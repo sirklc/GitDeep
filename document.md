@@ -9,8 +9,8 @@ structured reports rather than continuous dashboards.
 * **Phase 2 – Core Metrics Engine** (Completed): Compute stagnation, bus factor, contributor churn, activity decay, and file-level bug-prone hotspots.
 * **Phase 3 – NLP & AI Analysis** (Completed): Semantic analysis of commit messages using Gemini API to detect technical debt and intent collapse. Incorporates a Plagiarism Engine to detect replicated code patterns.
 * **Phase 4 – Failure Reasoning Engine** (Completed): Combine metrics and AI outputs to generate natural-language 'Why it died?' explanations.
-* **Phase 5 – Report Generation:** Produce PDF/Markdown reports in multiple languages with scores, graphs, and comparisons.
-* **Phase 6 – SaaS Layer:** Repo submission, async job handling, status tracking, and report delivery.
+* **Phase 5 – Report Generation (Completed):** Produce PDF/Markdown reports in multiple languages with scores, graphs, and comparisons.
+* **Phase 6 – SaaS Layer (Completed):** Repo submission, async job handling, status tracking, and report delivery.
 3. Core Analysis Algorithm
 1 Input repository URL.
 2 Fetch repository metadata and historical data snapshot.

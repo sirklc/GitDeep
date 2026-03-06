@@ -88,24 +88,24 @@ class MetricsEngine:
             "activity_trend": trend_data
         }
 
-    def calculate_code_quality(self, files: List[Dict[str, Any]]) -> dict:
+    def calculate_code_quality(self, hotspots: List[Dict[str, Any]]) -> dict:
         """
-        Stub: Simulates external code quality tool (e.g. SonarQube) metrics.
-        In a real application, this would make an API call to a SonarQube instance.
+        Calculates heuristic Code Quality metrics based on file hotspots and change frequencies.
+        Replaces previous random stub.
         """
-        if not files:
+        if not hotspots:
             return {"sqale_rating": "A", "reliability_rating": "A", "bugs": 0, "vulnerabilities": 0, "code_smells": 0}
             
-        import random
-        # Produce a pseudo-random but deterministic quality score based on file count
-        file_count = len(files)
+        total_changes = sum(h.get('changes', 0) for h in hotspots)
+        avg_commits_per_hotspot = sum(h.get('commit_count', 0) for h in hotspots) / len(hotspots)
         
-        bugs = min(file_count * 2, random.randint(0, file_count * 5))
-        vulnerabilities = min(file_count, random.randint(0, file_count * 2))
-        code_smells = file_count * random.randint(5, 15)
+        # Heuristics for bugs and vulnerabilities based on churn rate
+        bugs = int(total_changes * 0.02) # 2% of major changes introduce minor bugs
+        vulnerabilities = int(avg_commits_per_hotspot * 0.1) # 10% of high commit frequency might have security oversights
+        code_smells = int(total_changes * 0.15) # 15% of changes result in tech debt / smells
         
         # Determine ratings (A: Best, E: Worst)
-        sqale_rating = "A" if code_smells < 100 else ("B" if code_smells < 500 else "C")
+        sqale_rating = "A" if code_smells < 50 else ("B" if code_smells < 200 else "C")
         reliability_rating = "A" if bugs == 0 else ("B" if bugs < 10 else "C")
         
         return {

@@ -1,14 +1,30 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional
+from typing import Optional, List
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "GitDeep Archaeology API"
     GITHUB_PAT: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
-    SECRET_KEY: str = "super_secret_temporary_key_for_jwt_tokens"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
 
-    model_config = SettingsConfigDict(env_file=".env")
+    # JWT - must be set in .env, never hardcoded in production
+    SECRET_KEY: str = "change-me-in-production"
+    REFRESH_SECRET_KEY: str = "change-me-refresh-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 day
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30          # 30 days
+
+    # CORS - comma-separated list of allowed origins in .env
+    ALLOWED_ORIGINS: str = "http://localhost:8080,http://localhost:3000"
+
+    # Base URL used for building PDF download links
+    BASE_URL: str = "http://localhost:8000"
+
+    # Database
+    DATABASE_URL: Optional[str] = None
+
+    def get_allowed_origins(self) -> List[str]:
+        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()

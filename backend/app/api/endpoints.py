@@ -20,9 +20,6 @@ def analyze_repository(
     current_user: User = Depends(get_current_user)
 ):
     url = submission.url
-    # Extract owner and repo from URL
-    # e.g., https://github.com/betaforevers/GitDeep -> betaforevers/GitDeep
-    
     parts = url.strip("/").split("/")
     if len(parts) < 2 or "github.com" not in url:
         raise HTTPException(status_code=400, detail="Invalid GitHub URL")
@@ -40,24 +37,29 @@ def analyze_repository(
     ).order_by(RepoAnalysisRecord.created_at.desc()).first()
 
     if recent_record:
-        # Return the cached analysis
-        details = json.loads(recent_record.metrics_json)
-        return {"status": "success", "message": "Loaded from cache", "task_id": "cached", "result": RepoAnalysisStatus(
+        # Parse chart_data from stored metrics_json instead of returning empty dicts
+        stored = json.loads(recent_record.metrics_json) if recent_record.metrics_json else {}
+        chart_data = {
+            "activity_trend": stored.get("activity_trend", {}),
+            "intent_breakdown": stored.get("intent_breakdown", {}),
+        }
+        return RepoAnalysisStatus(
             status="success",
             message=recent_record.summary_text,
-            details=details,
-            chart_data={
-                "activity_trend": {}, 
-                "intent_breakdown": {}
-            },
+            details=stored,
+            chart_data=chart_data,
             pdf_url=recent_record.pdf_url,
-            health_score=recent_record.health_score
-        )}
+            health_score=recent_record.health_score,
+        )
     
     try:
         from app.celery_worker import analyze_repo_task
-        task = analyze_repo_task.delay(url, owner, repo, current_user.id)
-        return {"status": "processing", "message": "Analysis started in background", "task_id": task.id, "result": None}
+        task = analyze_repo_task.delay(url, owner, repo, current_user.id, submission.language)
+        return RepoAnalysisStatus(
+            status="processing",
+            message="Analysis started in background",
+            details={"task_id": task.id},
+        )
     except RateLimitExceededException:
         raise HTTPException(status_code=429, detail="GitHub API Rate Limit exceeded! Unauthenticated requests are limited to 60 per hour.")
     except Exception as e:
@@ -78,6 +80,25 @@ def get_analysis_status(task_id: str):
         return {"status": "failed", "message": str(task_result.info.get('exc_message', 'Unknown error')), "result": None}
     else:
         return {"status": task_result.state.lower(), "message": "Unknown state", "result": None}
+
+@router.get("/history")
+def get_public_history(db: Session = Depends(get_db)):
+    """Public endpoint: returns the last 20 analyses across all users for the history carousel."""
+    records = db.query(RepoAnalysisRecord).order_by(
+        RepoAnalysisRecord.created_at.desc()
+    ).limit(20).all()
+    history = []
+    for r in records:
+        history.append({
+            "id": r.id,
+            "repo_name": r.repo_name,
+            "status": r.health_status,
+            "score": r.health_score,
+            "summary": r.summary_text,
+            "analyzed_at": r.created_at.isoformat(),
+            "pdf_url": r.pdf_url
+        })
+    return {"history": history}
 
 @router.get("/me/history")
 def get_user_analysis_history(

@@ -1,13 +1,20 @@
 version: '3.8'
 
+x-common-env: &common-env
+  REDIS_URL: redis://redis:6379/0
+  DATABASE_URL: postgresql://gitdeep:gitdeep_password@db/gitdeep
+  BASE_URL: http://localhost:8080
+
 services:
   redis:
-    image: redis:7
+    image: redis:7-alpine
+    restart: unless-stopped
     ports:
       - "6379:6379"
 
   db:
-    image: postgres:15
+    image: postgres:15-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_USER: gitdeep
       POSTGRES_PASSWORD: gitdeep_password
@@ -16,45 +23,60 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U gitdeep" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: unless-stopped
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
     env_file:
       - ./backend/.env
     environment:
-      - REDIS_URL=redis://redis:6379/0
-      - DATABASE_URL=postgresql://gitdeep:gitdeep_password@db/gitdeep
+      <<: *common-env
     volumes:
-      - ./backend/reports:/app/reports
+      - reports_data:/app/reports
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   celery_worker:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    command: celery -A app.celery_worker.celery_app worker --loglevel=info
+    restart: unless-stopped
+    command: >
+      sh -c "celery -A app.celery_worker.celery_app worker --loglevel=info"
     env_file:
       - ./backend/.env
     environment:
-      - REDIS_URL=redis://redis:6379/0
-      - DATABASE_URL=postgresql://gitdeep:gitdeep_password@db/gitdeep
+      <<: *common-env
     volumes:
-      - ./backend/reports:/app/reports
+      - reports_data:/app/reports
     depends_on:
-      - redis
-      - db
-      - backend
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      backend:
+        condition: service_started
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "8080:80"
     depends_on:
@@ -62,3 +84,4 @@ services:
 
 volumes:
   postgres_data:
+  reports_data:

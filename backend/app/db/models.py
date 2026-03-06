@@ -8,7 +8,9 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=True)  # optional for existing users
     hashed_password = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     analyses = relationship("RepoAnalysisRecord", back_populates="owner")
@@ -21,9 +23,10 @@ class RepoAnalysisRecord(Base):
     health_status = Column(String)  # HEALTHY, AT RISK, DEAD
     health_score = Column(Integer)
     summary_text = Column(String)
-    metrics_json = Column(Text) # Store all raw json data securely as string
-    pdf_url = Column(String, nullable=True) # URL to the generated PDF report
+    metrics_json = Column(Text)    # all raw JSON data as string
+    pdf_url = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    # nullable=False: every analysis must belong to a registered user
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     owner = relationship("User", back_populates="analyses")
