@@ -138,3 +138,88 @@ For production deployment behind Cloudflare:
 ---
 
 *Built with ❤️ by [betaforevers](https://betaforevers.com)*
+
+---
+
+<details>
+<summary>🇹🇷 Türkçe Dokümantasyon</summary>
+
+# GitDeep 🔍
+
+**GitDeep**, yapay zeka destekli gelişmiş bir **Yazılım Arkeolojisi & Depo Analiz Platformu**dur. Halka açık GitHub projelerini derinlemesine inceleyerek proje sağlığını, katkıcı riskini ve geliştirme niyetini analiz eder.
+
+---
+
+## Özellikler ✨
+
+- **Aktivite & Çöküş Takibi** — Commit durağanlığını ve geliştirici düşüşünü matematiksel olarak hesaplar
+- **Bus Factor Analizi** — Projenin tek bir katkıcıya aşırı bağımlılığını tespit eder
+- **Semantik Niyet (NLP)** — Google Gemini kullanarak commit'leri kategorize eder (özellikler vs. teknik borç)
+- **İntihal Tespiti** — Kopyalanmış veya fazla mükerrer kod kalıplarını tarar
+- **PDF Rapor Üretimi** — Gömülü grafikler içeren profesyonel akademik raporlar
+- **Analiz Geçmişi** — Giriş yapmış kullanıcılar geçmiş analizlerini görüntüleyebilir
+- **Etkileşimli SPA** — Glassmorphism UI ve Chart.js görselleştirme
+- **Asenkron Arka Plan İşleri** — Celery + Redis ile yönetilen uzun süreli analizler
+
+## Güvenlik 🔒
+
+- **XSS Koruması** — Tüm DOM işlemleri `textContent` / `createElement` ile yapılır
+- **SQL Injection** — SQLAlchemy ORM sayesinde tam koruma
+- **Rate Limiting** — `/login` (10/dk) ve `/register` (5/dk) sınırı
+- **CAPTCHA** — Tüm kimlik doğrulama formlarında Cloudflare Turnstile
+- **Nginx Güvenlik Başlıkları** — `X-Frame-Options`, `X-Content-Type-Options` vb.
+- **JWT Kimlik Doğrulama** — Access + Refresh token akışı
+
+## Kurulum 🚀
+
+### Gereksinimler
+- Docker & Docker Compose
+- GitHub Personal Access Token
+- Google Gemini API Anahtarı
+- Cloudflare Turnstile Site Key & Secret Key
+
+### 1. Depoyu Klonla
+
+```bash
+git clone https://github.com/betaforevers/GitDeep.git
+cd GitDeep
+```
+
+### 2. `.env` Dosyasını Oluştur
+
+`backend/.env` dosyası oluştur (bu dosyayı commit etme!):
+
+```bash
+GITHUB_PAT=github_tokenin
+GEMINI_API_KEY=gemini_api_anhtarin
+
+BASE_URL=https://gitdeep.sirklc.com
+ALLOWED_ORIGINS=https://gitdeep.sirklc.com
+
+CLOUDFLARE_TURNSTILE_SITE_KEY=site_keyin
+CLOUDFLARE_TURNSTILE_SECRET=secret_keyin
+
+# Güçlü rastgele değer oluştur: python3 -c "import secrets; print(secrets.token_hex(32))"
+SECRET_KEY=guclu_rastgele_deger
+REFRESH_SECRET_KEY=baska_guclu_rastgele_deger
+```
+
+### 3. Docker ile Başlat
+
+```bash
+docker compose up -d --build
+```
+
+- **Frontend** → `http://localhost:8080`
+- **Backend API** → `http://localhost:8000`
+
+## Dağıtım 🌍
+
+Cloudflare arkasında production dağıtımı için:
+
+1. DNS kaydında subdomain → sunucu IP → **Proxied (turuncu bulut)** seç (DDoS koruması)
+2. Cloudflare SSL → **Full (Strict)** seç
+3. `.env` dosyasındaki `BASE_URL` ve `ALLOWED_ORIGINS` değerlerini production domain ile güncelle
+4. Sunucuda `docker compose up -d --build` çalıştır
+
+</details>
