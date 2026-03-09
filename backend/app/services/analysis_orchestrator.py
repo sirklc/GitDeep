@@ -22,7 +22,7 @@ class AnalysisOrchestrator:
         self.git_analyzer = GitAnalyzer()
         self.plagiarism_engine = PlagiarismEngine(self.git_analyzer.tmp_dir)
 
-    def analyze_repository(self, url: str, owner: str, repo: str, db, user_id: int = None, language: str = "English"):
+    def analyze_repository(self, url: str, owner: str, repo: str, db, user_id: int = None):
         # In Phase 1, we just do a dry-run check to see if we can fetch it
         repo_data = self.github_service.get_repo_info(owner, repo)
         commits_data = self.github_service.get_recent_commits(owner, repo, limit=200)
@@ -65,7 +65,7 @@ class AnalysisOrchestrator:
             "code_quality": code_quality_res
         }
         
-        pdf_path = self.report_generator.generate_report(f"{owner}/{repo}", details, reasoning_res, nlp_res, decay_res, language=language)
+        pdf_path = self.report_generator.generate_report(f"{owner}/{repo}", details, reasoning_res, nlp_res, decay_res)
         filename = os.path.basename(pdf_path)
         # Read BASE_URL from environment so it works in Docker / production
         base_url = os.getenv("BASE_URL", "http://localhost:8000")

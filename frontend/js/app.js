@@ -1,14 +1,14 @@
-import { analyzeRepository, getHistory, login, register, logout } from './api.js';
-import { elements, addLog, resetUI, displayResults, displayError, restoreUIState, renderHistory } from './ui.js';
+import { analyzeRepository, getHistory, login, register, logout } from './api.js?v=4';
+import { elements, addLog, resetUI, displayResults, displayError, restoreUIState, renderHistory } from './ui.js?v=4';
 
-async function handleAnalyze(url, language) {
+async function handleAnalyze(url) {
     if (!url) return;
 
     resetUI();
-    addLog(`Initiating analysis for: ${url} (Language: ${language})`);
+    addLog(`Initiating analysis for: ${url}`);
 
     try {
-        const data = await analyzeRepository(url, language, (msg) => {
+        const data = await analyzeRepository(url, (msg) => {
             addLog(`Status Update: ${msg}`);
         });
 
@@ -30,8 +30,7 @@ async function handleAnalyze(url, language) {
 elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const url = elements.urlInput.value.trim();
-    const language = document.getElementById('report-language').value;
-    handleAnalyze(url, language);
+    handleAnalyze(url);
 });
 
 async function loadHistory() {
@@ -65,8 +64,7 @@ async function loadHistory() {
             elements.urlInput.value = repoUrl;
             if (!elements.submitBtn.disabled) {
                 // Simulate form submission visually
-                const language = document.getElementById('report-language') ? document.getElementById('report-language').value : 'English';
-                handleAnalyze(repoUrl, language);
+                handleAnalyze(repoUrl);
             }
         });
 
@@ -165,7 +163,23 @@ function setupAuth() {
     updateAuthUI();
 }
 
+async function initTurnstile() {
+    try {
+        const res = await fetch('/api/config');
+        if (!res.ok) return;
+        const config = await res.json();
+        if (config.turnstile_site_key) {
+            document.querySelectorAll('.cf-turnstile').forEach(el => {
+                el.setAttribute('data-sitekey', config.turnstile_site_key);
+            });
+        }
+    } catch (e) {
+        console.warn('Could not load Turnstile config:', e);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupAuth();
     loadHistory();
+    initTurnstile();
 });

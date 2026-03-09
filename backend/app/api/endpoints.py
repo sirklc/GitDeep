@@ -7,11 +7,20 @@ from app.services.analysis_orchestrator import AnalysisOrchestrator
 from app.db.database import get_db
 from app.db.models import RepoAnalysisRecord, User
 from app.core.security import get_current_user
+from app.core.config import settings
 from github import RateLimitExceededException
 from fastapi_limiter.depends import RateLimiter
 
 router = APIRouter()
 orchestrator = AnalysisOrchestrator()
+
+@router.get("/config")
+def get_public_config():
+    """Returns public configuration values for the frontend (e.g. Turnstile site key)."""
+    return {
+        "turnstile_site_key": settings.CLOUDFLARE_TURNSTILE_SITE_KEY,
+    }
+
 
 @router.post("/analyze", response_model=RepoAnalysisStatus)
 def analyze_repository(
@@ -54,7 +63,7 @@ def analyze_repository(
     
     try:
         from app.celery_worker import analyze_repo_task
-        task = analyze_repo_task.delay(url, owner, repo, current_user.id, submission.language)
+        task = analyze_repo_task.delay(url, owner, repo, current_user.id)
         return RepoAnalysisStatus(
             status="processing",
             message="Analysis started in background",

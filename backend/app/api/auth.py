@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.db.database import get_db
@@ -9,11 +9,35 @@ from app.core.security import (
     create_access_token, create_refresh_token, verify_refresh_token,
     get_current_user
 )
+from app.core.config import settings
+import httpx
+
+from fastapi_limiter.depends import RateLimiter
+from pyrate_limiter import Rate, Limiter, Duration
 
 router = APIRouter()
 
-@router.post("/register", response_model=UserResponse)
-def register(user_in: UserCreate, db: Session = Depends(get_db)):
+# ── Cloudflare Turnstile Verification ─────────────────────────────────────────
+async def verify_turnstile(token: str | None):
+    """Call Cloudflare's siteverify API to validate the Turnstile token."""
+    if not token:
+        raise HTTPException(status_code=403, detail="CAPTCHA token is missing.")
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
+            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+            data={
+                "secret": settings.CLOUDFLARE_TURNSTILE_SECRET,
+                "response": token,
+            },
+        )
+    result = resp.json()
+    if not result.get("success"):
+        raise HTTPException(status_code=403, detail="CAPTCHA verification failed. Please try again.")
+
+@router.post("/register", response_model=UserResponse, dependencies=[Depends(RateLimiter(Limiter(Rate(5, Duration.MINUTE))))])
+async def register(user_in: UserCreate, db: Session = Depends(get_db)):
+    await verify_turnstile(user_in.cf_turnstile_response)
+
     user = db.query(User).filter(User.username == user_in.username).first()
     if user:
         raise HTTPException(
@@ -36,10 +60,15 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     db.refresh(user)
     return user
 
-@router.post("/login", response_model=Token)
-def login_access_token(
-    db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()
+@router.post("/login", response_model=Token, dependencies=[Depends(RateLimiter(Limiter(Rate(10, Duration.MINUTE))))])
+async def login_access_token(
+    request: Request, db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ):
+    # Turnstile token is passed as a custom form field alongside credentials
+    body = await request.form()
+    cf_token = body.get("cf_turnstile_response")
+    await verify_turnstile(cf_token)
+
     user = db.query(User).filter(User.username == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(

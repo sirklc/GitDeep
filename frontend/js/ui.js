@@ -1,4 +1,4 @@
-import { drawCharts } from './charts.js';
+import { drawCharts } from './charts.js?v=2';
 
 export const elements = {
     form: document.getElementById('analyze-form'),
@@ -162,7 +162,18 @@ function renderList(elementId, items, formatStrFn) {
         if (shortName.length > 40) {
             shortName = "..." + shortName.substring(shortName.length - 37);
         }
-        li.innerHTML = `<span style="color: #fff;" title="${item.filename}">${shortName}</span> <span style="opacity: 0.7;">${formatStrFn(item)}</span>`;
+        const nameSpan = document.createElement('span');
+        nameSpan.style.color = '#fff';
+        nameSpan.title = item.filename;
+        nameSpan.textContent = shortName;
+
+        const infoSpan = document.createElement('span');
+        infoSpan.style.opacity = '0.7';
+        infoSpan.textContent = ' ' + formatStrFn(item);
+
+        li.appendChild(nameSpan);
+        li.appendChild(infoSpan);
+
         ul.appendChild(li);
     });
 }
@@ -204,30 +215,73 @@ export function renderHistory(historyData, onHistoryItemClick) {
 
         const card = document.createElement('div');
         card.className = 'history-card';
-        card.innerHTML = `
-            <div>
-                <div class="history-card-header">
-                    <span class="history-repo-name">${item.repo_name}</span>
-                    <span class="badge" style="background: ${statusColor}22; color: ${statusColor}; border: 1px solid ${statusColor}44;">
-                        ${item.score}/100
-                    </span>
-                </div>
-                <div class="history-summary">${item.summary}</div>
-            </div>
-            <div class="history-card-footer">
-                <span class="history-date">${date}</span>
-                <div style="display: flex; gap: 10px;">
-                    ${item.pdf_url ? `<a href="${item.pdf_url}" target="_blank" class="history-download-btn" aria-label="Download PDF" style="color: #6b4cff; display: flex; align-items: center; gap: 4px; text-decoration: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+
+        // Header container
+        const headerDiv = document.createElement('div');
+        const headerInner = document.createElement('div');
+        headerInner.className = 'history-card-header';
+
+        const repoNameSpan = document.createElement('span');
+        repoNameSpan.className = 'history-repo-name';
+        repoNameSpan.textContent = item.repo_name;
+
+        const badgeSpan = document.createElement('span');
+        badgeSpan.className = 'badge';
+        badgeSpan.style.cssText = `background: ${statusColor}22; color: ${statusColor}; border: 1px solid ${statusColor}44;`;
+        badgeSpan.textContent = `${item.score}/100`;
+
+        headerInner.appendChild(repoNameSpan);
+        headerInner.appendChild(badgeSpan);
+
+        // Summary
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'history-summary';
+        summaryDiv.textContent = item.summary;
+
+        headerDiv.appendChild(headerInner);
+        headerDiv.appendChild(summaryDiv);
+
+        // Footer container
+        const footerDiv = document.createElement('div');
+        footerDiv.className = 'history-card-footer';
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'history-date';
+        dateSpan.textContent = date;
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.style.cssText = 'display: flex; gap: 10px;';
+
+        if (item.pdf_url) {
+            const pdfLink = document.createElement('a');
+            pdfLink.href = item.pdf_url;
+            pdfLink.target = '_blank';
+            pdfLink.className = 'history-download-btn';
+            pdfLink.setAttribute('aria-label', 'Download PDF');
+            pdfLink.style.cssText = 'color: #6b4cff; display: flex; align-items: center; gap: 4px; text-decoration: none;';
+            pdfLink.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg> PDF
-                    </a>` : ''}
-                    <a href="#" class="history-view-btn" data-repo="https://github.com/${item.repo_name}" style="color: var(--accent); text-decoration: none; display: flex; align-items: center;">View &rarr;</a>
-                </div>
-            </div>
-        `;
+                        </svg> PDF`;
+            actionsDiv.appendChild(pdfLink);
+        }
+
+        const viewLink = document.createElement('a');
+        viewLink.href = '#';
+        viewLink.className = 'history-view-btn';
+        viewLink.setAttribute('data-repo', `https://github.com/${item.repo_name}`);
+        viewLink.style.cssText = 'color: var(--accent); text-decoration: none; display: flex; align-items: center;';
+        viewLink.textContent = 'View →'; // Replaced &rarr; with actual character
+
+        actionsDiv.appendChild(viewLink);
+
+        footerDiv.appendChild(dateSpan);
+        footerDiv.appendChild(actionsDiv);
+
+        card.appendChild(headerDiv);
+        card.appendChild(footerDiv);
+
         elements.historyTrack.appendChild(card);
     });
 

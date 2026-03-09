@@ -65,7 +65,7 @@ class PDFReportGenerator:
         plt.savefig(save_path, format='png', dpi=150)
         plt.close()
         
-    def generate_report(self, repo_name: str, metrics: dict, reasoning: dict, nlp_data: dict, decay_data: dict, language: str = "English") -> str:
+    def generate_report(self, repo_name: str, metrics: dict, reasoning: dict, nlp_data: dict, decay_data: dict) -> str:
         pdf = GitDeepPDF()
         pdf.add_page()
         
@@ -104,7 +104,6 @@ class PDFReportGenerator:
             
         pdf.set_text_color(100, 100, 100)
         pdf.cell(0, 8, f"Generated At: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", ln=True, align='L')
-        pdf.cell(0, 8, f"Report Language: {language}", ln=True, align='L')
         pdf.set_text_color(0, 0, 0)
         pdf.ln(5)
         

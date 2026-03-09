@@ -88,7 +88,7 @@ class PlagiarismEngine:
 
         return round(avg_duplication, 1), high_duplication_pairs
 
-    def check_external_originality(self, repo_data: dict, clone_path: str, top_files: list, language: str = "English") -> dict:
+    def check_external_originality(self, repo_data: dict, clone_path: str, top_files: list) -> dict:
         """
         Uses Gemini to analyze the repository context and top active files to determine if it's
         highly original, a tutorial clone, or just boilerplate.
@@ -123,7 +123,7 @@ class PlagiarismEngine:
         Code Samples from Core Files:
         {file_samples}
         
-        Please provide your assessment strictly in {language}.
+        Please provide your assessment strictly in English.
         
         Return ONLY a JSON object with the following keys:
         - "score": An integer from 0 to 100 (100 = Highly original architecture/logic, 0 = 100% boilerplate/tutorial copy).

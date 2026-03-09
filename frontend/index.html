@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body>
@@ -30,9 +31,9 @@
                         style="position: absolute; right: 0; top: 0; display: flex; gap: 10px; align-items: center;">
                         <span id="user-greeting" style="display: none; font-size: 0.9rem; color: var(--accent);"></span>
                         <button id="login-modal-btn" class="action-link-btn"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem; background: transparent; border: 1px solid var(--accent); color: var(--text-main);">Login</button>
+                            style="display: none; padding: 0.4rem 0.8rem; font-size: 0.85rem; background: transparent; border: 1px solid var(--accent); color: var(--text-main);">Login</button>
                         <button id="register-modal-btn" class="action-link-btn"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem; background: var(--accent); border: none; color: white;">Register</button>
+                            style="display: none; padding: 0.4rem 0.8rem; font-size: 0.85rem; background: var(--accent); border: none; color: white;">Register</button>
                         <button id="logout-btn" class="action-link-btn"
                             style="display: none; padding: 0.4rem 0.8rem; font-size: 0.85rem; background: transparent; border: 1px solid var(--danger); color: var(--danger);">Logout</button>
                     </div>
@@ -51,13 +52,6 @@
                         </svg>
                         <input type="url" id="repo-url" placeholder="https://github.com/owner/repository" required
                             autocomplete="off">
-                        <select id="report-language"
-                            style="background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 0.95rem; outline: none; cursor: pointer;">
-                            <option value="English" style="color: black;">English</option>
-                            <option value="Turkish" style="color: black;">Türkçe</option>
-                            <option value="Spanish" style="color: black;">Español</option>
-                            <option value="German" style="color: black;">Deutsch</option>
-                        </select>
                         <button type="submit" id="submit-btn">Analyze Repo</button>
                     </div>
                 </form>
@@ -345,6 +339,9 @@
                     </div>
                     <div id="login-error"
                         style="color: var(--danger); font-size: 0.85rem; text-align: center; min-height: 20px;"></div>
+                    <!-- Cloudflare Turnstile -->
+                    <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"
+                        style="margin: 0.5rem 0;"></div>
                     <button type="submit" style="width: 100%; margin-top: 0.5rem; padding: 1rem;">Login</button>
                 </form>
 
@@ -380,6 +377,9 @@
                     </div>
                     <div id="register-error"
                         style="color: var(--danger); font-size: 0.85rem; text-align: center; min-height: 20px;"></div>
+                    <!-- Cloudflare Turnstile -->
+                    <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"
+                        style="margin: 0.5rem 0;"></div>
                     <button type="submit" style="width: 100%; margin-top: 0.5rem; padding: 1rem;">Register</button>
                 </form>
 
@@ -393,7 +393,7 @@
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script type="module" src="js/app.js"></script>
+        <script type="module" src="js/app.js?v=5"></script>
         <!-- NOTE: script.js is legacy and NOT loaded. js/app.js is the active entry point. -->
 </body>
 

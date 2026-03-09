@@ -3,7 +3,7 @@ import google.generativeai as genai
 from app.core.config import settings
 
 class ReasoningEngine:
-    def synthesize_report(self, repo_data: dict, bus_factor_data: dict, decay_data: dict, nlp_data: dict, releases_data: list, file_metrics_data: dict, language: str = "English") -> dict:
+    def synthesize_report(self, repo_data: dict, bus_factor_data: dict, decay_data: dict, nlp_data: dict, releases_data: list, file_metrics_data: dict) -> dict:
         """
         Synthesizes the individual metrics to generate a conclusion using Gemini API.
         Returns the parsed JSON response.
@@ -57,15 +57,15 @@ class ReasoningEngine:
         - Highly Coupled Files (Edited together): {', '.join(coupled_pairs) if coupled_pairs else 'None detected'}
         
         CRITICAL REQUIREMENTS:
-        1. Write the summary and reasons in {language}.
+        1. Write the summary and reasons in English.
         2. Adopt a strictly ACADEMIC and OBJECTIVE tone. Do not use colloquialisms. Write as if you are publishing a peer-reviewed paper on software engineering metrics.
         3. Specifically mention the file-level health (e.g. single-owner risks, bloated files, highly coupled pairs, bug-prone areas) in your analytical reasons if they pose a risk. Use this data to diagnose structural decay.
         
         Provide a JSON response with the following strictly formatted keys:
         - "status": One of "HEALTHY", "AT RISK", or "DEAD".
         - "health_score": An integer from 0 to 100.
-        - "summary": A 2-3 sentence overarching conclusion for the project in an academic tone ({language}).
-        - "reasons": An array of strings, listing 3 to 5 deeply analytical reasons based on the data provided, written in an academic tone ({language}). Discuss the rhythm and file risks directly if present.
+        - "summary": A 2-3 sentence overarching conclusion for the project in an academic tone (English).
+        - "reasons": An array of strings, listing 3 to 5 deeply analytical reasons based on the data provided, written in an academic tone (English). Discuss the rhythm and file risks directly if present.
         
         Return ONLY valid JSON. Wait until the end of the JSON to stop. Do not use block quotes like ```json. Just raw text starting with {{.
         """

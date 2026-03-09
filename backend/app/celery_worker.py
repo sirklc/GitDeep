@@ -26,13 +26,13 @@ celery_app.conf.update(
 orchestrator = AnalysisOrchestrator()
 
 @celery_app.task(bind=True, name="analyze_repo_task")
-def analyze_repo_task(self, url: str, owner: str, repo: str, user_id: int = None, language: str = "English"):
+def analyze_repo_task(self, url: str, owner: str, repo: str, user_id: int = None):
     db: Session = SessionLocal()
     try:
         # Update state to processing
         self.update_state(state='PROCESSING', meta={'status': 'Started analysis...'})
         
-        result = orchestrator.analyze_repository(url, owner, repo, db, user_id=user_id, language=language)
+        result = orchestrator.analyze_repository(url, owner, repo, db, user_id=user_id)
         
         return result
     except Exception as e:

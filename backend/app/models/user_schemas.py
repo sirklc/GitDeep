@@ -5,6 +5,7 @@ class UserCreate(BaseModel):
     username: str
     password: str
     email: Optional[EmailStr] = None   # optional at registration
+    cf_turnstile_response: Optional[str] = None  # Cloudflare Turnstile token
 
 class UserResponse(BaseModel):
     id: int

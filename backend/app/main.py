@@ -28,7 +28,13 @@ async def lifespan(app: FastAPI):
 
     # Teardown (optional cleanup)
 
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
+
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "*"] # Use specific domains in production
+)
 
 os.makedirs("reports", exist_ok=True)
 app.mount("/reports", StaticFiles(directory="reports"), name="reports")

@@ -19,6 +19,12 @@ class Settings(BaseSettings):
     # Base URL used for building PDF download links
     BASE_URL: str = "http://localhost:8000"
 
+    # Cloudflare Turnstile - set your real keys in .env for production
+    # Test secret (always passes): 1x0000000000000000000000000000000AA
+    # Test site key (always passes): 1x00000000000000000000AA
+    CLOUDFLARE_TURNSTILE_SECRET: str = "1x0000000000000000000000000000000AA"
+    CLOUDFLARE_TURNSTILE_SITE_KEY: str = "1x00000000000000000000AA"
+
     # Database
     DATABASE_URL: Optional[str] = None
 

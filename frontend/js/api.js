@@ -71,11 +71,11 @@ async function fetchWithAuth(url, options = {}) {
 }
 
 // ── analyzeRepository ─────────────────────────────────────────────────────────
-export async function analyzeRepository(url, language, onProgress) {
+export async function analyzeRepository(url, onProgress) {
     const response = await fetchWithAuth(`${API_BASE_URL}/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, language })
+        body: JSON.stringify({ url })
     });
 
     const data = await response.json();
@@ -137,7 +137,8 @@ export async function getHistory() {
 
 // ── Login ─────────────────────────────────────────────────────────────────────
 export async function login(username, password) {
-    const formData = new URLSearchParams({ username, password });
+    const cfToken = document.querySelector('#login-form .cf-turnstile-response')?.value || '';
+    const formData = new URLSearchParams({ username, password, cf_turnstile_response: cfToken });
     const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -154,10 +155,11 @@ export async function login(username, password) {
 
 // ── Register ──────────────────────────────────────────────────────────────────
 export async function register(username, password) {
+    const cfToken = document.querySelector('#register-form .cf-turnstile-response')?.value || '';
     const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, cf_turnstile_response: cfToken })
     });
 
     const data = await res.json();
