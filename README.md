@@ -137,6 +137,13 @@ For production deployment behind Cloudflare:
 
 ---
 
+## Contributors 👥
+
+| | Name | GitHub |
+|---|---|---|
+| 👨‍💻 | Mehmet Kılıç | [@sirklc](https://github.com/sirklc) |
+| 👩‍💻 | Tuba Çetin | [@cetintuba](https://github.com/cetintuba) |
+
 *Built with ❤️ by [betaforevers](https://betaforevers.com)*
 
 ---
@@ -221,5 +228,12 @@ Cloudflare arkasında production dağıtımı için:
 2. Cloudflare SSL → **Full (Strict)** seç
 3. `.env` dosyasındaki `BASE_URL` ve `ALLOWED_ORIGINS` değerlerini production domain ile güncelle
 4. Sunucuda `docker compose up -d --build` çalıştır
+
+## Katkıda Bulunanlar 👥
+
+| | İsim | GitHub |
+|---|---|---|
+| 👨‍💻 | Mehmet Kılıç | [@sirklc](https://github.com/sirklc) |
+| 👩‍💻 | Tuba Çetin | [@cetintuba](https://github.com/cetintuba) |
 
 </details>
