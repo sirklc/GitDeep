@@ -1,12 +1,14 @@
+import { useLocale } from '../i18n'
 import type { Contributor } from '../types'
 
 /** Top contributors with ownership bars — table-like, accessible alternative to a pie chart. */
 export default function ContributorList({ contributors }: { contributors: Contributor[] }) {
+  const { t } = useLocale()
   if (!contributors?.length) return null
 
   return (
     <div className="rounded-xl border border-edge bg-panel p-4">
-      <h3 className="mb-3 text-sm font-medium text-ink">Top contributors by commit ownership</h3>
+      <h3 className="mb-3 text-sm font-medium text-ink">{t.result.contributorsTitle}</h3>
       <ul className="space-y-2">
         {contributors.slice(0, 5).map((c) => (
           <li key={c.author} className="flex items-center gap-3">

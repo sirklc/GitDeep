@@ -1,8 +1,8 @@
+import { useLocale } from '../i18n'
 import type { HistoryItem } from '../types'
 
 interface Props {
   items: HistoryItem[]
-  personal: boolean
   onSelect: (repoName: string) => void
 }
 
@@ -12,14 +12,13 @@ function statusColor(status: string) {
   return 'var(--color-bad)'
 }
 
-export default function HistoryGrid({ items, personal, onSelect }: Props) {
+export default function HistoryGrid({ items, onSelect }: Props) {
+  const { t, lang } = useLocale()
   if (!items.length) return null
 
   return (
-    <section aria-label="Analysis history" className="mx-auto w-full max-w-6xl px-4 py-12">
-      <h2 className="mb-4 text-lg font-semibold">
-        {personal ? 'Your recent analyses' : 'Recently analyzed repositories'}
-      </h2>
+    <section aria-label={t.history.title} className="pt-12">
+      <h2 className="mb-4 font-display text-lg font-semibold">{t.history.title}</h2>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <button
@@ -37,7 +36,7 @@ export default function HistoryGrid({ items, personal, onSelect }: Props) {
             </div>
             <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-ink-muted">{item.summary}</p>
             <p className="mt-2 text-xs text-ink-muted/70">
-              {new Date(item.analyzed_at).toLocaleDateString()}
+              {new Date(item.analyzed_at).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US')}
             </p>
           </button>
         ))}

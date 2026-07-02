@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useLocale } from '../i18n'
 
 interface Props {
   busy: boolean
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export default function AnalyzeForm({ busy, onSubmit }: Props) {
+  const { t } = useLocale()
   const [url, setUrl] = useState('')
 
   const handleSubmit = (e: FormEvent) => {
@@ -25,7 +27,7 @@ export default function AnalyzeForm({ busy, onSubmit }: Props) {
         required
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        placeholder="https://github.com/owner/repository"
+        placeholder={t.analyze.placeholder}
         className="min-h-12 flex-1 rounded-xl border border-edge bg-panel px-4 font-mono text-sm text-ink placeholder:text-ink-muted/60 transition-colors duration-200 focus:border-primary focus:outline-2 focus:outline-primary"
       />
       <button
@@ -33,7 +35,7 @@ export default function AnalyzeForm({ busy, onSubmit }: Props) {
         disabled={busy}
         className="min-h-12 cursor-pointer rounded-xl bg-primary px-6 font-semibold text-white transition-colors duration-200 hover:bg-violet-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {busy ? 'Excavating…' : 'Analyze'}
+        {busy ? t.analyze.busy : t.analyze.button}
       </button>
     </form>
   )

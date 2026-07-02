@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useAuth } from '../context/AuthContext'
 import Turnstile from './Turnstile'
+import { useLocale } from '../i18n'
 
 export type AuthMode = 'login' | 'register'
 
@@ -12,6 +13,7 @@ interface Props {
 
 export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props) {
   const { login, register } = useAuth()
+  const { t } = useLocale()
   const [mode, setMode] = useState<AuthMode>(initialMode)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -36,13 +38,13 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
         onClose()
       } else {
         await register(username, password, cfToken)
-        setNotice('Account created — please sign in.')
+        setNotice(t.auth.registered)
         setMode('login')
         setPassword('')
         setCfToken('')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong.')
+      setError(err instanceof Error ? err.message : t.auth.genericError)
     } finally {
       setBusy(false)
     }
@@ -57,15 +59,15 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={mode === 'login' ? 'Sign in' : 'Create account'}
+        aria-label={mode === 'login' ? t.auth.signIn : t.auth.createAccount}
         className="w-full max-w-sm rounded-2xl border border-edge bg-panel p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">{mode === 'login' ? 'Sign in' : 'Create account'}</h2>
+          <h2 className="text-lg font-semibold">{mode === 'login' ? t.auth.signIn : t.auth.createAccount}</h2>
           <button
             onClick={onClose}
-            aria-label="Close dialog"
+            aria-label={t.auth.close}
             className="cursor-pointer rounded-lg p-1 text-ink-muted transition-colors duration-200 hover:text-ink focus:outline-2 focus:outline-primary"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -81,7 +83,7 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="auth-username" className="mb-1 block text-sm text-ink-muted">
-              Username
+              {t.auth.username}
             </label>
             <input
               id="auth-username"
@@ -95,7 +97,7 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
           </div>
           <div>
             <label htmlFor="auth-password" className="mb-1 block text-sm text-ink-muted">
-              Password
+              {t.auth.password}
             </label>
             <input
               id="auth-password"
@@ -122,23 +124,23 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
             disabled={busy}
             className="min-h-11 w-full cursor-pointer rounded-lg bg-primary font-semibold text-white transition-colors duration-200 hover:bg-violet-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
+            {busy ? t.auth.wait : mode === 'login' ? t.auth.signIn : t.auth.createAccount}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-ink-muted">
           {mode === 'login' ? (
             <>
-              No account?{' '}
+              {t.auth.noAccount}{' '}
               <button onClick={() => { setMode('register'); setError(''); setCfToken('') }} className="cursor-pointer text-primary hover:underline focus:outline-2 focus:outline-primary">
-                Create one
+                {t.auth.createOne}
               </button>
             </>
           ) : (
             <>
-              Already registered?{' '}
+              {t.auth.alreadyRegistered}{' '}
               <button onClick={() => { setMode('login'); setError(''); setCfToken('') }} className="cursor-pointer text-primary hover:underline focus:outline-2 focus:outline-primary">
-                Sign in
+                {t.auth.signIn}
               </button>
             </>
           )}

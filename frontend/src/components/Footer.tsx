@@ -1,31 +1,37 @@
-const COLUMNS = [
-  {
-    title: 'Product',
-    links: [
-      { label: 'Features', href: '#features' },
-      { label: 'How it works', href: '#how-it-works' },
-      { label: 'Recent digs', href: '#history' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Source code', href: 'https://github.com/betaforevers/GitDeep' },
-      { label: 'API docs', href: '/docs' },
-      { label: 'Report an issue', href: 'https://github.com/betaforevers/GitDeep/issues' },
-    ],
-  },
-  {
-    title: 'Creators',
-    links: [
-      { label: 'Mehmet Kılıç', href: 'https://github.com/sirklc' },
-      { label: 'Tuba Çetin', href: 'https://github.com/cetintuba' },
-      { label: 'betaforevers', href: 'https://betaforevers.com' },
-    ],
-  },
-]
+import { useLocale } from '../i18n'
+
+const GITHUB_URL = 'https://github.com/betaforevers/GitDeep'
 
 export default function Footer() {
+  const { t } = useLocale()
+
+  const columns = [
+    {
+      title: t.footer.product,
+      links: [
+        { label: t.footer.links.features, href: '#features' },
+        { label: t.footer.links.how, href: '#how-it-works' },
+        { label: t.footer.links.openSource, href: '#open-source' },
+      ],
+    },
+    {
+      title: t.footer.resources,
+      links: [
+        { label: t.footer.links.source, href: GITHUB_URL },
+        { label: t.footer.links.apiDocs, href: '/docs' },
+        { label: t.footer.links.issues, href: `${GITHUB_URL}/issues` },
+      ],
+    },
+    {
+      title: t.footer.creators,
+      links: [
+        { label: 'Mehmet Kılıç', href: 'https://github.com/sirklc' },
+        { label: 'Tuba Çetin', href: 'https://github.com/cetintuba' },
+        { label: 'betaforevers', href: 'https://betaforevers.com' },
+      ],
+    },
+  ]
+
   return (
     <footer className="border-t border-edge">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 md:grid-cols-4">
@@ -37,11 +43,9 @@ export default function Footer() {
             </svg>
             GitDeep
           </p>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-muted">
-            Software archaeology for public GitHub repositories — health, risk and intent in one report.
-          </p>
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-muted">{t.footer.tagline}</p>
           <a
-            href="https://github.com/betaforevers/GitDeep"
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitDeep on GitHub"
@@ -53,7 +57,7 @@ export default function Footer() {
           </a>
         </div>
 
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <nav key={col.title} aria-label={col.title}>
             <h3 className="text-sm font-semibold text-ink">{col.title}</h3>
             <ul className="mt-3 space-y-2">
@@ -73,7 +77,7 @@ export default function Footer() {
         ))}
       </div>
       <div className="border-t border-edge py-5 text-center text-xs text-ink-muted">
-        © {new Date().getFullYear()} betaforevers — MIT License
+        © {new Date().getFullYear()} betaforevers — {t.footer.license}
       </div>
     </footer>
   )

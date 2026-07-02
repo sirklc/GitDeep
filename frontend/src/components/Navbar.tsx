@@ -1,17 +1,22 @@
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLocale } from '../i18n'
 
 interface Props {
   onOpenAuth: (mode: 'login' | 'register') => void
 }
 
-const LINKS = [
-  { label: 'Features', href: '#features' },
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Recent digs', href: '#history' },
-]
-
 export default function Navbar({ onOpenAuth }: Props) {
   const { user, logout } = useAuth()
+  const { lang, t } = useLocale()
+  const navigate = useNavigate()
+  const otherLang = lang === 'en' ? 'tr' : 'en'
+
+  const links = [
+    { label: t.nav.features, href: '#features' },
+    { label: t.nav.how, href: '#how-it-works' },
+    { label: t.nav.openSource, href: '#open-source' },
+  ]
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-edge bg-surface/85 backdrop-blur">
@@ -25,7 +30,7 @@ export default function Navbar({ onOpenAuth }: Props) {
             Git<span className="text-primary">Deep</span>
           </a>
           <div className="hidden items-center gap-6 md:flex">
-            {LINKS.map((l) => (
+            {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
@@ -37,7 +42,14 @@ export default function Navbar({ onOpenAuth }: Props) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            onClick={() => navigate(`/${otherLang}`)}
+            aria-label={otherLang === 'tr' ? 'Türkçeye geç' : 'Switch to English'}
+            className="cursor-pointer rounded-lg border border-edge px-2.5 py-1.5 font-mono text-xs uppercase text-ink-muted transition-colors duration-200 hover:border-primary hover:text-ink focus:outline-2 focus:outline-primary"
+          >
+            {otherLang}
+          </button>
           <a
             href="https://github.com/betaforevers/GitDeep"
             target="_blank"
@@ -56,7 +68,7 @@ export default function Navbar({ onOpenAuth }: Props) {
                 onClick={logout}
                 className="cursor-pointer whitespace-nowrap rounded-lg border border-edge px-3 py-2 text-sm transition-colors duration-200 hover:border-primary hover:text-primary focus:outline-2 focus:outline-primary sm:px-4"
               >
-                Sign out
+                {t.nav.signOut}
               </button>
             </>
           ) : (
@@ -65,14 +77,14 @@ export default function Navbar({ onOpenAuth }: Props) {
                 onClick={() => onOpenAuth('login')}
                 className="cursor-pointer whitespace-nowrap rounded-lg px-3 py-2 text-sm text-ink-muted transition-colors duration-200 hover:text-ink focus:outline-2 focus:outline-primary"
               >
-                Sign in
+                {t.nav.signIn}
               </button>
-              <a
-                href="#analyze"
+              <button
+                onClick={() => onOpenAuth('register')}
                 className="cursor-pointer whitespace-nowrap rounded-lg bg-cta px-3 py-2 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-teal-300 focus:outline-2 focus:outline-offset-2 focus:outline-cta sm:px-4"
               >
-                Start digging
-              </a>
+                {t.nav.cta}
+              </button>
             </>
           )}
         </div>

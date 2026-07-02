@@ -1,18 +1,20 @@
+import { useLocale } from '../i18n'
+
 interface Props {
   score: number
   summary: string
   pdfUrl?: string
 }
 
-function scoreTone(score: number) {
-  if (score >= 70) return { color: 'var(--color-good)', label: 'HEALTHY' }
-  if (score >= 40) return { color: 'var(--color-warn)', label: 'AT RISK' }
-  return { color: 'var(--color-bad)', label: 'CRITICAL' }
-}
-
 /** Hero number: overall repository health score with an SVG ring gauge. */
 export default function ScoreCard({ score, summary, pdfUrl }: Props) {
-  const { color, label } = scoreTone(score)
+  const { t } = useLocale()
+  const { color, label } =
+    score >= 70
+      ? { color: 'var(--color-good)', label: t.result.healthy }
+      : score >= 40
+        ? { color: 'var(--color-warn)', label: t.result.atRisk }
+        : { color: 'var(--color-bad)', label: t.result.critical }
   const r = 52
   const c = 2 * Math.PI * r
   const filled = (score / 100) * c
@@ -55,7 +57,7 @@ export default function ScoreCard({ score, summary, pdfUrl }: Props) {
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            Download PDF report
+            {t.result.downloadPdf}
           </a>
         )}
       </div>

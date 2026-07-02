@@ -6,7 +6,7 @@ from app.models.schemas import RepositorySubmission, RepoAnalysisStatus
 from app.services.analysis_orchestrator import AnalysisOrchestrator
 from app.db.database import get_db
 from app.db.models import RepoAnalysisRecord, User
-from app.core.security import get_current_user, get_optional_user
+from app.core.security import get_current_user
 from app.core.config import settings
 from github import RateLimitExceededException
 from fastapi_limiter.depends import RateLimiter
@@ -26,7 +26,7 @@ def get_public_config():
 def analyze_repository(
     submission: RepositorySubmission, 
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_optional_user)
+    current_user: User = Depends(get_current_user)
 ):
     url = submission.url
     parts = url.strip("/").split("/")
@@ -63,7 +63,7 @@ def analyze_repository(
     
     try:
         from app.celery_worker import analyze_repo_task
-        task = analyze_repo_task.delay(url, owner, repo, current_user.id if current_user else None)
+        task = analyze_repo_task.delay(url, owner, repo, current_user.id)
         return RepoAnalysisStatus(
             status="processing",
             message="Analysis started in background",

@@ -1,3 +1,4 @@
+import { useLocale } from '../../i18n'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const PURPLE = '#8b5cf6' // validated chart palette
@@ -8,12 +9,13 @@ interface Props {
 
 /** Single-series area chart: commits per month. One hue, no legend (title names the series). */
 export default function ActivityChart({ trend }: Props) {
+  const { t } = useLocale()
   const data = Object.entries(trend).map(([month, commits]) => ({ month, commits }))
   if (!data.length) return null
 
   return (
     <div className="rounded-xl border border-edge bg-panel p-4">
-      <h3 className="mb-3 text-sm font-medium text-ink">Commit activity by month</h3>
+      <h3 className="mb-3 text-sm font-medium text-ink">{t.result.activityTitle}</h3>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: -16 }}>
