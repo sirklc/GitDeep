@@ -36,7 +36,7 @@ export default function HistoryGrid({ items, personal, onSelect }: Props) {
               </span>
             </div>
             <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-ink-muted">{item.summary}</p>
-            <p className="mt-2 text-[11px] text-ink-muted/70">
+            <p className="mt-2 text-xs text-ink-muted/70">
               {new Date(item.analyzed_at).toLocaleDateString()}
             </p>
           </button>

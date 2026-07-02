@@ -35,13 +35,13 @@ export default function Navbar({ onOpenAuth }: Props) {
             <>
               <button
                 onClick={() => onOpenAuth('login')}
-                className="cursor-pointer rounded-lg px-4 py-2 text-sm text-ink transition-colors duration-200 hover:text-primary focus:outline-2 focus:outline-primary"
+                className="cursor-pointer whitespace-nowrap rounded-lg px-3 py-2 text-sm text-ink transition-colors duration-200 hover:text-primary focus:outline-2 focus:outline-primary sm:px-4"
               >
                 Sign in
               </button>
               <button
                 onClick={() => onOpenAuth('register')}
-                className="cursor-pointer rounded-lg bg-cta px-4 py-2 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-amber-400 focus:outline-2 focus:outline-offset-2 focus:outline-cta"
+                className="cursor-pointer whitespace-nowrap rounded-lg bg-cta px-3 py-2 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-amber-400 focus:outline-2 focus:outline-offset-2 focus:outline-cta sm:px-4"
               >
                 Create account
               </button>

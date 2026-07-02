@@ -25,7 +25,7 @@ export default function ProgressLog({ entries, error }: Props) {
       {progress !== null && !error && (
         <div className="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-panel-2" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
           <div
-            className="h-full rounded-full bg-primary transition-all duration-500"
+            className="h-full rounded-full bg-primary transition-[width] duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
