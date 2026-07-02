@@ -1,5 +1,3 @@
-version: '3.8'
-
 x-common-env: &common-env
   REDIS_URL: redis://redis:6379/0
   DATABASE_URL: postgresql://gitdeep:gitdeep_password@db/gitdeep
