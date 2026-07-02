@@ -31,7 +31,7 @@ export default function AnalyzeForm({ busy, onSubmit }: Props) {
       <button
         type="submit"
         disabled={busy}
-        className="min-h-12 cursor-pointer rounded-xl bg-primary px-6 font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+        className="min-h-12 cursor-pointer rounded-xl bg-primary px-6 font-semibold text-white transition-colors duration-200 hover:bg-violet-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         {busy ? 'Excavating…' : 'Analyze'}
       </button>

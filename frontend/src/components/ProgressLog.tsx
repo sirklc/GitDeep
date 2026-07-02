@@ -34,7 +34,7 @@ export default function ProgressLog({ entries, error }: Props) {
         {entries.map((entry, i) => (
           <p key={i} className={i === entries.length - 1 && !error ? 'text-ink' : 'text-ink-muted'}>
             <span className="select-none text-primary">▸ </span>
-            {entry.progress !== null && <span className="text-chart-amber">[{entry.progress}%] </span>}
+            {entry.progress !== null && <span className="text-cta">[{entry.progress}%] </span>}
             {entry.text}
           </p>
         ))}

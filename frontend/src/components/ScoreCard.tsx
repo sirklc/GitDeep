@@ -50,7 +50,7 @@ export default function ScoreCard({ score, summary, pdfUrl }: Props) {
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-amber-400 focus:outline-2 focus:outline-offset-2 focus:outline-cta"
+            className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-lg bg-cta px-4 py-2 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-teal-300 focus:outline-2 focus:outline-offset-2 focus:outline-cta"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" strokeLinecap="round" strokeLinejoin="round" />

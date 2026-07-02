@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const AMBER = '#d97706' // validated chart palette
+const TEAL = '#0d9488' // validated chart palette
 
 interface Props {
   breakdown: Record<string, number>
@@ -18,32 +18,32 @@ export default function IntentChart({ breakdown }: Props) {
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: -16 }} barCategoryGap="28%">
-            <CartesianGrid stroke="#1e2a44" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="#26263a" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="intent"
-              tick={{ fill: '#8b9cb8', fontSize: 11, fontFamily: 'Fira Code' }}
-              axisLine={{ stroke: '#1e2a44' }}
+              tick={{ fill: '#9a9ab0', fontSize: 11, fontFamily: 'Fira Code' }}
+              axisLine={{ stroke: '#26263a' }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: '#8b9cb8', fontSize: 11, fontFamily: 'Fira Code' }}
+              tick={{ fill: '#9a9ab0', fontSize: 11, fontFamily: 'Fira Code' }}
               axisLine={false}
               tickLine={false}
               allowDecimals={false}
             />
             <Tooltip
-              cursor={{ fill: '#16203a', fillOpacity: 0.5 }}
+              cursor={{ fill: '#191926', fillOpacity: 0.5 }}
               contentStyle={{
-                background: '#0e1626',
-                border: '1px solid #1e2a44',
+                background: '#101018',
+                border: '1px solid #26263a',
                 borderRadius: 8,
-                color: '#e2e8f0',
+                color: '#ececf1',
                 fontSize: 12,
                 fontFamily: 'Fira Code',
               }}
-              labelStyle={{ color: '#8b9cb8' }}
+              labelStyle={{ color: '#9a9ab0' }}
             />
-            <Bar dataKey="count" fill={AMBER} radius={[4, 4, 0, 0]} maxBarSize={48} />
+            <Bar dataKey="count" fill={TEAL} radius={[4, 4, 0, 0]} maxBarSize={48} />
           </BarChart>
         </ResponsiveContainer>
       </div>

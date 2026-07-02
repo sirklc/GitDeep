@@ -120,7 +120,7 @@ export default function AuthModal({ mode: initialMode, siteKey, onClose }: Props
           <button
             type="submit"
             disabled={busy}
-            className="min-h-11 w-full cursor-pointer rounded-lg bg-primary font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-11 w-full cursor-pointer rounded-lg bg-primary font-semibold text-white transition-colors duration-200 hover:bg-violet-500 focus:outline-2 focus:outline-offset-2 focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
           </button>

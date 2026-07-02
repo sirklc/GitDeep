@@ -14,7 +14,7 @@ export default function ContributorList({ contributors }: { contributors: Contri
               {c.author}
             </span>
             <div className="h-2 flex-1 overflow-hidden rounded-full bg-panel-2">
-              <div className="h-full rounded-full bg-chart-blue" style={{ width: `${Math.min(c.ownership_pct, 100)}%` }} />
+              <div className="h-full rounded-full bg-chart-1" style={{ width: `${Math.min(c.ownership_pct, 100)}%` }} />
             </div>
             <span className="w-12 text-right font-mono text-xs text-ink-muted">{c.ownership_pct.toFixed(1)}%</span>
           </li>

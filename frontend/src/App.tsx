@@ -7,11 +7,23 @@ import AnalyzeForm from './components/AnalyzeForm'
 import ProgressLog, { type LogEntry } from './components/ProgressLog'
 import ScoreCard from './components/ScoreCard'
 import MetricCards from './components/MetricCards'
-const ActivityChart = lazy(() => import('./components/charts/ActivityChart'))
-const IntentChart = lazy(() => import('./components/charts/IntentChart'))
 import ContributorList from './components/ContributorList'
 import HistoryGrid from './components/HistoryGrid'
 import AuthModal, { type AuthMode } from './components/AuthModal'
+import TerminalMock from './components/TerminalMock'
+import FeatureGrid from './components/FeatureGrid'
+import HowItWorks from './components/HowItWorks'
+import Footer from './components/Footer'
+
+const ActivityChart = lazy(() => import('./components/charts/ActivityChart'))
+const IntentChart = lazy(() => import('./components/charts/IntentChart'))
+
+const STATS = [
+  { value: '7', label: 'analysis stages' },
+  { value: '200+', label: 'commits scanned per dig' },
+  { value: '0–100', label: 'health score verdict' },
+  { value: 'PDF', label: 'report on every run' },
+]
 
 export default function App() {
   const { user } = useAuth()
@@ -58,33 +70,47 @@ export default function App() {
   const handleHistorySelect = useCallback(
     (repoName: string) => {
       if (!busy) handleAnalyze(`https://github.com/${repoName}`)
-      window.scrollTo({ top: 0 })
+      document.getElementById('analyze')?.scrollIntoView()
     },
     [busy, handleAnalyze],
   )
 
   return (
-    <div className="min-h-screen bg-dig-grid">
+    <div className="min-h-screen">
       <Navbar onOpenAuth={setAuthMode} />
 
-      <main className="mx-auto max-w-6xl px-4 pt-32 pb-16">
-        {/* Hero */}
-        <section className="mb-10 text-center">
-          <p className="mb-3 font-mono text-sm tracking-widest text-primary">SOFTWARE ARCHAEOLOGY</p>
-          <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-            Dig into any GitHub repository's <span className="text-primary">true health</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ink-muted">
-            Bus factor, activity decay, commit intent, originality and code quality — synthesized into one
-            AI-reasoned report with a downloadable PDF.
-          </p>
-        </section>
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section id="analyze" className="hero-glow scroll-mt-16 border-b border-edge">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-32 lg:grid-cols-2">
+          <div>
+            <p className="mb-4 inline-block rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-xs text-primary">
+              Software archaeology platform
+            </p>
+            <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl">
+              Dig up the truth buried in any repo.
+            </h1>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-muted">
+              GitDeep excavates public GitHub repositories — bus factor, activity decay, commit intent and
+              originality — and delivers one AI-reasoned health verdict.
+            </p>
 
-        <AnalyzeForm busy={busy} onSubmit={handleAnalyze} />
+            <div className="mt-8">
+              <AnalyzeForm busy={busy} onSubmit={handleAnalyze} />
+              <p className="mt-3 text-sm text-ink-muted">
+                Free · no sign-up required · results in ~1 minute
+              </p>
+            </div>
+          </div>
+
+          <TerminalMock />
+        </div>
+      </section>
+
+      <main className="mx-auto max-w-6xl px-4">
         <ProgressLog entries={log} error={error} />
 
         {result && (
-          <div className="mt-10 space-y-4">
+          <div className="mt-10 scroll-mt-24 space-y-4" id="result">
             <ScoreCard score={result.health_score} summary={result.message} pdfUrl={result.pdf_url} />
             <MetricCards details={result.details} />
             <Suspense fallback={<div className="h-56 animate-pulse rounded-xl border border-edge bg-panel" aria-hidden="true" />}>
@@ -100,22 +126,46 @@ export default function App() {
         )}
       </main>
 
-      <HistoryGrid items={history} personal={!!user} onSelect={handleHistorySelect} />
+      {/* ── Stats strip ──────────────────────────────────────────────────── */}
+      <section aria-label="Platform stats" className="mx-auto max-w-6xl px-4 pt-16">
+        <div className="grid grid-cols-2 gap-6 rounded-xl border border-edge bg-panel px-6 py-8 md:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="font-display text-3xl font-bold text-cta">{s.value}</p>
+              <p className="mt-1 text-sm text-ink-muted">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <footer className="border-t border-edge py-6 text-center text-xs text-ink-muted">
-        GitDeep — built by{' '}
-        <a href="https://github.com/sirklc" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
-          @sirklc
-        </a>{' '}
-        &{' '}
-        <a href="https://github.com/cetintuba" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
-          @cetintuba
-        </a>
-      </footer>
+      <FeatureGrid />
+      <HowItWorks />
 
-      {authMode && siteKey !== undefined && (
-        <AuthModal mode={authMode} siteKey={siteKey} onClose={() => setAuthMode(null)} />
-      )}
+      <div id="history" className="scroll-mt-16">
+        <HistoryGrid items={history} personal={!!user} onSelect={handleHistorySelect} />
+      </div>
+
+      {/* ── Final CTA ────────────────────────────────────────────────────── */}
+      <section aria-label="Get started" className="border-t border-edge bg-panel/40">
+        <div className="mx-auto max-w-6xl px-4 py-20 text-center">
+          <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            Ready to start the excavation?
+          </h2>
+          <p className="mx-auto mt-3 max-w-md leading-relaxed text-ink-muted">
+            Paste a repository URL and get the verdict — health, risk and intent in one report.
+          </p>
+          <a
+            href="#analyze"
+            className="mt-8 inline-block cursor-pointer rounded-lg bg-cta px-8 py-3 font-semibold text-slate-950 transition-colors duration-200 hover:bg-teal-300 focus:outline-2 focus:outline-offset-2 focus:outline-cta"
+          >
+            Start digging
+          </a>
+        </div>
+      </section>
+
+      <Footer />
+
+      {authMode && <AuthModal mode={authMode} siteKey={siteKey} onClose={() => setAuthMode(null)} />}
     </div>
   )
 }

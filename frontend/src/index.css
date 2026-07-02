@@ -1,28 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  /* GitDeep design system — dark OLED, blue data + amber highlights */
-  --color-surface: #060a14;
-  --color-panel: #0e1626;
-  --color-panel-2: #16203a;
-  --color-edge: #1e2a44;
+  /* GitDeep design system v2 — black + purple base, turquoise accents */
+  --color-surface: #08080d;
+  --color-panel: #101018;
+  --color-panel-2: #191926;
+  --color-edge: #26263a;
 
-  --color-ink: #e2e8f0;
-  --color-ink-muted: #8b9cb8;
+  --color-ink: #ececf1;
+  --color-ink-muted: #9a9ab0;
 
-  --color-primary: #3b82f6;
-  --color-primary-deep: #1e40af;
-  --color-cta: #f59e0b;
+  --color-primary: #8b5cf6;
+  --color-primary-deep: #6d28d9;
+  --color-cta: #2dd4bf;
 
   /* Validated chart palette (dark surface) */
-  --color-chart-blue: #3b82f6;
-  --color-chart-amber: #d97706;
+  --color-chart-1: #8b5cf6;
+  --color-chart-2: #0d9488;
 
   --color-good: #22c55e;
   --color-warn: #eab308;
   --color-bad: #ef4444;
 
-  --font-sans: "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Fira Code", ui-monospace, monospace;
 }
 
@@ -48,10 +49,9 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Subtle grid backdrop for the archaeology feel */
-.bg-dig-grid {
-  background-image:
-    linear-gradient(to right, rgb(59 130 246 / 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(59 130 246 / 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Purple radial glow used behind the hero */
+.hero-glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 20%, rgb(139 92 246 / 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgb(45 212 191 / 0.07), transparent 70%);
 }
