@@ -30,9 +30,13 @@ def analyze_repo_task(self, url: str, owner: str, repo: str, user_id: int = None
     db: Session = SessionLocal()
     try:
         # Update state to processing
-        self.update_state(state='PROCESSING', meta={'status': 'Started analysis...'})
-        
-        result = orchestrator.analyze_repository(url, owner, repo, db, user_id=user_id)
+        self.update_state(state='PROCESSING', meta={'status': 'Started analysis...', 'step': 0, 'total': AnalysisOrchestrator.TOTAL_STAGES})
+
+        def report_progress(step: int, total: int, message: str):
+            self.update_state(state='PROCESSING', meta={'status': message, 'step': step, 'total': total})
+
+        result = orchestrator.analyze_repository(url, owner, repo, db, user_id=user_id,
+                                                 progress_callback=report_progress)
         
         return result
     except Exception as e:

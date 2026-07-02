@@ -97,7 +97,7 @@ export async function analyzeRepository(url, onProgress) {
 
 // ── Celery polling loop ───────────────────────────────────────────────────────
 async function pollTaskStatus(taskId, onProgress) {
-    const MAX_RETRIES = 60;  // 60 × 3s = 3 minutes
+    const MAX_RETRIES = 100;  // 100 × 3s = 5 minutes
     const INTERVAL_MS = 3000;
 
     for (let i = 0; i < MAX_RETRIES; i++) {
@@ -113,10 +113,10 @@ async function pollTaskStatus(taskId, onProgress) {
         } else if (data.status === 'failed') {
             throw new Error(data.message || 'Analiz başarısız oldu.');
         } else {
-            if (onProgress && data.message) onProgress(data.message);
+            if (onProgress && data.message) onProgress(data.message, data.progress);
         }
     }
-    throw new Error('Analiz zaman aşımına uğradı (3 dakika).');
+    throw new Error('Analiz zaman aşımına uğradı (5 dakika).');
 }
 
 // ── History ───────────────────────────────────────────────────────────────────

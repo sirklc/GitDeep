@@ -1,5 +1,5 @@
-import { analyzeRepository, getHistory, login, register, logout } from './api.js?v=4';
-import { elements, addLog, resetUI, displayResults, displayError, restoreUIState, renderHistory } from './ui.js?v=4';
+import { analyzeRepository, getHistory, login, register, logout } from './api.js?v=6';
+import { elements, addLog, resetUI, displayResults, displayError, restoreUIState, renderHistory } from './ui.js?v=6';
 
 async function handleAnalyze(url) {
     if (!url) return;
@@ -8,8 +8,12 @@ async function handleAnalyze(url) {
     addLog(`Initiating analysis for: ${url}`);
 
     try {
-        const data = await analyzeRepository(url, (msg) => {
-            addLog(`Status Update: ${msg}`);
+        let lastMsg = '';
+        const data = await analyzeRepository(url, (msg, progress) => {
+            if (msg === lastMsg) return;  // don't spam the log on every poll tick
+            lastMsg = msg;
+            const prefix = (progress !== null && progress !== undefined) ? `[%${progress}] ` : '';
+            addLog(`${prefix}${msg}`);
         });
 
         // Polling returns the result object directly on success.
@@ -44,13 +48,7 @@ async function loadHistory() {
         const historyLoginPrompt = document.getElementById('history-login-prompt');
         const historySection = document.getElementById('history-section');
 
-        if (!localStorage.getItem('gitdeep_token')) {
-            historyTrack.style.display = 'none';
-            historyLoginPrompt.style.display = 'block';
-            historySection.style.display = 'block';
-            return;
-        }
-
+        // Anonymous visitors see the public history feed; logged-in users see their own
         historyTrack.style.display = 'grid';
         historyLoginPrompt.style.display = 'none';
 

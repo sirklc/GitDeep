@@ -22,20 +22,30 @@ class AnalysisOrchestrator:
         self.git_analyzer = GitAnalyzer()
         self.plagiarism_engine = PlagiarismEngine(self.git_analyzer.tmp_dir)
 
-    def analyze_repository(self, url: str, owner: str, repo: str, db, user_id: int = None):
-        # In Phase 1, we just do a dry-run check to see if we can fetch it
+    TOTAL_STAGES = 7
+
+    def analyze_repository(self, url: str, owner: str, repo: str, db, user_id: int = None,
+                           progress_callback=None):
+        def report(step: int, message: str):
+            if progress_callback:
+                progress_callback(step, self.TOTAL_STAGES, message)
+
+        report(1, "Fetching repository metadata from GitHub...")
         repo_data = self.github_service.get_repo_info(owner, repo)
         commits_data = self.github_service.get_recent_commits(owner, repo, limit=200)
         releases_data = self.github_service.get_recent_releases(owner, repo, limit=10)
-        
+
+        report(2, "Calculating bus factor, activity decay and commit intent...")
         bus_factor_res = self.metrics_engine.calculate_bus_factor(commits_data)
         decay_res = self.metrics_engine.calculate_activity_decay(commits_data)
         nlp_res = self.nlp_engine.analyze_commits(commits_data)
-        
+
+        report(3, "Cloning repository and extracting file history...")
         # Fast local file extraction mapped over complete history
         local_commits_data = self.git_analyzer.clone_and_extract_file_history(url)
         file_metrics_res = self.file_metrics_engine.calculate_file_metrics(local_commits_data)
-        
+
+        report(4, "Running plagiarism and originality checks...")
         # Plagiarism / Originality Check
         duplication_pct, dupe_pairs = self.plagiarism_engine.calculate_internal_duplication(self.git_analyzer.tmp_dir)
         originality_res = self.plagiarism_engine.check_external_originality(repo_data, self.git_analyzer.tmp_dir, file_metrics_res.get('hotspots', []))
@@ -47,7 +57,8 @@ class AnalysisOrchestrator:
         }
         
         code_quality_res = self.metrics_engine.calculate_code_quality(file_metrics_res.get('hotspots', []))
-        
+
+        report(5, "Synthesizing AI reasoning report...")
         reasoning_res = self.reasoning_engine.synthesize_report(
             repo_data, bus_factor_res, decay_res, nlp_res, releases_data, file_metrics_res
         )
@@ -65,12 +76,14 @@ class AnalysisOrchestrator:
             "code_quality": code_quality_res
         }
         
+        report(6, "Generating PDF report...")
         pdf_path = self.report_generator.generate_report(f"{owner}/{repo}", details, reasoning_res, nlp_res, decay_res)
         filename = os.path.basename(pdf_path)
         # Read BASE_URL from environment so it works in Docker / production
         base_url = os.getenv("BASE_URL", "http://localhost:8000")
         pdf_url = f"{base_url}/reports/{filename}"
         
+        report(7, "Saving analysis results...")
         # Save to SQLite Database
         db_record = RepoAnalysisRecord(
             repo_name=f"{owner}/{repo}",

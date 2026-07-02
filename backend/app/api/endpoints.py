@@ -82,7 +82,15 @@ def get_analysis_status(task_id: str):
     if task_result.state == 'PENDING':
         return {"status": "pending", "message": "Waiting in queue...", "result": None}
     elif task_result.state == 'PROCESSING':
-        return {"status": "processing", "message": task_result.info.get('status', 'Processing...'), "result": None}
+        info = task_result.info or {}
+        step, total = info.get('step', 0), info.get('total', 0)
+        progress = round(step / total * 100) if total else None
+        return {
+            "status": "processing",
+            "message": info.get('status', 'Processing...'),
+            "progress": progress,
+            "result": None,
+        }
     elif task_result.state == 'SUCCESS':
         return {"status": "success", "message": "Analysis complete", "result": task_result.result}
     elif task_result.state == 'FAILURE':
