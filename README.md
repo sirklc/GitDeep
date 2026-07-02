@@ -11,7 +11,7 @@
 
 - **Activity & Decay Tracking** — Calculates commit stagnation and developer drop-off over time
 - **Bus Factor Analysis** — Detects over-reliance on a single contributor
-- **Semantic Intent (NLP)** — Uses Google Gemini to categorize commits (features vs. technical debt)
+- **Semantic Intent (NLP)** — Categorizes commits (features vs. technical debt) via keyword heuristics; Gemini powers the reasoning & originality reports
 - **Plagiarism Detection** — Scans code patterns for duplicated or copied logic
 - **PDF Report Generation** — Professional academic-style reports with embedded charts
 - **Analysis History** — Logged-in users can view their past analyses
@@ -161,7 +161,7 @@ For production deployment behind Cloudflare:
 
 - **Aktivite & Çöküş Takibi** — Commit durağanlığını ve geliştirici düşüşünü matematiksel olarak hesaplar
 - **Bus Factor Analizi** — Projenin tek bir katkıcıya aşırı bağımlılığını tespit eder
-- **Semantik Niyet (NLP)** — Google Gemini kullanarak commit'leri kategorize eder (özellikler vs. teknik borç)
+- **Semantik Niyet (NLP)** — Commit'leri anahtar kelime sezgileriyle kategorize eder (özellikler vs. teknik borç); Gemini ise muhakeme ve orijinallik raporlarını üretir
 - **İntihal Tespiti** — Kopyalanmış veya fazla mükerrer kod kalıplarını tarar
 - **PDF Rapor Üretimi** — Gömülü grafikler içeren profesyonel akademik raporlar
 - **Analiz Geçmişi** — Giriş yapmış kullanıcılar geçmiş analizlerini görüntüleyebilir
