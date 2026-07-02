@@ -44,6 +44,19 @@ def test_code_quality_heuristic():
     # 520 * 0.15 = 78 code smells -> Grade B (50 < 78 < 200)
     assert result["sqale_rating"] == "B"
     
+def test_activity_decay_returns_monthly_trend():
+    # Regression: activity_decay must group commits by month and expose the
+    # monthly trend used by the frontend chart.
+    engine = MetricsEngine()
+    commits = [
+        {"date": "2023-01-01"}, {"date": "2023-01-15"},
+        {"date": "2023-02-01"}, {"date": "2023-03-10"},
+    ]
+
+    result = engine.calculate_activity_decay(commits)
+    trend = result["activity_trend"]
+    assert trend == {"2023-01": 2, "2023-02": 1, "2023-03": 1}
+
 def test_empty_commits():
     engine = MetricsEngine()
     
