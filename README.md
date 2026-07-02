@@ -15,7 +15,7 @@
 - **Plagiarism Detection** — Scans code patterns for duplicated or copied logic
 - **PDF Report Generation** — Professional academic-style reports with embedded charts
 - **Analysis History** — Logged-in users can view their past analyses
-- **Interactive SPA** — Glassmorphism UI with Chart.js visualizations
+- **React SPA** — Dark-mode dashboard built with React 19, TypeScript and Recharts
 - **Async Background Jobs** — Long-running analyses managed via Celery + Redis
 
 ## Security 🔒
@@ -36,7 +36,7 @@
 | Database | PostgreSQL |
 | Cache / Queue | Redis |
 | AI | Google Gemini API |
-| Frontend | Vanilla HTML5 / CSS3 / JavaScript, Chart.js |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, Recharts |
 | PDF | FPDF2 |
 | Security | Cloudflare Turnstile, fastapi-limiter, bcrypt |
 | Infrastructure | Docker, Docker Compose, Nginx |
@@ -165,7 +165,7 @@ For production deployment behind Cloudflare:
 - **İntihal Tespiti** — Kopyalanmış veya fazla mükerrer kod kalıplarını tarar
 - **PDF Rapor Üretimi** — Gömülü grafikler içeren profesyonel akademik raporlar
 - **Analiz Geçmişi** — Giriş yapmış kullanıcılar geçmiş analizlerini görüntüleyebilir
-- **Etkileşimli SPA** — Glassmorphism UI ve Chart.js görselleştirme
+- **React SPA** — React 19, TypeScript ve Recharts ile koyu temalı gösterge paneli
 - **Asenkron Arka Plan İşleri** — Celery + Redis ile yönetilen uzun süreli analizler
 
 ## Güvenlik 🔒

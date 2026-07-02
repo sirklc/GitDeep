@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  /* GitDeep design system — dark OLED, blue data + amber highlights */
+  --color-surface: #060a14;
+  --color-panel: #0e1626;
+  --color-panel-2: #16203a;
+  --color-edge: #1e2a44;
+
+  --color-ink: #e2e8f0;
+  --color-ink-muted: #8b9cb8;
+
+  --color-primary: #3b82f6;
+  --color-primary-deep: #1e40af;
+  --color-cta: #f59e0b;
+
+  /* Validated chart palette (dark surface) */
+  --color-chart-blue: #3b82f6;
+  --color-chart-amber: #d97706;
+
+  --color-good: #22c55e;
+  --color-warn: #eab308;
+  --color-bad: #ef4444;
+
+  --font-sans: "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Subtle grid backdrop for the archaeology feel */
+.bg-dig-grid {
+  background-image:
+    linear-gradient(to right, rgb(59 130 246 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(59 130 246 / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
