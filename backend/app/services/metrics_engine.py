@@ -59,9 +59,12 @@ class MetricsEngine:
             
         df['date'] = pd.to_datetime(df['date'])
         
-        # Group by month
+        # Group by month, filling gap months with 0 so inactivity counts as decay
         df['month'] = df['date'].dt.to_period('M')
-        monthly_commits = df.groupby('month').size().reset_index(name='count')
+        monthly_counts = df.groupby('month').size()
+        full_range = pd.period_range(monthly_counts.index.min(), monthly_counts.index.max(), freq='M')
+        monthly_counts = monthly_counts.reindex(full_range, fill_value=0)
+        monthly_commits = monthly_counts.rename_axis('month').reset_index(name='count')
         
         if len(monthly_commits) < 2:
             return {"decay_score": 0.0, "is_stagnant": False, "activity_trend": {}}
