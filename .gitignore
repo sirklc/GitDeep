@@ -3,6 +3,7 @@
 
 # Virtual Environment
 venv/
+venv_win/
 env/
 
 # Python Cache
@@ -18,6 +19,15 @@ backend/data/
 
 # Generated Reports
 backend/reports/*.pdf
+
+# Logs
+*.log
+
+# Temp clone directories used during analysis
+backend/app/tmp/
+
+# graphify knowledge-graph output
+graphify-out/
 
 # IDE/OS files
 .DS_Store
