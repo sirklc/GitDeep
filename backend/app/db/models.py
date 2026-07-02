@@ -26,7 +26,7 @@ class RepoAnalysisRecord(Base):
     metrics_json = Column(Text)    # all raw JSON data as string
     pdf_url = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    # nullable=False: every analysis must belong to a registered user
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    # nullable=True: anonymous (unauthenticated) analyses have no owner
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
     owner = relationship("User", back_populates="analyses")
