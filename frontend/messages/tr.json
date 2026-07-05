@@ -1,0 +1,59 @@
+{
+  "landing": {
+    "badge": "Açık kaynak repo analizi",
+    "title": "GitHub reponu yapay zekâ ile denetle",
+    "subtitle": "Linki yapıştır — GitDeep mimariyi, güvenliği, topluluk sinyallerini ve dokümantasyonu puanlasın; PDF raporun e-postana gelsin.",
+    "cta": "Analize başla",
+    "ctaSecondary": "Nasıl çalışır?",
+    "features": {
+      "architecture": { "title": "Mimari Kalite", "desc": "Separation of concerns, ölçeklenebilirlik ve clean code değerlendirmesi. 30 puan." },
+      "security": { "title": "Güvenlik", "desc": "Hardcoded secret taraması ve bağımlılık riski analizi. 30 puan." },
+      "engagement": { "title": "Topluluk", "desc": "GitHub istatistikleri ve production-ready sinyalleri. 20 puan." },
+      "documentation": { "title": "Dokümantasyon", "desc": "Commit mesajı kalitesi ve README profesyonelliği. 20 puan." }
+    }
+  },
+  "nav": {
+    "login": "Giriş",
+    "register": "Kayıt ol",
+    "dashboard": "Panel",
+    "pricing": "Fiyatlandırma"
+  },
+  "common": {
+    "credits": "kredi",
+    "loading": "Yükleniyor..."
+  },
+  "auth": {
+    "loginTitle": "Giriş yap",
+    "registerTitle": "Hesap oluştur",
+    "email": "Email",
+    "password": "Parola",
+    "loginCta": "Giriş yap",
+    "registerCta": "Kayıt ol",
+    "verifying": "Email doğrulanıyor...",
+    "verified": "Email doğrulandı!",
+    "verifyFailed": "Doğrulama başarısız — link geçersiz veya süresi dolmuş.",
+    "goDashboard": "Panele git"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "verifyBanner": "Analiz başlatabilmek için email adresini doğrulaman gerekiyor.",
+    "resend": "Doğrulama emailini tekrar gönder",
+    "verifySent": "Gönderildi ✓",
+    "balance": "Kredi bakiyesi",
+    "buyCredits": "Kredi al",
+    "newAnalysis": "Yeni analiz",
+    "newAnalysisDesc": "GitHub repo linkini yapıştır, raporun emailine gelsin.",
+    "startAnalysis": "Analize başla",
+    "ledger": "Kredi geçmişi",
+    "colReason": "İşlem",
+    "colDelta": "Kredi",
+    "colBalance": "Bakiye",
+    "colDate": "Tarih",
+    "reasons": {
+      "signup_bonus": "Hoş geldin hediyesi",
+      "analysis_charge": "Analiz ücreti",
+      "analysis_refund": "Analiz iadesi",
+      "purchase": "Kredi satın alımı"
+    }
+  }
+}

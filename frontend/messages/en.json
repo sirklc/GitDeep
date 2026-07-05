@@ -1,0 +1,59 @@
+{
+  "landing": {
+    "badge": "Open-source repo analysis",
+    "title": "Audit your GitHub repo with AI",
+    "subtitle": "Paste the link — GitDeep scores architecture, security, community signals and documentation; your PDF report lands in your inbox.",
+    "cta": "Start analysis",
+    "ctaSecondary": "How it works",
+    "features": {
+      "architecture": { "title": "Architecture", "desc": "Separation of concerns, scalability and clean code review. 30 points." },
+      "security": { "title": "Security", "desc": "Hardcoded secret scanning and dependency risk analysis. 30 points." },
+      "engagement": { "title": "Community", "desc": "GitHub statistics and production-ready signals. 20 points." },
+      "documentation": { "title": "Documentation", "desc": "Commit message quality and README professionalism. 20 points." }
+    }
+  },
+  "nav": {
+    "login": "Log in",
+    "register": "Sign up",
+    "dashboard": "Dashboard",
+    "pricing": "Pricing"
+  },
+  "common": {
+    "credits": "credits",
+    "loading": "Loading..."
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create account",
+    "email": "Email",
+    "password": "Password",
+    "loginCta": "Log in",
+    "registerCta": "Sign up",
+    "verifying": "Verifying email...",
+    "verified": "Email verified!",
+    "verifyFailed": "Verification failed — link invalid or expired.",
+    "goDashboard": "Go to dashboard"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "verifyBanner": "You need to verify your email before starting an analysis.",
+    "resend": "Resend verification email",
+    "verifySent": "Sent ✓",
+    "balance": "Credit balance",
+    "buyCredits": "Buy credits",
+    "newAnalysis": "New analysis",
+    "newAnalysisDesc": "Paste a GitHub repo link, get the report in your inbox.",
+    "startAnalysis": "Start analysis",
+    "ledger": "Credit history",
+    "colReason": "Transaction",
+    "colDelta": "Credits",
+    "colBalance": "Balance",
+    "colDate": "Date",
+    "reasons": {
+      "signup_bonus": "Welcome bonus",
+      "analysis_charge": "Analysis fee",
+      "analysis_refund": "Analysis refund",
+      "purchase": "Credit purchase"
+    }
+  }
+}
