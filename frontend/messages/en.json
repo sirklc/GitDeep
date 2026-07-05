@@ -16,7 +16,8 @@
     "login": "Log in",
     "register": "Sign up",
     "dashboard": "Dashboard",
-    "pricing": "Pricing"
+    "pricing": "Pricing",
+    "logout": "Log out"
   },
   "common": {
     "credits": "credits",
@@ -45,6 +46,7 @@
     "newAnalysisDesc": "Paste a GitHub repo link, get the report in your inbox.",
     "startAnalysis": "Start analysis",
     "ledger": "Credit history",
+    "viewHistory": "View analysis history",
     "colReason": "Transaction",
     "colDelta": "Credits",
     "colBalance": "Balance",
@@ -55,5 +57,54 @@
       "analysis_refund": "Analysis refund",
       "purchase": "Credit purchase"
     }
+  },
+  "analyze": {
+    "title": "New analysis",
+    "subtitle": "Paste a public GitHub repository link — see the cost first, then confirm.",
+    "getQuote": "Get quote",
+    "cost": "This analysis",
+    "balanceChange": "Your balance: {before} → {after}",
+    "insufficient": "Insufficient credits — buy credits first.",
+    "confirm": "Confirm ({credits} credits)",
+    "verifyRequired": "Verify your email to run an analysis."
+  },
+  "job": {
+    "title": "Analysis in progress",
+    "step": "Step {step}/{total}",
+    "waiting": "You'll be redirected when the report is ready; an email is on its way too.",
+    "failed": "Analysis failed.",
+    "refunded": "{credits} credits were refunded to your account.",
+    "tryAgain": "Try again"
+  },
+  "report": {
+    "downloadPdf": "Download PDF",
+    "sections": {
+      "architecture": "Architecture",
+      "security": "Security",
+      "engagement": "Community",
+      "documentation": "Documentation"
+    },
+    "secretsTitle": "Detected secret patterns (masked)",
+    "recommendations": "Recommendations"
+  },
+  "history": {
+    "title": "Analysis history",
+    "empty": "No analyses yet.",
+    "colRepo": "Repository",
+    "colStatus": "Status",
+    "colScore": "Score",
+    "colDate": "Date",
+    "viewReport": "View report"
+  },
+  "billing": {
+    "title": "Buy credits",
+    "subtitle": "Pick a package — pay by card or crypto, credits land in your account automatically.",
+    "creditsLabel": "credits",
+    "payCard": "Pay with card",
+    "payCrypto": "Pay with crypto",
+    "successTitle": "Payment received",
+    "successBody": "Your new balance: {balance} credits.",
+    "successPending": "Payment confirmed — credits will appear in your balance shortly.",
+    "cancelledBody": "Checkout was cancelled — no charge was made."
   }
 }

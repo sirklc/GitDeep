@@ -80,7 +80,12 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <h2 className="mt-12 font-display text-xl font-semibold">{t("ledger")}</h2>
+      <h2 className="mt-12 flex items-center justify-between font-display text-xl font-semibold">
+        {t("ledger")}
+        <Link href="/history" className="text-sm font-normal text-accent hover:underline">
+          {t("viewHistory")}
+        </Link>
+      </h2>
       <div className="mt-4 overflow-x-auto rounded-xl border border-border-subtle">
         <table className="w-full text-left text-sm">
           <thead className="bg-surface text-muted">

@@ -11,14 +11,11 @@ function VerifyEmailInner() {
   const t = useTranslations("auth");
   const params = useSearchParams();
   const token = params.get("token") ?? "";
-  const [state, setState] = useState<"pending" | "ok" | "error">("pending");
+  const [state, setState] = useState<"pending" | "ok" | "error">(token ? "pending" : "error");
   const [detail, setDetail] = useState("");
 
   useEffect(() => {
-    if (!token) {
-      setState("error");
-      return;
-    }
+    if (!token) return;
     api
       .get(`/auth/verify-email?token=${encodeURIComponent(token)}`)
       .then(() => setState("ok"))

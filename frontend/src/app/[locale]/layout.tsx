@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Fira_Code, Inter, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 
+import Header from "@/components/Header";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -47,7 +48,10 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${firaCode.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Header />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

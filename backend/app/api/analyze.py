@@ -50,6 +50,7 @@ class JobStatusOut(BaseModel):
     overall_score: int | None
     error_message: str | None
     credits_charged: int
+    created_at: str
 
 
 def _overview_or_400(repo_url: str) -> tuple[str, str, dict]:
@@ -167,4 +168,5 @@ def _job_out(job: AnalysisJob) -> JobStatusOut:
         overall_score=job.overall_score,
         error_message=job.error_message,
         credits_charged=job.credits_charged,
+        created_at=job.created_at.isoformat(),
     )

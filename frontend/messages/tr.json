@@ -16,7 +16,8 @@
     "login": "Giriş",
     "register": "Kayıt ol",
     "dashboard": "Panel",
-    "pricing": "Fiyatlandırma"
+    "pricing": "Fiyatlandırma",
+    "logout": "Çıkış yap"
   },
   "common": {
     "credits": "kredi",
@@ -45,6 +46,7 @@
     "newAnalysisDesc": "GitHub repo linkini yapıştır, raporun emailine gelsin.",
     "startAnalysis": "Analize başla",
     "ledger": "Kredi geçmişi",
+    "viewHistory": "Analiz geçmişini gör",
     "colReason": "İşlem",
     "colDelta": "Kredi",
     "colBalance": "Bakiye",
@@ -55,5 +57,54 @@
       "analysis_refund": "Analiz iadesi",
       "purchase": "Kredi satın alımı"
     }
+  },
+  "analyze": {
+    "title": "Yeni analiz",
+    "subtitle": "Public bir GitHub reposu linki yapıştır — önce maliyeti gör, sonra onayla.",
+    "getQuote": "Maliyeti gör",
+    "cost": "Bu analiz",
+    "balanceChange": "Bakiyeniz: {before} → {after}",
+    "insufficient": "Yetersiz kredi — önce kredi satın almalısın.",
+    "confirm": "Onayla ({credits} kredi)",
+    "verifyRequired": "Analiz başlatmak için email adresini doğrulaman gerekiyor."
+  },
+  "job": {
+    "title": "Analiz sürüyor",
+    "step": "Adım {step}/{total}",
+    "waiting": "Rapor hazır olunca otomatik yönlendirileceksin; email de gelecek.",
+    "failed": "Analiz başarısız oldu.",
+    "refunded": "{credits} kredi hesabına iade edildi.",
+    "tryAgain": "Tekrar dene"
+  },
+  "report": {
+    "downloadPdf": "PDF indir",
+    "sections": {
+      "architecture": "Mimari",
+      "security": "Güvenlik",
+      "engagement": "Topluluk",
+      "documentation": "Dokümantasyon"
+    },
+    "secretsTitle": "Tespit edilen secret desenleri (maskeli)",
+    "recommendations": "İyileştirme önerileri"
+  },
+  "history": {
+    "title": "Analiz geçmişi",
+    "empty": "Henüz analiz yok.",
+    "colRepo": "Repo",
+    "colStatus": "Durum",
+    "colScore": "Puan",
+    "colDate": "Tarih",
+    "viewReport": "Raporu gör"
+  },
+  "billing": {
+    "title": "Kredi satın al",
+    "subtitle": "Bir paket seç — kartla veya kripto ile öde, krediler otomatik olarak hesabına yansısın.",
+    "creditsLabel": "kredi",
+    "payCard": "Kartla öde",
+    "payCrypto": "Kripto ile öde",
+    "successTitle": "Ödeme alındı",
+    "successBody": "Yeni bakiyeniz: {balance} kredi.",
+    "successPending": "Ödeme onaylandı — krediler kısa süre içinde bakiyenize yansıyacak.",
+    "cancelledBody": "Ödeme iptal edildi — herhangi bir ücret alınmadı."
   }
 }
