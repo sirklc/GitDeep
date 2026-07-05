@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{ review.language }}">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 2cm 1.8cm; }
+  body { font-family: "DejaVu Sans", sans-serif; color: #1a1a26; font-size: 10.5pt; line-height: 1.55; }
+  .header { border-bottom: 3px solid #8b5cf6; padding-bottom: 12px; margin-bottom: 24px; }
+  .brand { color: #8b5cf6; font-size: 13pt; font-weight: bold; letter-spacing: 1px; }
+  h1 { font-size: 19pt; margin: 6px 0 2px; }
+  .meta { color: #666; font-size: 9pt; }
+  .score-box { background: #f4f0fe; border: 2px solid #8b5cf6; border-radius: 10px;
+               padding: 14px 20px; margin: 18px 0; text-align: center; }
+  .score-big { font-size: 30pt; font-weight: bold; color: #7c3aed; }
+  .verdict { font-style: italic; color: #444; margin-top: 4px; }
+  .section { margin-top: 20px; page-break-inside: avoid; }
+  .section h2 { font-size: 13pt; color: #0d9488; border-left: 4px solid #2dd4bf;
+                padding-left: 10px; margin-bottom: 6px; }
+  .section .sc { float: right; font-weight: bold; color: #7c3aed; }
+  ul { margin: 6px 0 0 18px; padding: 0; }
+  li { margin-bottom: 4px; }
+  .reco { background: #ecfdf8; border: 1px solid #2dd4bf; border-radius: 8px;
+          padding: 12px 16px; margin-top: 22px; }
+  .reco h2 { color: #0d9488; font-size: 13pt; margin: 0 0 8px; }
+  .reco ol { margin: 0 0 0 18px; }
+  .footer { margin-top: 28px; padding-top: 10px; border-top: 1px solid #ddd;
+            color: #999; font-size: 8pt; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">GITDEEP</div>
+    <h1>{{ repo_name }}</h1>
+    <div class="meta">
+      {% if review.language == "tr" %}Teknik Analiz Raporu — {{ generated_at }}
+      {% else %}Technical Analysis Report — {{ generated_at }}{% endif %}
+    </div>
+  </div>
+
+  <div class="score-box">
+    <div class="score-big">{{ review.overall_score }}/100</div>
+    <div class="verdict">{{ review.one_line_verdict }}</div>
+  </div>
+
+  {% set titles = {
+    "tr": {"architecture": "1. Mimari Değerlendirme", "security": "2. Güvenlik İncelemesi",
+           "engagement": "3. GitHub Aktivite Analizi", "documentation": "4. Dokümantasyon",
+           "reco": "İyileştirme Önerileri"},
+    "en": {"architecture": "1. Architecture Review", "security": "2. Security Review",
+           "engagement": "3. GitHub Activity Analysis", "documentation": "4. Documentation",
+           "reco": "Actionable Recommendations"}
+  } %}
+  {% set tt = titles[review.language] %}
+
+  {% for key in ["architecture", "security", "engagement", "documentation"] %}
+  {% set sec = review[key] %}
+  <div class="section">
+    <h2>{{ tt[key] }} <span class="sc">{{ sec.score }}/{{ sec.max_score }}</span></h2>
+    <p>{{ sec.summary }}</p>
+    {% if sec.findings %}
+    <ul>
+      {% for finding in sec.findings %}<li>{{ finding }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <div class="reco">
+    <h2>{{ tt.reco }}</h2>
+    <ol>
+      {% for rec in review.top_recommendations %}<li>{{ rec }}</li>{% endfor %}
+    </ol>
+  </div>
+
+  <div class="footer">
+    GitDeep — AI Repo Review · {{ repo_url }} · SHA-256: {{ integrity_note }}
+  </div>
+</body>
+</html>

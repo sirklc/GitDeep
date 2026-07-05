@@ -1,72 +1,82 @@
-from github import Github
+"""GitHub API üzerinden metadata + repo boyutu (kredi tarifesi için)."""
+
+import re
+
+from github import Auth, Github, GithubException
+
 from app.core.config import settings
 
-class GitHubService:
-    def __init__(self):
-        # Authenticate using token if available, otherwise unauthenticated (lower rate limit)
-        if settings.GITHUB_PAT:
-            self.g = Github(settings.GITHUB_PAT, retry=0)
-        else:
-            self.g = Github(retry=0)
+REPO_URL_RE = re.compile(
+    r"^https?://github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git)?/?$"
+)
 
-    def get_repo_info(self, owner: str, repo_name: str) -> dict:
-        full_name = f"{owner}/{repo_name}"
-        repo = self.g.get_repo(full_name)
-        
-        return {
-            "full_name": repo.full_name,
-            "description": repo.description,
-            "stars": repo.stargazers_count,
-            "forks": repo.forks_count,
-            "open_issues": repo.open_issues_count,
-            "created_at": repo.created_at.isoformat(),
-            "updated_at": repo.updated_at.isoformat(),
-            "pushed_at": repo.pushed_at.isoformat()
-        }
 
-    def get_recent_commits(self, owner: str, repo_name: str, limit: int = 100) -> list:
-        full_name = f"{owner}/{repo_name}"
-        repo = self.g.get_repo(full_name)
-        
-        commits_data = []
-        commits = repo.get_commits()
-        
-        count = 0
-        for commit in commits:
-            if count >= limit:
-                break
-                
-            author_name = commit.commit.author.name if commit.commit.author else "Unknown"
-            date_str = commit.commit.author.date.isoformat() if commit.commit.author else ""
-            
-            commits_data.append({
-                "sha": commit.sha,
-                "message": commit.commit.message,
-                "author": author_name,
-                "date": date_str
-            })
-            count += 1
-            
-        return commits_data
+class RepoNotFound(Exception):
+    pass
 
-    def get_recent_releases(self, owner: str, repo_name: str, limit: int = 10) -> list:
-        full_name = f"{owner}/{repo_name}"
-        repo = self.g.get_repo(full_name)
-        
-        releases_data = []
-        releases = repo.get_releases()
-        
-        count = 0
-        for rel in releases:
-            if count >= limit:
-                break
-                
-            releases_data.append({
-                "tag_name": rel.tag_name,
-                "name": rel.title,
-                "published_at": rel.published_at.isoformat() if rel.published_at else "",
-                "author": rel.author.login if rel.author else "Unknown"
-            })
-            count += 1
-            
-        return releases_data
+
+class RepoNotPublic(Exception):
+    pass
+
+
+def parse_repo_url(url: str) -> tuple[str, str]:
+    match = REPO_URL_RE.match(url.strip())
+    if not match:
+        raise ValueError("Invalid GitHub repository URL")
+    return match.group(1), match.group(2)
+
+
+def _client() -> Github:
+    if settings.github_pat:
+        return Github(auth=Auth.Token(settings.github_pat))
+    return Github()
+
+
+def get_repo_overview(owner: str, repo_name: str) -> dict:
+    """Boyut (MB) + metadata. Private/bulunamayan repo için hata fırlatır."""
+    gh = _client()
+    try:
+        repo = gh.get_repo(f"{owner}/{repo_name}")
+    except GithubException as exc:
+        if exc.status == 404:
+            raise RepoNotFound(f"{owner}/{repo_name}") from exc
+        raise
+    if repo.private:
+        raise RepoNotPublic(f"{owner}/{repo_name}")
+
+    return {
+        "full_name": repo.full_name,
+        "description": repo.description or "",
+        "size_mb": round(repo.size / 1024, 2),  # API size KB döner
+        "stars": repo.stargazers_count,
+        "forks": repo.forks_count,
+        "open_issues": repo.open_issues_count,
+        "watchers": repo.subscribers_count,
+        "language": repo.language or "",
+        "license": repo.license.spdx_id if repo.license else None,
+        "default_branch": repo.default_branch,
+        "created_at": repo.created_at.isoformat() if repo.created_at else None,
+        "pushed_at": repo.pushed_at.isoformat() if repo.pushed_at else None,
+        "clone_url": repo.clone_url,
+    }
+
+
+def get_commit_messages(owner: str, repo_name: str, limit: int = 100) -> list[str]:
+    gh = _client()
+    repo = gh.get_repo(f"{owner}/{repo_name}")
+    messages: list[str] = []
+    for commit in repo.get_commits()[:limit]:
+        first_line = (commit.commit.message or "").splitlines()
+        messages.append(first_line[0][:200] if first_line else "")
+    return messages
+
+
+def get_contributor_count(owner: str, repo_name: str) -> int:
+    gh = _client()
+    repo = gh.get_repo(f"{owner}/{repo_name}")
+    contributors = repo.get_contributors()
+    # İlk sayfayla yetin — büyük repolarda tam sayım pahalı.
+    count = 0
+    for _ in contributors[:100]:
+        count += 1
+    return count

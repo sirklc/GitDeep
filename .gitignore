@@ -1,34 +1,35 @@
-# Environment Variables
-.env
-
-# Virtual Environment
-venv/
-venv_win/
-env/
-
-# Python Cache
+# Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Database
-# Ignore the data directory containing the SQLite DB
-backend/data/
-*.db
-*.sqlite3
+# Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
 
-# Generated Reports
-backend/reports/*.pdf
+# Env & secrets
+.env
+.env.local
+.env.*.local
 
-# Logs
-*.log
+# Runtime artifacts
+reports/
+*.pdf
+tmp/
 
-# Temp clone directories used during analysis
-backend/app/tmp/
-
-# graphify knowledge-graph output
-graphify-out/
-
-# IDE/OS files
-.DS_Store
+# IDE / OS
 .vscode/
+.idea/
+.DS_Store
+
+# Playwright
+frontend/test-results/
+frontend/playwright-report/

@@ -1,89 +1,106 @@
-from datetime import datetime, timedelta
-from typing import Optional
-from jose import JWTError, jwt
-import bcrypt
-from fastapi import Depends, HTTPException, status, Request
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
+import base64
+import hashlib
+import hmac
+import time
+from datetime import datetime, timedelta, timezone
+
+import jwt
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
 from app.core.config import settings
-from app.db.database import get_db
-from app.db.models import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
+# Argon2id — parola hashleme endüstri standardı (OWASP önerisi).
+_hasher = PasswordHasher()
 
-def verify_password(plain_password, hashed_password):
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-def get_password_hash(password):
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+def hash_password(password: str) -> str:
+    return _hasher.hash(password)
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire, "type": "access"})
-    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
-def create_refresh_token(data: dict) -> str:
-    """Creates a long-lived refresh token signed with REFRESH_SECRET_KEY."""
-    to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
-    to_encode.update({"exp": expire, "type": "refresh"})
-    return jwt.encode(to_encode, settings.REFRESH_SECRET_KEY, algorithm=settings.ALGORITHM)
+def verify_password(password: str, hashed: str) -> bool:
+    try:
+        return _hasher.verify(hashed, password)
+    except VerifyMismatchError:
+        return False
 
-def verify_refresh_token(token: str) -> str:
-    """Validates a refresh token and returns the username (sub) it encodes."""
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid or expired refresh token",
-        headers={"WWW-Authenticate": "Bearer"},
+
+def _create_token(user_id: int, minutes: int, secret: str, token_type: str) -> str:
+    now = datetime.now(timezone.utc)
+    payload = {
+        "sub": str(user_id),
+        "type": token_type,
+        "iat": now,
+        "exp": now + timedelta(minutes=minutes),
+    }
+    return jwt.encode(payload, secret, algorithm=settings.jwt_algorithm)
+
+
+def create_access_token(user_id: int) -> str:
+    return _create_token(user_id, settings.access_token_minutes, settings.secret_key, "access")
+
+
+def create_refresh_token(user_id: int) -> str:
+    return _create_token(
+        user_id, settings.refresh_token_minutes, settings.refresh_secret_key, "refresh"
     )
-    try:
-        payload = jwt.decode(token, settings.REFRESH_SECRET_KEY, algorithms=[settings.ALGORITHM])
-        if payload.get("type") != "refresh":
-            raise credentials_exception
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        return username
-    except JWTError:
-        raise credentials_exception
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        if payload.get("type") != "access":
-            raise credentials_exception
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-        
-    user = db.query(User).filter(User.username == username).first()
-    if user is None:
-        raise credentials_exception
-    return user
 
-def get_optional_user(request: Request, db: Session = Depends(get_db)) -> Optional[User]:
-    """Like get_current_user but returns None for unauthenticated requests instead of raising 401."""
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        return None
-    token = auth_header[len("Bearer "):]
+def decode_token(token: str, *, refresh: bool = False) -> int | None:
+    """Geçerliyse user_id döner, değilse None."""
+    secret = settings.refresh_secret_key if refresh else settings.secret_key
+    expected_type = "refresh" if refresh else "access"
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        if payload.get("type") != "access":
-            return None
-        username: str = payload.get("sub")
-        if not username:
-            return None
-        user = db.query(User).filter(User.username == username).first()
-        return user
-    except JWTError:
+        payload = jwt.decode(token, secret, algorithms=[settings.jwt_algorithm])
+    except jwt.PyJWTError:
         return None
+    if payload.get("type") != expected_type:
+        return None
+    try:
+        return int(payload["sub"])
+    except (KeyError, ValueError):
+        return None
+
+
+def token_fingerprint(token: str) -> str:
+    """Loglama/denetim için token'ın SHA-256 parmak izi (token asla loglanmaz)."""
+    return hashlib.sha256(token.encode()).hexdigest()[:16]
+
+
+# --- HMAC-SHA256 imzalı email doğrulama linki ---
+
+def create_email_verify_token(user_id: int) -> str:
+    expires = int(time.time()) + settings.email_link_hours * 3600
+    payload = f"{user_id}:{expires}"
+    sig = hmac.new(
+        settings.email_link_secret.encode(), payload.encode(), hashlib.sha256
+    ).hexdigest()
+    raw = f"{payload}:{sig}"
+    return base64.urlsafe_b64encode(raw.encode()).decode()
+
+
+def verify_email_token(token: str) -> int | None:
+    """Geçerli ve süresi dolmamışsa user_id döner."""
+    try:
+        raw = base64.urlsafe_b64decode(token.encode()).decode()
+        user_id_str, expires_str, sig = raw.rsplit(":", 2)
+        payload = f"{user_id_str}:{expires_str}"
+    except Exception:
+        return None
+    expected = hmac.new(
+        settings.email_link_secret.encode(), payload.encode(), hashlib.sha256
+    ).hexdigest()
+    if not hmac.compare_digest(sig, expected):
+        return None
+    if int(expires_str) < time.time():
+        return None
+    return int(user_id_str)
+
+
+def sha256_file(path: str) -> str:
+    """PDF bütünlük hash'i."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()

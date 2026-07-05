@@ -1,106 +1,148 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from datetime import datetime, timezone
+
+import structlog
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response
+from sqlalchemy import select
 from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordRequestForm
-from app.db.database import get_db
-from app.db.models import User
-from app.models.user_schemas import UserCreate, UserResponse, Token, RefreshRequest
-from app.core.security import (
-    get_password_hash, verify_password,
-    create_access_token, create_refresh_token, verify_refresh_token,
-    get_current_user
+
+from app.api.deps import (
+    REFRESH_COOKIE,
+    clear_auth_cookies,
+    get_current_user,
+    rate_limit,
+    set_auth_cookies,
 )
 from app.core.config import settings
-import httpx
+from app.core.security import (
+    create_email_verify_token,
+    decode_token,
+    hash_password,
+    verify_email_token,
+    verify_password,
+)
+from app.db.database import get_db
+from app.db.models import User
+from app.schemas.auth import LoginRequest, MessageOut, RegisterRequest, UserOut
+from app.services import credits as credit_service
+from app.services.mailer import send_verification_email
+from app.services.turnstile import verify_turnstile
 
-from fastapi_limiter.depends import RateLimiter
-from pyrate_limiter import Rate, Limiter, Duration
+log = structlog.get_logger()
 
-router = APIRouter()
+router = APIRouter(prefix="/api/auth", tags=["auth"])
 
-# ── Cloudflare Turnstile Verification ─────────────────────────────────────────
-async def verify_turnstile(token: str | None):
-    """Call Cloudflare's siteverify API to validate the Turnstile token."""
-    if not token:
-        raise HTTPException(status_code=403, detail="CAPTCHA token is missing.")
-    async with httpx.AsyncClient() as client:
-        resp = await client.post(
-            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-            data={
-                "secret": settings.CLOUDFLARE_TURNSTILE_SECRET,
-                "response": token,
-            },
-        )
-    result = resp.json()
-    if not result.get("success"):
-        raise HTTPException(status_code=403, detail="CAPTCHA verification failed. Please try again.")
 
-@router.post("/register", response_model=UserResponse, dependencies=[Depends(RateLimiter(Limiter(Rate(5, Duration.MINUTE))))])
-async def register(user_in: UserCreate, db: Session = Depends(get_db)):
-    await verify_turnstile(user_in.cf_turnstile_response)
+@router.post(
+    "/register",
+    response_model=UserOut,
+    dependencies=[rate_limit(times=5, seconds=60)],
+)
+async def register(
+    body: RegisterRequest,
+    request: Request,
+    response: Response,
+    background: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    if not await verify_turnstile(body.turnstile_token, request.client.host if request.client else None):
+        raise HTTPException(status_code=400, detail="CAPTCHA verification failed")
 
-    user = db.query(User).filter(User.username == user_in.username).first()
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this username already exists in the system.",
-        )
-    if user_in.email:
-        existing_email = db.query(User).filter(User.email == user_in.email).first()
-        if existing_email:
-            raise HTTPException(status_code=400, detail="This email is already registered.")
+    email = body.email.lower()
+    if db.scalar(select(User).where(User.email == email)) is not None:
+        raise HTTPException(status_code=409, detail="Email already registered")
 
-    hashed_password = get_password_hash(user_in.password)
     user = User(
-        username=user_in.username,
-        email=user_in.email,
-        hashed_password=hashed_password
+        email=email,
+        hashed_password=hash_password(body.password),
+        locale=body.locale,
+        credit_balance=0,
     )
     db.add(user)
+    db.flush()
+    credit_service.grant_signup_bonus(db, user, settings.signup_bonus_credits)
     db.commit()
-    db.refresh(user)
-    return user
 
-@router.post("/login", response_model=Token, dependencies=[Depends(RateLimiter(Limiter(Rate(10, Duration.MINUTE))))])
-async def login_access_token(
-    request: Request, db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()
+    token = create_email_verify_token(user.id)
+    background.add_task(send_verification_email, user.email, token, user.locale)
+
+    set_auth_cookies(response, user.id)
+    return UserOut.from_user(user)
+
+
+@router.post(
+    "/login",
+    response_model=UserOut,
+    dependencies=[rate_limit(times=10, seconds=60)],
+)
+async def login(
+    body: LoginRequest,
+    request: Request,
+    response: Response,
+    db: Session = Depends(get_db),
 ):
-    # Turnstile token is passed as a custom form field alongside credentials
-    body = await request.form()
-    cf_token = body.get("cf_turnstile_response")
-    await verify_turnstile(cf_token)
+    if not await verify_turnstile(body.turnstile_token, request.client.host if request.client else None):
+        raise HTTPException(status_code=400, detail="CAPTCHA verification failed")
 
-    user = db.query(User).filter(User.username == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(
-            status_code=400, detail="Incorrect username or password"
-        )
-    
-    token_data = {"sub": user.username}
-    access_token = create_access_token(data=token_data)
-    refresh_token = create_refresh_token(data=token_data)
+    user = db.scalar(select(User).where(User.email == body.email.lower()))
+    if user is None or not verify_password(body.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account disabled")
 
-    return {
-        "access_token": access_token,
-        "refresh_token": refresh_token,
-        "token_type": "bearer",
-    }
+    set_auth_cookies(response, user.id)
+    return UserOut.from_user(user)
 
-@router.post("/refresh", response_model=Token)
-def refresh_access_token(body: RefreshRequest, db: Session = Depends(get_db)):
-    """Exchange a valid refresh token for a new access + refresh token pair."""
-    username = verify_refresh_token(body.refresh_token)
-    user = db.query(User).filter(User.username == username).first()
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
 
-    token_data = {"sub": user.username}
-    return {
-        "access_token": create_access_token(data=token_data),
-        "refresh_token": create_refresh_token(data=token_data),
-        "token_type": "bearer",
-    }
+@router.post("/refresh", response_model=MessageOut)
+def refresh(request: Request, response: Response, db: Session = Depends(get_db)):
+    token = request.cookies.get(REFRESH_COOKIE)
+    user_id = decode_token(token, refresh=True) if token else None
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    user = db.get(User, user_id)
+    if user is None or not user.is_active:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
 
-@router.get("/me", response_model=UserResponse)
-def read_current_user(current_user: User = Depends(get_current_user)):
-    """Returns the currently authenticated user's profile."""
-    return current_user
+    set_auth_cookies(response, user.id)
+    return MessageOut(message="refreshed")
+
+
+@router.post("/logout", response_model=MessageOut)
+def logout(response: Response):
+    clear_auth_cookies(response)
+    return MessageOut(message="logged out")
+
+
+@router.get("/me", response_model=UserOut)
+def me(user: User = Depends(get_current_user)):
+    return UserOut.from_user(user)
+
+
+@router.get("/verify-email", response_model=MessageOut)
+def verify_email(token: str, db: Session = Depends(get_db)):
+    user_id = verify_email_token(token)
+    if user_id is None:
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+    if user.email_verified_at is None:
+        user.email_verified_at = datetime.now(timezone.utc)
+        db.commit()
+    return MessageOut(message="verified")
+
+
+@router.post(
+    "/resend-verification",
+    response_model=MessageOut,
+    dependencies=[rate_limit(times=3, seconds=300)],
+)
+def resend_verification(
+    background: BackgroundTasks,
+    user: User = Depends(get_current_user),
+):
+    if user.email_verified_at is not None:
+        return MessageOut(message="already verified")
+    token = create_email_verify_token(user.id)
+    background.add_task(send_verification_email, user.email, token, user.locale)
+    return MessageOut(message="sent")

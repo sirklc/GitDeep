@@ -1,84 +1,98 @@
-x-common-env: &common-env
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://gitdeep:gitdeep_password@db:5432/gitdeep
   REDIS_URL: redis://redis:6379/0
-  DATABASE_URL: postgresql://gitdeep:gitdeep_password@db/gitdeep
-  BASE_URL: http://localhost:8080
+  SECRET_KEY: ${SECRET_KEY:-dev-secret-change-me}
+  REFRESH_SECRET_KEY: ${REFRESH_SECRET_KEY:-dev-refresh-change-me}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:-dev-email-link-change-me}
+  BACKEND_BASE_URL: ${BACKEND_BASE_URL:-http://localhost:8000}
+  FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+  COOKIE_SECURE: ${COOKIE_SECURE:-false}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  CLAUDE_MODEL_SELECT: ${CLAUDE_MODEL_SELECT:-claude-haiku-4-5}
+  CLAUDE_MODEL_REVIEW: ${CLAUDE_MODEL_REVIEW:-claude-sonnet-5}
+  GITHUB_PAT: ${GITHUB_PAT:-}
+  SIGNUP_BONUS_CREDITS: ${SIGNUP_BONUS_CREDITS:-100}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+  STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  CRYPTOMUS_MERCHANT_ID: ${CRYPTOMUS_MERCHANT_ID:-}
+  CRYPTOMUS_API_KEY: ${CRYPTOMUS_API_KEY:-}
+  CRYPTOMUS_TEST_MODE: ${CRYPTOMUS_TEST_MODE:-true}
+  SMTP_HOST: ${SMTP_HOST:-mailpit}
+  SMTP_PORT: ${SMTP_PORT:-1025}
+  SMTP_USER: ${SMTP_USER:-}
+  SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+  SMTP_FROM: ${SMTP_FROM:-reports@gitdeep.dev}
+  SMTP_TLS: ${SMTP_TLS:-none}
+  TURNSTILE_SECRET: ${TURNSTILE_SECRET:-1x0000000000000000000000000000000AA}
+  SENTRY_DSN: ${SENTRY_DSN:-}
 
 services:
   redis:
     image: redis:7-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   db:
-    image: postgres:15-alpine
-    restart: unless-stopped
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: gitdeep
       POSTGRES_PASSWORD: gitdeep_password
       POSTGRES_DB: gitdeep
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U gitdeep" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U gitdeep"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    command: >
-      sh -c "alembic upgrade head &&
-             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    build: ./backend
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    environment: *backend-env
     ports:
       - "8000:8000"
-    env_file:
-      - ./backend/.env
-    environment:
-      <<: *common-env
     volumes:
       - reports_data:/app/reports
     depends_on:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
 
   celery_worker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    command: >
-      sh -c "celery -A app.celery_worker.celery_app worker --loglevel=info"
-    env_file:
-      - ./backend/.env
-    environment:
-      <<: *common-env
+    build: ./backend
+    command: celery -A app.worker.celery_app worker --loglevel=info --concurrency=2
+    environment: *backend-env
     volumes:
       - reports_data:/app/reports
     depends_on:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
-      backend:
-        condition: service_started
+        condition: service_healthy
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-    restart: unless-stopped
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api}
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-1x00000000000000000000AA}
     ports:
-      - "8080:80"
+      - "3000:3000"
     depends_on:
       - backend
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"   # Web UI
+      - "1025:1025"   # SMTP
 
 volumes:
   postgres_data:
