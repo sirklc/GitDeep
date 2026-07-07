@@ -54,7 +54,7 @@ export default function AuthForm({ mode }: Readonly<{ mode: "login" | "register"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="mt-1 w-full rounded-lg border border-border-subtle bg-background px-4 py-2 outline-none focus:border-primary"
+        className="mt-1 w-full rounded-lg border border-border-subtle bg-background px-4 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/50"
       />
       <label className="mt-4 block text-sm text-muted" htmlFor="password">
         {t("password")}
@@ -66,13 +66,13 @@ export default function AuthForm({ mode }: Readonly<{ mode: "login" | "register"
         minLength={8}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="mt-1 w-full rounded-lg border border-border-subtle bg-background px-4 py-2 outline-none focus:border-primary"
+        className="mt-1 w-full rounded-lg border border-border-subtle bg-background px-4 py-2 outline-none focus:border-primary focus:ring-2 focus:ring-primary/50"
       />
       {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
       <button
         type="submit"
         disabled={busy}
-        className="mt-6 w-full rounded-lg bg-primary py-2.5 font-semibold text-white transition hover:bg-primary-strong disabled:opacity-50"
+        className="mt-6 w-full cursor-pointer rounded-lg bg-primary-strong py-2.5 font-semibold text-white transition hover:bg-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         {busy ? "..." : mode === "login" ? t("loginCta") : t("registerCta")}
       </button>

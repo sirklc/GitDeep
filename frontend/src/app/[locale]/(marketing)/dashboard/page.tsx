@@ -48,7 +48,7 @@ export default function DashboardPage() {
             onClick={() =>
               api.post("/auth/resend-verification").then(() => setResent(true))
             }
-            className="font-semibold text-accent underline disabled:opacity-50"
+            className="cursor-pointer font-semibold text-accent underline disabled:cursor-not-allowed disabled:opacity-50"
           >
             {resent ? t("verifySent") : t("resend")}
           </button>
@@ -63,7 +63,7 @@ export default function DashboardPage() {
           </p>
           <Link
             href="/billing"
-            className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-strong"
+            className="mt-4 inline-block rounded-lg bg-primary-strong px-4 py-2 text-sm font-semibold text-white hover:bg-primary"
           >
             {t("buyCredits")}
           </Link>

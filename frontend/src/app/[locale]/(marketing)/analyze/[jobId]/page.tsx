@@ -92,7 +92,7 @@ export default function JobProgressPage({
           </p>
           <Link
             href="/analyze"
-            className="mt-4 inline-block rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-primary-strong"
+            className="mt-4 inline-block rounded-lg bg-primary-strong px-5 py-2 text-sm font-semibold text-white hover:bg-primary"
           >
             {t("tryAgain")}
           </Link>

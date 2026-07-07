@@ -5,11 +5,46 @@
     "subtitle": "Paste the link — GitDeep scores architecture, security, community signals and documentation; your PDF report lands in your inbox.",
     "cta": "Start analysis",
     "ctaSecondary": "How it works",
+    "heroStats": {
+      "dimensions": "4 scored dimensions",
+      "scale": "100-point scale",
+      "delivery": "PDF delivered by email",
+      "engine": "Powered by Claude"
+    },
     "features": {
       "architecture": { "title": "Architecture", "desc": "Separation of concerns, scalability and clean code review. 30 points." },
       "security": { "title": "Security", "desc": "Hardcoded secret scanning and dependency risk analysis. 30 points." },
       "engagement": { "title": "Community", "desc": "GitHub statistics and production-ready signals. 20 points." },
-      "documentation": { "title": "Documentation", "desc": "Commit message quality and README professionalism. 20 points." }
+      "documentation": { "title": "Documentation", "desc": "Commit message quality and README professionalism. 20 points." },
+      "pointsLabel": "points possible",
+      "shareLabel": "{pct}% of your total score"
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "subtitle": "From link to report in three steps.",
+      "steps": [
+        { "title": "Paste your repo link", "desc": "See the exact credit cost upfront, based on repo size — no surprises." },
+        { "title": "Claude reviews your code", "desc": "Two-stage AI analysis scores architecture, security, community signals and docs." },
+        { "title": "Get your PDF report", "desc": "Delivered instantly in-app and by email, ready to share or act on." }
+      ]
+    },
+    "techStack": {
+      "badge": "Under the hood",
+      "title": "Built on tools you already trust",
+      "subtitle": "GitDeep's pipeline runs on a modern, production-grade stack — no black boxes.",
+      "hubLabel": "Core stack"
+    },
+    "sample": {
+      "badge": "Example output",
+      "title": "See what a GitDeep report looks like",
+      "subtitle": "Every analysis returns a scored breakdown across four dimensions — here's a sample.",
+      "verdict": "Solid architecture with clear module boundaries; tighten dependency pinning and add setup docs to the README."
+    },
+    "finalCta": {
+      "title": "Ready to see your score?",
+      "subtitle": "Free credits on signup — no card required to try it.",
+      "cta": "Create free account",
+      "secondaryCta": "See a sample report"
     }
   },
   "nav": {
@@ -17,7 +52,15 @@
     "register": "Sign up",
     "dashboard": "Dashboard",
     "pricing": "Pricing",
-    "logout": "Log out"
+    "logout": "Log out",
+    "howItWorks": "How it works",
+    "sampleReport": "Sample report",
+    "techStack": "Tech stack",
+    "github": "Star on GitHub",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguage": "Switch language",
+    "account": "Account"
   },
   "common": {
     "credits": "credits",
@@ -105,6 +148,36 @@
     "successTitle": "Payment received",
     "successBody": "Your new balance: {balance} credits.",
     "successPending": "Payment confirmed — credits will appear in your balance shortly.",
-    "cancelledBody": "Checkout was cancelled — no charge was made."
+    "cancelledBody": "Checkout was cancelled — no charge was made.",
+    "mostPopular": "Most popular",
+    "bestValue": "Best value",
+    "perCredit": "per credit",
+    "oneTime": "One-time purchase",
+    "approxAnalyses": "≈ {count} analyses on small repos",
+    "cheaperBadge": "{pct}% cheaper per credit",
+    "tierDesc": {
+      "starter": "For trying GitDeep on a repo or two.",
+      "pro": "For regular audits across your projects.",
+      "bulk": "For teams auditing at scale."
+    },
+    "features": [
+      "Full architecture, security, community & docs scoring",
+      "PDF report delivered to your inbox",
+      "Pay once — credits never expire",
+      "Checkout by card or crypto"
+    ]
+  },
+  "footer": {
+    "tagline": "AI-powered GitHub repo audits — architecture, security, community and docs, scored and delivered to your inbox.",
+    "product": "Product",
+    "howItWorks": "How it works",
+    "sampleReport": "Sample report",
+    "account": "Account",
+    "resources": "Resources",
+    "docs": "Documentation",
+    "docsComingSoon": "Documentation is coming soon",
+    "sourceCode": "Source code",
+    "rights": "All rights reserved.",
+    "madeWith": "Analysis powered by Claude"
   }
 }

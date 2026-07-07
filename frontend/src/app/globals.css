@@ -32,3 +32,44 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
 }
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(12px, -24px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(237, 237, 242, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.glass-card {
+  background: rgba(26, 26, 38, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(237, 237, 242, 0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--foreground) 20%, var(--primary) 60%, var(--accent) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.glow-primary {
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.4), 0 0 40px -8px rgba(139, 92, 246, 0.55);
+}

@@ -76,12 +76,12 @@ export default function AnalyzePage() {
             setUrl(e.target.value);
             setQuote(null);
           }}
-          className="flex-1 rounded-lg border border-border-subtle bg-surface px-4 py-3 font-mono text-sm outline-none focus:border-primary"
+          className="flex-1 rounded-lg border border-border-subtle bg-surface px-4 py-3 font-mono text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/50"
         />
         <button
           type="submit"
           disabled={busy}
-          className="rounded-lg bg-primary px-6 py-3 font-semibold text-white hover:bg-primary-strong disabled:opacity-50"
+          className="cursor-pointer rounded-lg bg-primary-strong px-6 py-3 font-semibold text-white hover:bg-primary disabled:cursor-not-allowed disabled:opacity-50"
         >
           {t("getQuote")}
         </button>
@@ -94,7 +94,7 @@ export default function AnalyzePage() {
             type="button"
             disabled={resent}
             onClick={() => api.post("/auth/resend-verification").then(() => setResent(true))}
-            className="font-semibold text-accent underline disabled:opacity-50"
+            className="cursor-pointer font-semibold text-accent underline disabled:cursor-not-allowed disabled:opacity-50"
           >
             {resent ? dashboardT("verifySent") : dashboardT("resend")}
           </button>
@@ -126,7 +126,7 @@ export default function AnalyzePage() {
               type="button"
               onClick={confirm}
               disabled={busy}
-              className="mt-4 rounded-lg bg-accent px-6 py-2.5 font-semibold text-background hover:opacity-90 disabled:opacity-50"
+              className="mt-4 cursor-pointer rounded-lg bg-accent px-6 py-2.5 font-semibold text-background hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {t("confirm", { credits: quote.credits })}
             </button>

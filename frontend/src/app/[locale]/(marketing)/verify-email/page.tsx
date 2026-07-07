@@ -36,7 +36,7 @@ function VerifyEmailInner() {
             </p>
             <Link
               href="/dashboard"
-              className="mt-6 inline-block rounded-lg bg-primary px-6 py-2.5 font-semibold text-white hover:bg-primary-strong"
+              className="mt-6 inline-block rounded-lg bg-primary-strong px-6 py-2.5 font-semibold text-white hover:bg-primary"
             >
               {t("goDashboard")}
             </Link>
