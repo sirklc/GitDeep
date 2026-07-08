@@ -1,52 +1,90 @@
 # GitDeep
 
-GitDeep, herkese açık bir GitHub reposunun linkini alıp yapay zekâ (Claude) ile
-**mimari kalite, güvenlik, topluluk sinyalleri ve dokümantasyon** eksenlerinde
-0-100 arası puanlayan, sonucu PDF rapor olarak e-posta ile teslim eden bir SaaS'tır.
+GitDeep is a SaaS that takes the link to any public GitHub repository and
+scores it with AI (Claude) across **architecture quality, security, community
+signals, and documentation** on a 0-100 scale, delivering the result as a PDF
+report via email.
 
-Kullanıcı kayıt olur, ücretsiz hoş geldin kredisi alır, repo linkini yapıştırır,
-maliyeti görür, onaylar; analiz Celery kuyruğunda arka planda çalışır ve rapor
-hazır olunca hem uygulama içinde hem e-postada kullanıcıyı bekler.
+> **Status:** The backend is being actively rewritten. Right now only
+> authentication (signup/login/password reset) and newsletter subscription
+> work; the repo analysis pipeline (Celery, Claude integration, credit
+> system, Stripe/Cryptomus) hasn't been migrated to this new backend yet.
+> The frontend dashboard is currently a UI preview running entirely on mock
+> data — it isn't wired up to the real API yet.
 
-## Mimari özet
+## Architecture overview
 
 ```
 frontend/   Next.js 16 (App Router) + React 19 + next-intl (en/tr) + Tailwind 4
-backend/    FastAPI + SQLAlchemy 2.0 + Alembic + Celery + Postgres + Redis
+backend/    FastAPI + SQLAlchemy 2.0 + Alembic + Postgres (external server)
 ```
 
-- **Backend**: JWT/cookie tabanlı kimlik doğrulama, append-only kredi ledger'ı,
-  8 adımlı Celery analiz pipeline'ı, Anthropic Claude ile iki aşamalı LLM analizi,
-  WeasyPrint ile PDF üretimi, SMTP ile e-posta teslimatı, Stripe + Cryptomus ile
-  kredi satın alma.
-- **Frontend**: Kayıt/giriş, kredi bakiyesi + satın alma, repo analiz akışı
-  (teklif → onay → canlı ilerleme → rapor), analiz geçmişi.
+- **Backend (at this stage):** JWT/cookie-based authentication (signup,
+  login, logout, `/me`, refresh), outgoing email from a purpose-specific
+  sender address (password reset from `support@`, newsletter confirmation
+  from `newsletter@`), and newsletter subscription. The database runs on a
+  **separate server** — docker-compose does not host Postgres, it only
+  connects to it via `DATABASE_URL`.
+- **Frontend:** Open-source project landing page; signup/login/forgot-password
+  flows are wired to the real backend; the dashboard (credits, analysis
+  history, billing, notifications, etc.) is UI-only for now and uses mock
+  data.
 
-Detaylı mimari, API referansı, kredi/ödeme akışı ve kurulum rehberi için
-[`documents/`](documents/) klasörüne bakın:
+The analysis pipeline, credit ledger, and payment integrations (Celery,
+Anthropic Claude, Stripe, Cryptomus) that existed in the previous version
+have deliberately not been migrated to this backend yet; they'll be added
+back in separate steps.
 
-- [Genel Bakış](documents/genel-bakis.md)
-- [Teknoloji Yığını](documents/teknoloji-yigini.md)
-- [Mimari](documents/mimari.md)
-- [API Referansı](documents/api-referansi.md)
-- [Kredi ve Ödeme Sistemi](documents/kredi-ve-odeme.md)
-- [Kurulum ve Geliştirme](documents/kurulum-ve-gelistirme.md)
-- [i18n (Çoklu Dil)](documents/i18n.md)
-
-## Hızlı başlangıç
+## Environment variables (.env)
 
 ```bash
-cp .env.example .env   # gerekli anahtarları doldurun (bkz. kurulum-ve-gelistirme.md)
-docker compose up -d
+cp .env.example .env
+```
+
+The most critical fields to fill in:
+
+- `DATABASE_URL` — connection string for your own (external) Postgres server.
+- `SECRET_KEY`, `REFRESH_SECRET_KEY`, `EMAIL_LINK_SECRET` — replace with long,
+  random values in production.
+- `SMTP_*` — Mailpit is used in dev (see below); use a real SMTP provider
+  (SES, Postmark, Resend, etc.) in production.
+- `EMAIL_FROM_SUPPORT` / `EMAIL_FROM_NEWSLETTER` / `EMAIL_FROM_DEFAULT` —
+  different sender address per email type. When adding a new email type,
+  just add a new `EMAIL_FROM_*` variable here.
+
+## Quick start (Docker)
+
+```bash
+cp .env.example .env   # fill in the fields above
+docker compose up -d --build
 ```
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:8000 (`/healthz` ile sağlık kontrolü)
-- Mailpit (dev SMTP arayüzü): http://localhost:8025
+- Backend API: http://localhost:8000 (`/healthz` for health check, `/docs` for Swagger UI)
+- Mailpit (dev SMTP interface — view every email sent here): http://localhost:8025
 
-Yerel geliştirme, testler ve ortam değişkenlerinin tam listesi için
-[`documents/kurulum-ve-gelistirme.md`](documents/kurulum-ve-gelistirme.md).
+`docker-compose.yml` intentionally does **not** include a database service —
+since Postgres is hosted on your own server, the backend container just
+connects to it over the network via the `DATABASE_URL` in `.env`. On first
+boot, the backend container runs `alembic upgrade head` and sets up the
+tables automatically.
 
-## Lisans
+## Local development (without Docker)
 
-MIT — bkz. [LICENSE](LICENSE).
+```bash
+# backend
+cd backend
+python -m venv venv && source venv/bin/activate
+pip install -r requirements-dev.txt
+alembic upgrade head
+uvicorn app.main:app --reload
+
+# frontend
+cd frontend
+npm install
+npm run dev
+```
+
+## License
+
+MIT — see [LICENSE](LICENSE).

@@ -5,16 +5,30 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import React, { useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { useState } from 'react'
+import { api, ApiError } from '@/lib/api'
 
 export default function ForgotPasswordPage() {
     const t = useTranslations('auth')
+    const locale = useLocale()
+    const [email, setEmail] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
 
-    const onSubmit = (e: React.FormEvent) => {
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsSubmitted(true)
+        setError(null)
+        setLoading(true)
+        try {
+            await api.post('/auth/forgot-password', { email, locale })
+            setIsSubmitted(true)
+        } catch (err) {
+            setError(err instanceof ApiError ? err.detail : String(err))
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -40,10 +54,21 @@ export default function ForgotPasswordPage() {
                             <>
                                 <div className="space-y-2">
                                     <Label htmlFor="email" className="block text-sm">{t('emailLabel')}</Label>
-                                    <Input type="email" required name="email" id="email" />
+                                    <Input
+                                        type="email"
+                                        required
+                                        name="email"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
                                 </div>
 
-                                <Button className="w-full">{t('resetPasswordButton')}</Button>
+                                {error && <p className="text-sm text-red-400">{error}</p>}
+
+                                <Button type="submit" className="w-full" disabled={loading}>
+                                    {loading ? '…' : t('resetPasswordButton')}
+                                </Button>
                             </>
                         )}
                     </div>

@@ -34,3 +34,6 @@ tmp/
 frontend/test-results/
 frontend/playwright-report/
 .gstack/
+
+# Design/planning notes — kişisel notlar, repoda takip edilmiyor
+documents/

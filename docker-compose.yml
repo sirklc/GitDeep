@@ -1,0 +1,32 @@
+# Not: Postgres bilerek burada yok. Veritabanı ayrı bir sunucuda çalışıyor;
+# backend sadece .env'deki DATABASE_URL üzerinden ona ağ üzerinden bağlanır.
+# DATABASE_URL harici sunucuya erişebildiği sürece (VPN/özel ağ/allowlist)
+# bu compose dosyası değişmeden çalışır.
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mailpit
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Sadece dev/staging için — üretimde gerçek SMTP sağlayıcınızı (SES,
+  # Postmark, Resend vb.) .env'deki SMTP_* değişkenleriyle kullanın ve bu
+  # servisi kaldırın.
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025" # web arayüzü
+      - "1025:1025" # smtp
+    restart: unless-stopped

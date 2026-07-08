@@ -41,6 +41,8 @@
     "newsletter": "Bülten",
     "emailPlaceholder": "E-posta adresiniz",
     "submit": "Gönder",
+    "subscribed": "Abone oldun — gelen kutunu kontrol et.",
+    "subscribeError": "Bir şeyler ters gitti. Lütfen tekrar dene.",
     "noMiss": "Hiçbir güncellemeyi kaçırmayın!",
     "copyright": "GitDeep, Tüm hakları saklıdır",
     "groups": { "product": "Ürün", "solution": "Çözüm", "company": "Şirket", "legal": "Yasal" },
@@ -75,7 +77,15 @@
     "noAccountLink": "Kayıt ol",
     "hasAccountText": "Zaten bir hesabınız var mı?",
     "hasAccountLink": "Giriş yap",
-    "backToLogin": "Giriş sayfasına dön"
+    "backToLogin": "Giriş sayfasına dön",
+    "resetPasswordPageTitle": "Yeni şifre belirle",
+    "resetPasswordPageDescription": "Hesabın için yeni bir şifre seç.",
+    "newPasswordLabel": "Yeni şifre",
+    "confirmPasswordLabel": "Yeni şifre (tekrar)",
+    "resetPasswordSubmitButton": "Şifreyi sıfırla",
+    "resetPasswordSuccessMessage": "Şifren sıfırlandı. Artık giriş yapabilirsin.",
+    "resetPasswordMismatch": "Şifreler eşleşmiyor",
+    "resetPasswordInvalidToken": "Bu sıfırlama bağlantısı geçersiz veya token eksik."
   },
   "dashboard": {
     "searchPlaceholder": "Ara...",

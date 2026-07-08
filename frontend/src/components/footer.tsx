@@ -1,14 +1,32 @@
-import { useTranslations } from 'next-intl'
+'use client'
+
+import { useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LocaleToggle } from '@/components/locale-toggle'
 import Link from 'next/link'
+import { api } from '@/lib/api'
 
 export default function FooterSection() {
     const t = useTranslations('footer')
-    const tn = useTranslations('nav')
+    const locale = useLocale()
+    const [email, setEmail] = useState('')
+    const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+
+    const onSubscribe = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setStatus('loading')
+        try {
+            await api.post('/newsletter/subscribe', { email, locale })
+            setStatus('done')
+            setEmail('')
+        } catch {
+            setStatus('error')
+        }
+    }
 
     const links = [
         {
@@ -93,14 +111,32 @@ export default function FooterSection() {
                             </div>
                         ))}
                     </div>
-                    <form className="row-start-1 border-b pb-8 text-sm md:col-span-2 md:border-none lg:col-span-1">
+                    <form onSubmit={onSubscribe} className="row-start-1 border-b pb-8 text-sm md:col-span-2 md:border-none lg:col-span-1">
                         <div className="space-y-4">
                             <Label htmlFor="mail" className="block font-medium">{t('newsletter')}</Label>
-                            <div className="flex gap-2">
-                                <Input type="email" id="mail" name="mail" placeholder={t('emailPlaceholder')} className="h-8 text-sm" />
-                                <Button size="sm">{t('submit')}</Button>
-                            </div>
-                            <span className="text-muted-foreground block text-sm">{t('noMiss')}</span>
+                            {status === 'done' ? (
+                                <p className="text-sm text-accent-foreground dark:text-accent">{t('subscribed')}</p>
+                            ) : (
+                                <>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            type="email"
+                                            id="mail"
+                                            name="mail"
+                                            required
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder={t('emailPlaceholder')}
+                                            className="h-8 text-sm"
+                                        />
+                                        <Button size="sm" type="submit" disabled={status === 'loading'}>
+                                            {status === 'loading' ? '…' : t('submit')}
+                                        </Button>
+                                    </div>
+                                    {status === 'error' && <p className="text-sm text-red-400">{t('subscribeError')}</p>}
+                                    <span className="text-muted-foreground block text-sm">{t('noMiss')}</span>
+                                </>
+                            )}
                         </div>
                     </form>
                 </div>

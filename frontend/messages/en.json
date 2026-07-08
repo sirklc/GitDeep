@@ -41,6 +41,8 @@
     "newsletter": "Newsletter",
     "emailPlaceholder": "Your email",
     "submit": "Submit",
+    "subscribed": "You're subscribed — check your inbox.",
+    "subscribeError": "Something went wrong. Please try again.",
     "noMiss": "Don't miss any update!",
     "copyright": "GitDeep, All rights reserved",
     "groups": { "product": "Product", "solution": "Solution", "company": "Company", "legal": "Legal" },
@@ -75,7 +77,15 @@
     "noAccountLink": "Sign up",
     "hasAccountText": "Already have an account?",
     "hasAccountLink": "Sign in",
-    "backToLogin": "Back to login"
+    "backToLogin": "Back to login",
+    "resetPasswordPageTitle": "Set a new password",
+    "resetPasswordPageDescription": "Choose a new password for your account.",
+    "newPasswordLabel": "New password",
+    "confirmPasswordLabel": "Confirm new password",
+    "resetPasswordSubmitButton": "Reset password",
+    "resetPasswordSuccessMessage": "Your password has been reset. You can now sign in.",
+    "resetPasswordMismatch": "Passwords don't match",
+    "resetPasswordInvalidToken": "This reset link is invalid or missing a token."
   },
   "dashboard": {
     "searchPlaceholder": "Search...",
