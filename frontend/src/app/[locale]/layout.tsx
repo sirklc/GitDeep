@@ -5,6 +5,7 @@ import { Fira_Code, Inter, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { routing } from "@/i18n/routing";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "../globals.css";
 
@@ -45,9 +46,12 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       className={`${inter.variable} ${spaceGrotesk.variable} ${firaCode.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

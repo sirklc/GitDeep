@@ -1,0 +1,26 @@
+GITDEEP TASARIM ALGISI VE UI/UX ÖZETI
+=======================================
+
+1. Karanlık Mod Odaklı (Dark Mode First) & Minimalizm
+   - Projenin temel renk paleti siyah, derin griler (zinc/neutral) ve beyaz üzerine kuruludur.
+   - Göz yormayan bu renk seçimi, uygulamanın teknik ve profesyonel kimliğini ön plana çıkarır.
+   - Yüksek kontrast, okunabilirliği ve odaklanmayı artırır.
+
+2. Glassmorphism ve Derinlik (Işık Efektleri)
+   - Uygulamada düz ve sıkıcı arayüzler yerine; radial gradient'ler (radyal renk geçişleri), blur (bulanıklık) efektleri ve yarı saydam kartlar kullanılmıştır.
+   - Bu "glassmorphism" yapısı, modern SaaS uygulamalarında (örneğin Vercel, Linear) görülen premium ve "pahalılık" hissini kullanıcıya yansıtır.
+
+3. Akıcı Animasyonlar ve Mikro Etkileşimler
+   - Sayfa yüklemelerindeki yumuşak geçişler (fade-in-blur) ve infinite slider (sonsuz kayan) alanlar dinamik bir his verir.
+   - Örneğin; logoların veya kartların üzerine gelindiğinde çevresindeki öğelerin bulanıklaşması (blur) veya kararması, kullanıcının doğrudan o anki işleme odaklanmasını sağlayan şık bir dokunuştur.
+
+4. Renklerin Stratejik Kullanımı (Renkli Logolar)
+   - Temel tasarımın renksiz ve monokrom (tek renkli) olmasına karşılık; entegrasyon logoları (OpenAI, AWS, Gemini, Claude vb.) kendi orijinal canlı renkleriyle kullanılmıştır.
+   - Karanlık ve sade bir arka planda patlayan bu canlı renkler, sistemin ne kadar çok dış araçla (ve özellikle yapay zeka araçlarıyla) güçlü bir şekilde bağlandığını vurgular.
+
+5. Tipografi ve Modern "Bento" Kart Dizilimi
+   - Metinlerde (typography) büyük ve cesur başlıklar, altında ise daha silik (muted) açıklamalar yer alır.
+   - Özellikleri ve mock-up'ları gösteren bölümler modüler "Bento Box" mantığıyla kutulara ayrılarak, bilginin en temiz ve teknolojik şekilde sindirilmesi sağlanır.
+
+SONUÇ:
+GitDeep'in tasarımı; son teknoloji araçları (AI, Cloud, Developer Tools) kullanan, işini ciddiye alan, yenilikçi ve kurumsal düzeyde (enterprise-ready) bir ürün olduğunu ziyaretçiye ilk saniyeden hissettirmektedir.

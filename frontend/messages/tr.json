@@ -1,183 +1,259 @@
 {
-  "landing": {
-    "badge": "Açık kaynak repo analizi",
-    "title": "GitHub reponu yapay zekâ ile denetle",
-    "subtitle": "Linki yapıştır — GitDeep mimariyi, güvenliği, topluluk sinyallerini ve dokümantasyonu puanlasın; PDF raporun e-postana gelsin.",
-    "cta": "Analize başla",
-    "ctaSecondary": "Nasıl çalışır?",
-    "heroStats": {
-      "dimensions": "4 eksende puanlama",
-      "scale": "100 puan üzerinden",
-      "delivery": "PDF raporu email ile",
-      "engine": "Claude ile çalışır"
-    },
-    "features": {
-      "architecture": { "title": "Mimari Kalite", "desc": "Separation of concerns, ölçeklenebilirlik ve clean code değerlendirmesi. 30 puan." },
-      "security": { "title": "Güvenlik", "desc": "Hardcoded secret taraması ve bağımlılık riski analizi. 30 puan." },
-      "engagement": { "title": "Topluluk", "desc": "GitHub istatistikleri ve production-ready sinyalleri. 20 puan." },
-      "documentation": { "title": "Dokümantasyon", "desc": "Commit mesajı kalitesi ve README profesyonelliği. 20 puan." },
-      "pointsLabel": "puan üzerinden",
-      "shareLabel": "toplam puanın %{pct}'si"
-    },
-    "howItWorks": {
-      "title": "Nasıl çalışır?",
-      "subtitle": "Linkten rapora üç adımda.",
-      "steps": [
-        { "title": "Repo linkini yapıştır", "desc": "Repo boyutuna göre tam maliyeti önceden gör — sürpriz yok." },
-        { "title": "Claude kodunu inceler", "desc": "İki aşamalı yapay zekâ analizi mimari, güvenlik, topluluk sinyalleri ve dokümantasyonu puanlar." },
-        { "title": "PDF raporunu al", "desc": "Uygulama içinde ve email ile anında teslim edilir, paylaşmaya veya harekete geçmeye hazır." }
-      ]
-    },
-    "techStack": {
-      "badge": "Perde arkası",
-      "title": "Güvendiğin araçlar üzerine kurulu",
-      "subtitle": "GitDeep'in analiz hattı modern, production-grade bir teknoloji yığınında çalışır — kara kutu yok.",
-      "hubLabel": "Çekirdek yığın"
-    },
-    "sample": {
-      "badge": "Örnek çıktı",
-      "title": "Bir GitDeep raporu nasıl görünür?",
-      "subtitle": "Her analiz dört eksende puanlanmış bir döküm döner — işte bir örnek.",
-      "verdict": "Net modül sınırlarıyla sağlam bir mimari; bağımlılık sürümlerini sabitleyin ve README'ye kurulum adımları ekleyin."
-    },
-    "finalCta": {
-      "title": "Puanını görmeye hazır mısın?",
-      "subtitle": "Kayıtta ücretsiz kredi — denemek için kart gerekmez.",
-      "cta": "Ücretsiz hesap oluştur",
-      "secondaryCta": "Örnek raporu gör"
+  "nav": {
+    "features": "Özellikler",
+    "solution": "Çözüm",
+    "pricing": "Fiyatlandırma",
+    "about": "Hakkımızda",
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "getStarted": "Başla"
+  },
+  "hero": {
+    "badge": "Yapay Zeka Model Desteği Tanıtıldı",
+    "title": "Müşteri Etkileşimi için Modern Çözümler",
+    "description": "Modern web siteleri ve uygulamalar oluşturmak için yüksek düzeyde özelleştirilebilir bileşenler. Tam istediğiniz gibi.",
+    "startBuilding": "Hemen Başla",
+    "requestDemo": "Demo Talep Et",
+    "meetCustomers": "Kullandığım hizmetler"
+  },
+  "features": {
+    "sectionTitle": "İhtiyaçlarınızı Karşılamak için Tasarlandı",
+    "sectionDescription": "İş akışınızın her alanını karşılamak için tasarlanmış güçlü araçlar ve özellikler.",
+    "customizable": { "title": "Özelleştirilebilir", "description": "Geniş özelleştirme seçenekleriyle her ayrıntıyı ihtiyaçlarınıza göre kolayca ayarlayabilirsiniz." },
+    "control": { "title": "Tam Kontrol Sizde", "description": "Tasarım unsurlarından işlevselliğe kadar benzersiz ve kişiselleştirilmiş bir deneyim için tam kontrole sahipsiniz." },
+    "ai": { "title": "Yapay Zeka ile Güçlendirilmiş", "description": "İşlevsellikten tasarım unsurlarına kadar benzersiz bir deneyim yaratmak için yapay zekanın gücünden yararlanın." }
+  },
+  "content": {
+    "title": "GitDeep ekosistemi repolarınızı bir araya getiriyor.",
+    "p1": "GitDeep, yalnızca analizden fazlası olmaya doğru evrilmektedir.",
+    "p1Bold": "Tüm bir ekosistemi destekliyor",
+    "p1Suffix": "— içgörülerden eylemlere kadar.",
+    "p2": "Geliştiricileri ve ekipleri destekler — mimari analizden güvenliğe, belgelendirmeden topluluk puanlamasına kadar.",
+    "quote": "GitDeep kullanmak gizli bir mühendislik süper gücünü keşfetmek gibi oldu. Basitlik ve derinliğin mükemmel bir birleşimi.",
+    "quoteAuthor": "John Doe, CTO"
+  },
+  "integrations": {
+    "title": "Favori Araçlarınızla Entegre Edin",
+    "description": "İş akışınızı geliştirmek için popüler platformlar ve hizmetlerle sorunsuz bağlantı kurun.",
+    "getStarted": "Başla"
+  },
+  "footer": {
+    "newsletter": "Bülten",
+    "emailPlaceholder": "E-posta adresiniz",
+    "submit": "Gönder",
+    "noMiss": "Hiçbir güncellemeyi kaçırmayın!",
+    "copyright": "GitDeep, Tüm hakları saklıdır",
+    "groups": { "product": "Ürün", "solution": "Çözüm", "company": "Şirket", "legal": "Yasal" },
+    "links": {
+      "features": "Özellikler", "solution": "Çözüm", "customers": "Müşteriler", "pricing": "Fiyatlandırma",
+      "help": "Yardım", "about": "Hakkımızda", "startup": "Girişim", "freelancers": "Serbest Çalışanlar",
+      "organizations": "Organizasyonlar", "students": "Öğrenciler", "collaboration": "İşbirliği",
+      "design": "Tasarım", "management": "Yönetim", "careers": "Kariyer", "blog": "Blog",
+      "press": "Basın", "contact": "İletişim", "licence": "Lisans", "privacy": "Gizlilik",
+      "cookies": "Çerezler", "security": "Güvenlik"
     }
   },
-  "nav": {
-    "login": "Giriş",
-    "register": "Kayıt ol",
-    "dashboard": "Panel",
-    "pricing": "Fiyatlandırma",
-    "logout": "Çıkış yap",
-    "howItWorks": "Nasıl çalışır",
-    "sampleReport": "Örnek rapor",
-    "techStack": "Teknoloji",
-    "github": "GitHub'da yıldızla",
-    "openMenu": "Menüyü aç",
-    "closeMenu": "Menüyü kapat",
-    "switchLanguage": "Dili değiştir",
-    "account": "Hesap"
-  },
-  "common": {
-    "credits": "kredi",
-    "loading": "Yükleniyor..."
-  },
   "auth": {
-    "loginTitle": "Giriş yap",
-    "registerTitle": "Hesap oluştur",
-    "email": "Email",
-    "password": "Parola",
-    "loginCta": "Giriş yap",
-    "registerCta": "Kayıt ol",
-    "verifying": "Email doğrulanıyor...",
-    "verified": "Email doğrulandı!",
-    "verifyFailed": "Doğrulama başarısız — link geçersiz veya süresi dolmuş.",
-    "goDashboard": "Panele git"
+    "loginTitle": "Hoş Geldiniz",
+    "loginDescription": "Hesabınıza giriş yapmak için e-posta adresinizi girin",
+    "signupTitle": "Hesap Oluşturun",
+    "signupDescription": "Hesabınızı oluşturmak için bilgilerinizi girin",
+    "forgotPasswordTitle": "Şifremi Unuttum",
+    "forgotPasswordDescription": "E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "ornek@sirket.com",
+    "passwordLabel": "Şifre",
+    "nameLabel": "Ad Soyad",
+    "firstNameLabel": "Ad",
+    "lastNameLabel": "Soyad",
+    "namePlaceholder": "Ahmet Yılmaz",
+    "forgotPasswordLink": "Şifrenizi mi unuttunuz?",
+    "signInButton": "Giriş Yap",
+    "signUpButton": "Hesap Oluştur",
+    "resetPasswordButton": "Bağlantı Gönder",
+    "noAccountText": "Hesabınız yok mu?",
+    "noAccountLink": "Kayıt ol",
+    "hasAccountText": "Zaten bir hesabınız var mı?",
+    "hasAccountLink": "Giriş yap",
+    "backToLogin": "Giriş sayfasına dön"
   },
   "dashboard": {
-    "title": "Panel",
-    "verifyBanner": "Analiz başlatabilmek için email adresini doğrulaman gerekiyor.",
-    "resend": "Doğrulama emailini tekrar gönder",
-    "verifySent": "Gönderildi ✓",
-    "balance": "Kredi bakiyesi",
-    "buyCredits": "Kredi al",
-    "newAnalysis": "Yeni analiz",
-    "newAnalysisDesc": "GitHub repo linkini yapıştır, raporun emailine gelsin.",
-    "startAnalysis": "Analize başla",
-    "ledger": "Kredi geçmişi",
-    "viewHistory": "Analiz geçmişini gör",
-    "colReason": "İşlem",
-    "colDelta": "Kredi",
+    "searchPlaceholder": "Ara...",
+    "comingSoon": "Yakında",
+    "menu": {
+      "overview": "Genel Bakış",
+      "projects": "Projeler",
+      "analyses": "Analizlerim",
+      "billing": "Krediler & Faturalar",
+      "compare": "Karşılaştır",
+      "notifications": "Bildirimler",
+      "integrations": "Entegrasyonlar",
+      "team": "Takım",
+      "settings": "Ayarlar"
+    },
+    "metrics": {
+      "creditBalance": "Kredi Bakiyesi",
+      "totalAnalyses": "Toplam Analiz",
+      "avgScore": "Ortalama Skor",
+      "monthAnalyses": "Bu Ay"
+    },
+    "welcome": "Tekrar hoş geldiniz",
+    "welcomeSub": "İşte bugünün özeti.",
+    "buyCredits": "Kredi Al",
+    "newAnalysisCta": "Yeni Analiz Başlat",
+    "scoreTrend": "Skor Trendi",
+    "viewAll": "Tümünü Gör",
+    "recentAnalyses": "Son Analizler",
+    "recentAnalysesDesc": "En son çalıştırdığınız repo analizleri.",
+    "verifyBanner": "Tüm özelliklerin kilidini açmak için lütfen e-posta adresinizi doğrulayın.",
+    "resend": "Doğrulama e-postasını tekrar gönder",
+    "verifySent": "Doğrulama e-postası gönderildi",
+    "projects": {
+      "emptyTitle": "Henüz proje yok",
+      "emptyDesc": "GitHub'dan ilk deponuzu içe aktararak başlayın.",
+      "addProject": "Yeni Proje Ekle",
+      "importProject": "Proje İçe Aktar",
+      "connectGithub": "GitHub ile Bağlan",
+      "connecting": "Bağlanıyor...",
+      "selectRepo": "İçe aktarılacak bir depo seçin",
+      "import": "İçe Aktar",
+      "back": "Geri Dön"
+    }
+  },
+  "dashboardAnalyses": {
+    "title": "Analizlerim",
+    "subtitle": "Analiz ettiğiniz her repo, skoru ve durumuyla birlikte.",
+    "searchPlaceholder": "Repo ara...",
+    "filterAll": "Tümü",
+    "filterCompleted": "Tamamlandı",
+    "filterProcessing": "İşleniyor",
+    "filterFailed": "Başarısız",
+    "colRepo": "Repo",
+    "colStatus": "Durum",
+    "colScore": "Skor",
+    "colCredits": "Kredi",
+    "colDate": "Tarih",
+    "viewReport": "Raporu Gör",
+    "empty": "Filtrelerinize uyan analiz bulunamadı.",
+    "status": {
+      "queued": "Sırada",
+      "processing": "İşleniyor",
+      "completed": "Tamamlandı",
+      "failed": "Başarısız",
+      "refunded": "İade Edildi"
+    }
+  },
+  "dashboardReport": {
+    "back": "Analizlerime Dön",
+    "creditsCharged": "Harcanan Kredi",
+    "overallScore": "Genel Skor",
+    "verdict": "Genel Değerlendirme",
+    "axis": {
+      "architecture": "Mimari Kalite",
+      "security": "Güvenlik",
+      "engagement": "Topluluk & Etkileşim",
+      "documentation": "Dokümantasyon"
+    },
+    "recommendations": "Öncelikli Öneriler",
+    "secretScanTitle": "Güvenlik Taraması",
+    "secretScanEmpty": "Bu repoda sızdırılmış bir gizli anahtar bulunamadı.",
+    "downloadPdf": "PDF İndir",
+    "shareTitle": "Raporu Paylaş",
+    "shareDesc": "Bu bağlantıya sahip herkes raporun salt okunur bir kopyasını görüntüleyebilir.",
+    "copyLink": "Bağlantıyı Kopyala",
+    "copied": "Kopyalandı",
+    "badgeTitle": "README Rozeti",
+    "badgeDesc": "GitDeep skorunuzu reponuzun README'sinde gösterin.",
+    "copyBadge": "Markdown Kopyala"
+  },
+  "dashboardBilling": {
+    "title": "Krediler & Faturalar",
+    "subtitle": "Kredi bakiyenizi, satın alma geçmişinizi ve ödemelerinizi yönetin.",
+    "balanceLabel": "Güncel Bakiye",
+    "buyCredits": "Kredi Al",
+    "packagesTitle": "Kredi Paketleri",
+    "mostPopular": "En Popüler",
+    "buyButton": "Satın Al",
+    "ledgerTitle": "İşlem Geçmişi",
+    "colReason": "Sebep",
+    "colDelta": "Miktar",
     "colBalance": "Bakiye",
     "colDate": "Tarih",
     "reasons": {
-      "signup_bonus": "Hoş geldin hediyesi",
+      "signup_bonus": "Hoş geldin bonusu",
       "analysis_charge": "Analiz ücreti",
       "analysis_refund": "Analiz iadesi",
-      "purchase": "Kredi satın alımı"
+      "purchase": "Kredi satın alma"
+    },
+    "paymentsTitle": "Ödeme Geçmişi",
+    "colProvider": "Sağlayıcı",
+    "colPackage": "Paket",
+    "colAmount": "Tutar",
+    "colStatusPayment": "Durum",
+    "paymentStatus": {
+      "pending": "Beklemede",
+      "paid": "Ödendi",
+      "failed": "Başarısız",
+      "expired": "Süresi Doldu"
     }
   },
-  "analyze": {
-    "title": "Yeni analiz",
-    "subtitle": "Public bir GitHub reposu linki yapıştır — önce maliyeti gör, sonra onayla.",
-    "getQuote": "Maliyeti gör",
-    "cost": "Bu analiz",
-    "balanceChange": "Bakiyeniz: {before} → {after}",
-    "insufficient": "Yetersiz kredi — önce kredi satın almalısın.",
-    "confirm": "Onayla ({credits} kredi)",
-    "verifyRequired": "Analiz başlatmak için email adresini doğrulaman gerekiyor."
+  "dashboardNotifications": {
+    "title": "Bildirimler",
+    "subtitle": "Analizleriniz, krediniz ve ödemelerinizle ilgili güncellemeler.",
+    "markAllRead": "Tümünü okundu işaretle",
+    "empty": "Yeni bildiriminiz yok.",
+    "types": {
+      "analysis_completed": "Analiz tamamlandı",
+      "low_credit": "Kredi bakiyesi düşük",
+      "payment_success": "Ödeme başarılı",
+      "payment_failed": "Ödeme başarısız"
+    }
   },
-  "job": {
-    "title": "Analiz sürüyor",
-    "step": "Adım {step}/{total}",
-    "waiting": "Rapor hazır olunca otomatik yönlendirileceksin; email de gelecek.",
-    "failed": "Analiz başarısız oldu.",
-    "refunded": "{credits} kredi hesabına iade edildi.",
-    "tryAgain": "Tekrar dene"
+  "dashboardSettings": {
+    "title": "Hesap Ayarları",
+    "subtitle": "Profilinizi, güvenliğinizi ve tercihlerinizi yönetin.",
+    "profileTitle": "Profil",
+    "nameLabel": "Ad Soyad",
+    "emailLabel": "E-posta Adresi",
+    "localeLabel": "Dil Tercihi",
+    "saveButton": "Değişiklikleri Kaydet",
+    "passwordTitle": "Şifre Değiştir",
+    "currentPasswordLabel": "Mevcut Şifre",
+    "newPasswordLabel": "Yeni Şifre",
+    "confirmPasswordLabel": "Yeni Şifre (Tekrar)",
+    "updatePasswordButton": "Şifreyi Güncelle",
+    "dangerZoneTitle": "Tehlikeli Bölge",
+    "dangerZoneDesc": "Hesabınızı ve tüm ilişkili verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.",
+    "deleteAccount": "Hesabı Sil"
   },
-  "report": {
-    "downloadPdf": "PDF indir",
-    "sections": {
-      "architecture": "Mimari",
-      "security": "Güvenlik",
-      "engagement": "Topluluk",
-      "documentation": "Dokümantasyon"
-    },
-    "secretsTitle": "Tespit edilen secret desenleri (maskeli)",
-    "recommendations": "İyileştirme önerileri"
+  "dashboardIntegrations": {
+    "title": "API & Entegrasyonlar",
+    "subtitle": "Analizleri programatik olarak tetikleyin, webhook ile bildirim alın.",
+    "apiKeyTitle": "API Anahtarı",
+    "apiKeyDesc": "CI/CD hattınızdan analiz tetiklemek için bu anahtarı kullanın.",
+    "generateKey": "Yeni Anahtar Oluştur",
+    "revoke": "İptal Et",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "webhookTitle": "Webhook URL",
+    "webhookDesc": "Bir analiz tamamlandığında buraya POST isteği göndeririz.",
+    "webhookPlaceholder": "https://ornek.com/webhooks/gitdeep",
+    "saveWebhook": "Webhook'u Kaydet",
+    "docsNote": "Tam API referansı yakında."
   },
-  "history": {
-    "title": "Analiz geçmişi",
-    "empty": "Henüz analiz yok.",
-    "colRepo": "Repo",
-    "colStatus": "Durum",
-    "colScore": "Puan",
-    "colDate": "Tarih",
-    "viewReport": "Raporu gör"
+  "dashboardCompare": {
+    "title": "Repo Karşılaştır",
+    "subtitle": "İki analizi yan yana koyup nasıl kıyaslandıklarını görün.",
+    "selectFirst": "İlk analiz",
+    "selectSecond": "İkinci analiz",
+    "placeholder": "Bir analiz seçin",
+    "overallScore": "Genel Skor",
+    "noSelection": "Karşılaştırmak için yukarıdan iki analiz seçin."
   },
-  "billing": {
-    "title": "Kredi satın al",
-    "subtitle": "Bir paket seç — kartla veya kripto ile öde, krediler otomatik olarak hesabına yansısın.",
-    "creditsLabel": "kredi",
-    "payCard": "Kartla öde",
-    "payCrypto": "Kripto ile öde",
-    "successTitle": "Ödeme alındı",
-    "successBody": "Yeni bakiyeniz: {balance} kredi.",
-    "successPending": "Ödeme onaylandı — krediler kısa süre içinde bakiyenize yansıyacak.",
-    "cancelledBody": "Ödeme iptal edildi — herhangi bir ücret alınmadı.",
-    "mostPopular": "En popüler",
-    "bestValue": "En avantajlı",
-    "perCredit": "kredi başına",
-    "oneTime": "Tek seferlik satın alma",
-    "approxAnalyses": "≈ {count} küçük repo analizi",
-    "cheaperBadge": "kredi başına %{pct} daha ucuz",
-    "tierDesc": {
-      "starter": "GitDeep'i bir iki repoda denemek için.",
-      "pro": "Projelerinde düzenli denetim yapmak için.",
-      "bulk": "Ölçekte denetim yapan takımlar için."
-    },
-    "features": [
-      "Mimari, güvenlik, topluluk ve dokümantasyon puanlaması",
-      "PDF rapor e-posta adresine gönderilir",
-      "Tek seferlik ödeme — kredilerin süresi dolmaz",
-      "Kartla veya kripto ile ödeme"
-    ]
-  },
-  "footer": {
-    "tagline": "Yapay zekâ destekli GitHub repo denetimi — mimari, güvenlik, topluluk ve dokümantasyon puanlanır, sonuç emailine gelir.",
-    "product": "Ürün",
-    "howItWorks": "Nasıl çalışır?",
-    "sampleReport": "Örnek rapor",
-    "account": "Hesap",
-    "resources": "Kaynaklar",
-    "docs": "Dökümanlar",
-    "docsComingSoon": "Dökümanlar yakında",
-    "sourceCode": "Kaynak kod",
-    "rights": "Tüm hakları saklıdır.",
-    "madeWith": "Analizler Claude ile çalışır"
+  "dashboardTeam": {
+    "title": "Takım",
+    "subtitle": "Takım arkadaşlarınızı davet edin, ortak kredi havuzunu paylaşın.",
+    "comingSoonTitle": "Çok Yakında",
+    "comingSoonDesc": "Ortak kredi havuzu ve rol tabanlı erişime sahip takım çalışma alanları yol haritamızda."
   }
 }

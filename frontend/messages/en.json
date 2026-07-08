@@ -1,183 +1,259 @@
 {
-  "landing": {
-    "badge": "Open-source repo analysis",
-    "title": "Audit your GitHub repo with AI",
-    "subtitle": "Paste the link — GitDeep scores architecture, security, community signals and documentation; your PDF report lands in your inbox.",
-    "cta": "Start analysis",
-    "ctaSecondary": "How it works",
-    "heroStats": {
-      "dimensions": "4 scored dimensions",
-      "scale": "100-point scale",
-      "delivery": "PDF delivered by email",
-      "engine": "Powered by Claude"
-    },
-    "features": {
-      "architecture": { "title": "Architecture", "desc": "Separation of concerns, scalability and clean code review. 30 points." },
-      "security": { "title": "Security", "desc": "Hardcoded secret scanning and dependency risk analysis. 30 points." },
-      "engagement": { "title": "Community", "desc": "GitHub statistics and production-ready signals. 20 points." },
-      "documentation": { "title": "Documentation", "desc": "Commit message quality and README professionalism. 20 points." },
-      "pointsLabel": "points possible",
-      "shareLabel": "{pct}% of your total score"
-    },
-    "howItWorks": {
-      "title": "How it works",
-      "subtitle": "From link to report in three steps.",
-      "steps": [
-        { "title": "Paste your repo link", "desc": "See the exact credit cost upfront, based on repo size — no surprises." },
-        { "title": "Claude reviews your code", "desc": "Two-stage AI analysis scores architecture, security, community signals and docs." },
-        { "title": "Get your PDF report", "desc": "Delivered instantly in-app and by email, ready to share or act on." }
-      ]
-    },
-    "techStack": {
-      "badge": "Under the hood",
-      "title": "Built on tools you already trust",
-      "subtitle": "GitDeep's pipeline runs on a modern, production-grade stack — no black boxes.",
-      "hubLabel": "Core stack"
-    },
-    "sample": {
-      "badge": "Example output",
-      "title": "See what a GitDeep report looks like",
-      "subtitle": "Every analysis returns a scored breakdown across four dimensions — here's a sample.",
-      "verdict": "Solid architecture with clear module boundaries; tighten dependency pinning and add setup docs to the README."
-    },
-    "finalCta": {
-      "title": "Ready to see your score?",
-      "subtitle": "Free credits on signup — no card required to try it.",
-      "cta": "Create free account",
-      "secondaryCta": "See a sample report"
+  "nav": {
+    "features": "Features",
+    "solution": "Solution",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Login",
+    "signup": "Sign Up",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "Introducing Support for AI Models",
+    "title": "Modern Solutions for Customer Engagement",
+    "description": "Highly customizable components for building modern websites and applications that look and feel the way you mean it.",
+    "startBuilding": "Start Building",
+    "requestDemo": "Request a demo",
+    "meetCustomers": "Services I use"
+  },
+  "features": {
+    "sectionTitle": "Built to cover your needs",
+    "sectionDescription": "Powerful tools and features designed to meet every aspect of your workflow.",
+    "customizable": { "title": "Customizable", "description": "Extensive customization options, allowing you to tailor every aspect to meet your specific needs." },
+    "control": { "title": "You have full control", "description": "From design elements to functionality, you have complete control to create a unique and personalized experience." },
+    "ai": { "title": "Powered By AI", "description": "Elements to functionality, you have complete control to create a unique experience." }
+  },
+  "content": {
+    "title": "The GitDeep ecosystem brings together your repos.",
+    "p1": "GitDeep is evolving to be more than just analysis.",
+    "p1Bold": "It supports an entire ecosystem",
+    "p1Suffix": "— from insights to actions.",
+    "p2": "It supports developers and teams — from architecture analysis to security, documentation, and community scoring.",
+    "quote": "Using GitDeep has been like unlocking a secret engineering superpower. It's the perfect fusion of simplicity and depth.",
+    "quoteAuthor": "John Doe, CTO"
+  },
+  "integrations": {
+    "title": "Integrate with your favorite tools",
+    "description": "Connect seamlessly with popular platforms and services to enhance your workflow.",
+    "getStarted": "Get Started"
+  },
+  "footer": {
+    "newsletter": "Newsletter",
+    "emailPlaceholder": "Your email",
+    "submit": "Submit",
+    "noMiss": "Don't miss any update!",
+    "copyright": "GitDeep, All rights reserved",
+    "groups": { "product": "Product", "solution": "Solution", "company": "Company", "legal": "Legal" },
+    "links": {
+      "features": "Features", "solution": "Solution", "customers": "Customers", "pricing": "Pricing",
+      "help": "Help", "about": "About", "startup": "Startup", "freelancers": "Freelancers",
+      "organizations": "Organizations", "students": "Students", "collaboration": "Collaboration",
+      "design": "Design", "management": "Management", "careers": "Careers", "blog": "Blog",
+      "press": "Press", "contact": "Contact", "licence": "Licence", "privacy": "Privacy",
+      "cookies": "Cookies", "security": "Security"
     }
   },
-  "nav": {
-    "login": "Log in",
-    "register": "Sign up",
-    "dashboard": "Dashboard",
-    "pricing": "Pricing",
-    "logout": "Log out",
-    "howItWorks": "How it works",
-    "sampleReport": "Sample report",
-    "techStack": "Tech stack",
-    "github": "Star on GitHub",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "switchLanguage": "Switch language",
-    "account": "Account"
-  },
-  "common": {
-    "credits": "credits",
-    "loading": "Loading..."
-  },
   "auth": {
-    "loginTitle": "Log in",
-    "registerTitle": "Create account",
-    "email": "Email",
-    "password": "Password",
-    "loginCta": "Log in",
-    "registerCta": "Sign up",
-    "verifying": "Verifying email...",
-    "verified": "Email verified!",
-    "verifyFailed": "Verification failed — link invalid or expired.",
-    "goDashboard": "Go to dashboard"
+    "loginTitle": "Welcome back",
+    "loginDescription": "Enter your email to sign in to your account",
+    "signupTitle": "Create an account",
+    "signupDescription": "Enter your email below to create your account",
+    "forgotPasswordTitle": "Reset password",
+    "forgotPasswordDescription": "Enter your email address and we will send you a password reset link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "m@example.com",
+    "passwordLabel": "Password",
+    "nameLabel": "Full Name",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "namePlaceholder": "John Doe",
+    "forgotPasswordLink": "Forgot your password?",
+    "signInButton": "Sign In",
+    "signUpButton": "Create Account",
+    "resetPasswordButton": "Send Reset Link",
+    "noAccountText": "Don't have an account?",
+    "noAccountLink": "Sign up",
+    "hasAccountText": "Already have an account?",
+    "hasAccountLink": "Sign in",
+    "backToLogin": "Back to login"
   },
   "dashboard": {
-    "title": "Dashboard",
-    "verifyBanner": "You need to verify your email before starting an analysis.",
+    "searchPlaceholder": "Search...",
+    "comingSoon": "Coming soon",
+    "menu": {
+      "overview": "Overview",
+      "projects": "Projects",
+      "analyses": "My Analyses",
+      "billing": "Credits & Billing",
+      "compare": "Compare",
+      "notifications": "Notifications",
+      "integrations": "Integrations",
+      "team": "Team",
+      "settings": "Settings"
+    },
+    "metrics": {
+      "creditBalance": "Credit Balance",
+      "totalAnalyses": "Total Analyses",
+      "avgScore": "Average Score",
+      "monthAnalyses": "This Month"
+    },
+    "welcome": "Welcome back",
+    "welcomeSub": "Here's your summary for today.",
+    "buyCredits": "Buy Credits",
+    "newAnalysisCta": "Start New Analysis",
+    "scoreTrend": "Score Trend",
+    "viewAll": "View All",
+    "recentAnalyses": "Recent Analyses",
+    "recentAnalysesDesc": "Your most recently run repo analyses.",
+    "verifyBanner": "Please verify your email address to unlock all features.",
     "resend": "Resend verification email",
-    "verifySent": "Sent ✓",
-    "balance": "Credit balance",
-    "buyCredits": "Buy credits",
-    "newAnalysis": "New analysis",
-    "newAnalysisDesc": "Paste a GitHub repo link, get the report in your inbox.",
-    "startAnalysis": "Start analysis",
-    "ledger": "Credit history",
-    "viewHistory": "View analysis history",
-    "colReason": "Transaction",
-    "colDelta": "Credits",
+    "verifySent": "Verification email sent",
+    "projects": {
+      "emptyTitle": "No projects yet",
+      "emptyDesc": "Get started by importing your first repository from GitHub.",
+      "addProject": "Add New Project",
+      "importProject": "Import Project",
+      "connectGithub": "Connect with GitHub",
+      "connecting": "Connecting...",
+      "selectRepo": "Select a repository to import",
+      "import": "Import",
+      "back": "Back"
+    }
+  },
+  "dashboardAnalyses": {
+    "title": "My Analyses",
+    "subtitle": "Every repository you've analyzed, with its score and status.",
+    "searchPlaceholder": "Search repositories...",
+    "filterAll": "All",
+    "filterCompleted": "Completed",
+    "filterProcessing": "Processing",
+    "filterFailed": "Failed",
+    "colRepo": "Repository",
+    "colStatus": "Status",
+    "colScore": "Score",
+    "colCredits": "Credits",
+    "colDate": "Date",
+    "viewReport": "View Report",
+    "empty": "No analyses match your filters.",
+    "status": {
+      "queued": "Queued",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed",
+      "refunded": "Refunded"
+    }
+  },
+  "dashboardReport": {
+    "back": "Back to My Analyses",
+    "creditsCharged": "Credits Charged",
+    "overallScore": "Overall Score",
+    "verdict": "Verdict",
+    "axis": {
+      "architecture": "Architecture Quality",
+      "security": "Security",
+      "engagement": "Community & Engagement",
+      "documentation": "Documentation"
+    },
+    "recommendations": "Top Recommendations",
+    "secretScanTitle": "Secret Scan",
+    "secretScanEmpty": "No leaked secrets were found in this repository.",
+    "downloadPdf": "Download PDF",
+    "shareTitle": "Share Report",
+    "shareDesc": "Anyone with this link can view a read-only version of this report.",
+    "copyLink": "Copy Link",
+    "copied": "Copied",
+    "badgeTitle": "README Badge",
+    "badgeDesc": "Show your GitDeep score on your repository's README.",
+    "copyBadge": "Copy Markdown"
+  },
+  "dashboardBilling": {
+    "title": "Credits & Billing",
+    "subtitle": "Manage your credit balance, purchase history and payments.",
+    "balanceLabel": "Current Balance",
+    "buyCredits": "Buy Credits",
+    "packagesTitle": "Credit Packages",
+    "mostPopular": "Most Popular",
+    "buyButton": "Purchase",
+    "ledgerTitle": "Transaction History",
+    "colReason": "Reason",
+    "colDelta": "Amount",
     "colBalance": "Balance",
     "colDate": "Date",
     "reasons": {
       "signup_bonus": "Welcome bonus",
-      "analysis_charge": "Analysis fee",
+      "analysis_charge": "Analysis charge",
       "analysis_refund": "Analysis refund",
       "purchase": "Credit purchase"
+    },
+    "paymentsTitle": "Payment History",
+    "colProvider": "Provider",
+    "colPackage": "Package",
+    "colAmount": "Amount",
+    "colStatusPayment": "Status",
+    "paymentStatus": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "failed": "Failed",
+      "expired": "Expired"
     }
   },
-  "analyze": {
-    "title": "New analysis",
-    "subtitle": "Paste a public GitHub repository link — see the cost first, then confirm.",
-    "getQuote": "Get quote",
-    "cost": "This analysis",
-    "balanceChange": "Your balance: {before} → {after}",
-    "insufficient": "Insufficient credits — buy credits first.",
-    "confirm": "Confirm ({credits} credits)",
-    "verifyRequired": "Verify your email to run an analysis."
+  "dashboardNotifications": {
+    "title": "Notifications",
+    "subtitle": "Updates about your analyses, credits and payments.",
+    "markAllRead": "Mark all as read",
+    "empty": "You're all caught up.",
+    "types": {
+      "analysis_completed": "Analysis completed",
+      "low_credit": "Low credit balance",
+      "payment_success": "Payment successful",
+      "payment_failed": "Payment failed"
+    }
   },
-  "job": {
-    "title": "Analysis in progress",
-    "step": "Step {step}/{total}",
-    "waiting": "You'll be redirected when the report is ready; an email is on its way too.",
-    "failed": "Analysis failed.",
-    "refunded": "{credits} credits were refunded to your account.",
-    "tryAgain": "Try again"
+  "dashboardSettings": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile, security and preferences.",
+    "profileTitle": "Profile",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email Address",
+    "localeLabel": "Language Preference",
+    "saveButton": "Save Changes",
+    "passwordTitle": "Change Password",
+    "currentPasswordLabel": "Current Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "updatePasswordButton": "Update Password",
+    "dangerZoneTitle": "Danger Zone",
+    "dangerZoneDesc": "Permanently delete your account and all associated data. This cannot be undone.",
+    "deleteAccount": "Delete Account"
   },
-  "report": {
-    "downloadPdf": "Download PDF",
-    "sections": {
-      "architecture": "Architecture",
-      "security": "Security",
-      "engagement": "Community",
-      "documentation": "Documentation"
-    },
-    "secretsTitle": "Detected secret patterns (masked)",
-    "recommendations": "Recommendations"
+  "dashboardIntegrations": {
+    "title": "API & Integrations",
+    "subtitle": "Trigger analyses programmatically and get notified via webhooks.",
+    "apiKeyTitle": "API Key",
+    "apiKeyDesc": "Use this key to trigger analyses from your CI/CD pipeline.",
+    "generateKey": "Generate New Key",
+    "revoke": "Revoke",
+    "copy": "Copy",
+    "copied": "Copied",
+    "webhookTitle": "Webhook URL",
+    "webhookDesc": "We'll send a POST request here whenever an analysis completes.",
+    "webhookPlaceholder": "https://example.com/webhooks/gitdeep",
+    "saveWebhook": "Save Webhook",
+    "docsNote": "Full API reference coming soon."
   },
-  "history": {
-    "title": "Analysis history",
-    "empty": "No analyses yet.",
-    "colRepo": "Repository",
-    "colStatus": "Status",
-    "colScore": "Score",
-    "colDate": "Date",
-    "viewReport": "View report"
+  "dashboardCompare": {
+    "title": "Compare Repos",
+    "subtitle": "Put two analyses side by side to see how they stack up.",
+    "selectFirst": "First analysis",
+    "selectSecond": "Second analysis",
+    "placeholder": "Select an analysis",
+    "overallScore": "Overall Score",
+    "noSelection": "Select two analyses above to compare them."
   },
-  "billing": {
-    "title": "Buy credits",
-    "subtitle": "Pick a package — pay by card or crypto, credits land in your account automatically.",
-    "creditsLabel": "credits",
-    "payCard": "Pay with card",
-    "payCrypto": "Pay with crypto",
-    "successTitle": "Payment received",
-    "successBody": "Your new balance: {balance} credits.",
-    "successPending": "Payment confirmed — credits will appear in your balance shortly.",
-    "cancelledBody": "Checkout was cancelled — no charge was made.",
-    "mostPopular": "Most popular",
-    "bestValue": "Best value",
-    "perCredit": "per credit",
-    "oneTime": "One-time purchase",
-    "approxAnalyses": "≈ {count} analyses on small repos",
-    "cheaperBadge": "{pct}% cheaper per credit",
-    "tierDesc": {
-      "starter": "For trying GitDeep on a repo or two.",
-      "pro": "For regular audits across your projects.",
-      "bulk": "For teams auditing at scale."
-    },
-    "features": [
-      "Full architecture, security, community & docs scoring",
-      "PDF report delivered to your inbox",
-      "Pay once — credits never expire",
-      "Checkout by card or crypto"
-    ]
-  },
-  "footer": {
-    "tagline": "AI-powered GitHub repo audits — architecture, security, community and docs, scored and delivered to your inbox.",
-    "product": "Product",
-    "howItWorks": "How it works",
-    "sampleReport": "Sample report",
-    "account": "Account",
-    "resources": "Resources",
-    "docs": "Documentation",
-    "docsComingSoon": "Documentation is coming soon",
-    "sourceCode": "Source code",
-    "rights": "All rights reserved.",
-    "madeWith": "Analysis powered by Claude"
+  "dashboardTeam": {
+    "title": "Team",
+    "subtitle": "Invite teammates and share a credit pool.",
+    "comingSoonTitle": "Coming Soon",
+    "comingSoonDesc": "Team workspaces with shared credits and role-based access are on our roadmap."
   }
 }
