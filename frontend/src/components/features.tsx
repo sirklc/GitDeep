@@ -2,6 +2,8 @@ import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Settings2, Sparkles, Zap } from 'lucide-react'
 import { ReactNode } from 'react'
+import { TextEffect } from '@/components/motion-primitives/text-effect'
+import { AnimatedGroup } from '@/components/motion-primitives/animated-group'
 
 export default function Features() {
     const t = useTranslations('features')
@@ -9,10 +11,19 @@ export default function Features() {
         <section className="bg-zinc-50 py-16 md:py-32 dark:bg-transparent">
             <div className="mx-auto max-w-5xl px-6">
                 <div className="text-center">
-                    <h2 className="text-balance text-4xl font-semibold lg:text-5xl">{t('sectionTitle')}</h2>
-                    <p className="mt-4 text-muted-foreground">{t('sectionDescription')}</p>
+                    <TextEffect preset="fade-in-blur" speedSegment={0.3} as="h2" className="text-balance text-4xl font-semibold lg:text-5xl">{t('sectionTitle')}</TextEffect>
+                    <TextEffect per="line" preset="fade-in-blur" speedSegment={0.3} delay={0.5} as="p" className="mt-4 text-muted-foreground">{t('sectionDescription')}</TextEffect>
                 </div>
-                <div className="mx-auto mt-8 grid max-w-sm gap-6 text-center md:mt-16 lg:max-w-full lg:grid-cols-3">
+                <AnimatedGroup
+                    className="mx-auto mt-8 grid max-w-sm gap-6 text-center md:mt-16 lg:max-w-full lg:grid-cols-3"
+                    variants={{
+                        container: { visible: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } } },
+                        item: {
+                            hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
+                            visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { type: 'spring', bounce: 0.3 } },
+                        },
+                    }}
+                >
                     <Card className="group shadow-zinc-950/5">
                         <CardHeader className="pb-3">
                             <CardDecorator><Zap className="size-6" aria-hidden /></CardDecorator>
@@ -40,7 +51,7 @@ export default function Features() {
                             <p className="mt-3 text-sm text-muted-foreground">{t('ai.description')}</p>
                         </CardContent>
                     </Card>
-                </div>
+                </AnimatedGroup>
             </div>
         </section>
     )

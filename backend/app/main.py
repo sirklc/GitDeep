@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, newsletter
+from app.api import analysis, auth, newsletter
 from app.core.config import settings
 
 app = FastAPI(title="GitDeep API")
@@ -16,6 +16,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(newsletter.router)
+app.include_router(analysis.router)
 
 
 @app.get("/healthz")

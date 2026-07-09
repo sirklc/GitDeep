@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LocaleToggle } from '@/components/locale-toggle'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { api } from '@/lib/api'
 
 export default function FooterSection() {
@@ -32,12 +32,12 @@ export default function FooterSection() {
         {
             group: t('groups.product'),
             items: [
-                { title: t('links.features'), href: '#' },
-                { title: t('links.solution'), href: '#' },
+                { title: t('links.features'), href: '/features' },
+                { title: t('links.solution'), href: '/solution' },
                 { title: t('links.customers'), href: '#' },
-                { title: t('links.pricing'), href: '#' },
+                { title: t('links.pricing'), href: '/pricing' },
                 { title: t('links.help'), href: '#' },
-                { title: t('links.about'), href: '#' },
+                { title: t('links.about'), href: '/about' },
             ],
         },
         {
@@ -55,7 +55,7 @@ export default function FooterSection() {
         {
             group: t('groups.company'),
             items: [
-                { title: t('links.about'), href: '#' },
+                { title: t('links.about'), href: '/about' },
                 { title: t('links.careers'), href: '#' },
                 { title: t('links.blog'), href: '#' },
                 { title: t('links.press'), href: '#' },

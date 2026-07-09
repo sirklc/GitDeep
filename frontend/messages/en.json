@@ -265,5 +265,55 @@
     "subtitle": "Invite teammates and share a credit pool.",
     "comingSoonTitle": "Coming Soon",
     "comingSoonDesc": "Team workspaces with shared credits and role-based access are on our roadmap."
+  },
+  "pricingPage": {
+    "title": "Simple, transparent pricing",
+    "description": "Choose the plan that's right for you.",
+    "monthly": "Monthly",
+    "annually": "Annually",
+    "discountBadge": "20% Discount",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "description": "Perfect for trying out GitDeep.",
+      "features": ["10 Analyses per month", "Community Support", "Basic Reports"],
+      "cta": "Get Started"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$15",
+      "priceAnnual": "$12",
+      "description": "For developers who need more power.",
+      "features": ["100 Analyses per month", "Priority Support", "Detailed PDF Reports", "CI/CD Integration"],
+      "cta": "Upgrade to Pro"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$49",
+      "priceAnnual": "$39",
+      "description": "For teams with advanced needs.",
+      "features": ["Unlimited Analyses", "24/7 Dedicated Support", "Custom Integrations", "Team Workspaces"],
+      "cta": "Contact Sales"
+    }
+  },
+  "aboutPage": {
+    "title": "About GitDeep",
+    "description": "GitDeep is built by a team of passionate developers who believe in better tooling for code analysis.",
+    "missionTitle": "Our Mission",
+    "missionBody": "We are on a mission to simplify repository analysis and help teams build better software.",
+    "missionBody2": "Understanding large, complex codebases shouldn't require days of manual reading. We built GitDeep to give developers instant context, automated documentation, and AI-driven insights directly from their repositories.",
+    "missionBody3": "Our goal is to make every developer feel like a core contributor from day one, regardless of the project's size or complexity.",
+    "teamTitle": "Meet the Team",
+    "teamDescription": "The people building the future of repo analysis.",
+    "roles": {
+      "owner": "Founder & CEO",
+      "engineer": "Lead Engineer"
+    },
+    "valuesTitle": "Our Core Values",
+    "values": {
+      "innovation": { "title": "Continuous Innovation", "description": "Always pushing the boundaries of what AI can do for code." },
+      "quality": { "title": "Uncompromising Quality", "description": "Building tools that developers can trust." },
+      "community": { "title": "Community Driven", "description": "Listening to our users and open-source contributors." }
+    }
   }
 }

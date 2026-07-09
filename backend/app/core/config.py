@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     email_from_newsletter: str = "newsletter@gitdeep.dev"
     email_from_default: str = "no-reply@gitdeep.dev"
 
+    # Repo analiz pipeline'ı (Faz 3) — mimari eksenini skorlayan Claude çağrısı.
+    anthropic_api_key: str = ""
+
     @property
     def allowed_origins_list(self) -> list[str]:
         return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]

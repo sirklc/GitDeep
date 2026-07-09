@@ -34,6 +34,9 @@ tmp/
 frontend/test-results/
 frontend/playwright-report/
 .gstack/
+.claude/
 
 # Design/planning notes — kişisel notlar, repoda takip edilmiyor
 documents/
+
+graphify-out/

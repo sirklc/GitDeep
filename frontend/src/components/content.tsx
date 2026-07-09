@@ -1,13 +1,24 @@
 import { useTranslations } from 'next-intl'
 import { Github } from '@/components/ui/svgs/github'
+import { TextEffect } from '@/components/motion-primitives/text-effect'
+import { AnimatedGroup } from '@/components/motion-primitives/animated-group'
 
 export default function ContentSection() {
     const t = useTranslations('content')
     return (
         <section className="py-16 md:py-32">
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-                <h2 className="relative z-10 max-w-xl text-4xl font-medium lg:text-5xl">{t('title')}</h2>
-                <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
+                <TextEffect preset="fade-in-blur" speedSegment={0.3} as="h2" className="relative z-10 max-w-xl text-4xl font-medium lg:text-5xl">{t('title')}</TextEffect>
+                <AnimatedGroup 
+                    className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24"
+                    variants={{
+                        container: { visible: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } } },
+                        item: {
+                            hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
+                            visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { type: 'spring', bounce: 0.3 } },
+                        },
+                    }}
+                >
                     <div className="relative mb-6 sm:mb-0">
                         <div className="relative aspect-[76/59] rounded-2xl bg-gradient-to-b from-zinc-700 to-transparent p-px">
                             <div className="h-full w-full rounded-[15px] bg-surface overflow-hidden">
@@ -88,7 +99,7 @@ export default function ContentSection() {
                             </blockquote>
                         </div>
                     </div>
-                </div>
+                </AnimatedGroup>
             </div>
         </section>
     )

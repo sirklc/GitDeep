@@ -1,5 +1,5 @@
 'use client'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,10 +14,10 @@ export const HeroHeader = () => {
     const [isScrolled, setIsScrolled] = React.useState(false)
 
     const menuItems = [
-        { name: t('features'), href: '#features' },
-        { name: t('solution'), href: '#solution' },
-        { name: t('pricing'), href: '#pricing' },
-        { name: t('about'), href: '#about' },
+        { name: t('features'), href: '/features' },
+        { name: t('solution'), href: '/solution' },
+        { name: t('pricing'), href: '/pricing' },
+        { name: t('about'), href: '/about' },
     ]
 
     React.useEffect(() => {

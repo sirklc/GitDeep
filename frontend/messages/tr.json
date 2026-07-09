@@ -265,5 +265,55 @@
     "subtitle": "Takım arkadaşlarınızı davet edin, ortak kredi havuzunu paylaşın.",
     "comingSoonTitle": "Çok Yakında",
     "comingSoonDesc": "Ortak kredi havuzu ve rol tabanlı erişime sahip takım çalışma alanları yol haritamızda."
+  },
+  "pricingPage": {
+    "title": "Basit, şeffaf fiyatlandırma",
+    "description": "Sizin için en uygun planı seçin.",
+    "monthly": "Aylık",
+    "annually": "Yıllık",
+    "discountBadge": "%20 İndirim",
+    "free": {
+      "name": "Ücretsiz",
+      "price": "$0",
+      "description": "GitDeep'i denemek için mükemmel.",
+      "features": ["Ayda 10 Analiz", "Topluluk Desteği", "Temel Raporlar"],
+      "cta": "Başla"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$15",
+      "priceAnnual": "$12",
+      "description": "Daha fazla güce ihtiyaç duyan geliştiriciler için.",
+      "features": ["Ayda 100 Analiz", "Öncelikli Destek", "Detaylı PDF Raporları", "CI/CD Entegrasyonu"],
+      "cta": "Pro'ya Geç"
+    },
+    "enterprise": {
+      "name": "Kurumsal",
+      "price": "$49",
+      "priceAnnual": "$39",
+      "description": "Gelişmiş ihtiyaçları olan takımlar için.",
+      "features": ["Sınırsız Analiz", "7/24 Özel Destek", "Özel Entegrasyonlar", "Takım Çalışma Alanları"],
+      "cta": "Satışla İletişime Geç"
+    }
+  },
+  "aboutPage": {
+    "title": "GitDeep Hakkında",
+    "description": "GitDeep, kod analizi için daha iyi araçlara inanan tutkulu geliştiriciler tarafından geliştirilmiştir.",
+    "missionTitle": "Misyonumuz",
+    "missionBody": "Depo analizini basitleştirme ve ekiplerin daha iyi yazılım oluşturmasına yardımcı olma misyonundayız.",
+    "missionBody2": "Büyük ve karmaşık kod tabanlarını anlamak günlerce manuel okuma gerektirmemeli. Geliştiricilere doğrudan depolarından anında bağlam, otomatik dokümantasyon ve yapay zeka destekli içgörüler sunmak için GitDeep'i oluşturduk.",
+    "missionBody3": "Amacımız, projenin boyutu veya karmaşıklığı ne olursa olsun her geliştiricinin ilk günden itibaren projeye hakim olmasını sağlamaktır.",
+    "teamTitle": "Ekibimizle Tanışın",
+    "teamDescription": "Repo analizinin geleceğini inşa eden kişiler.",
+    "roles": {
+      "owner": "Kurucu & CEO",
+      "engineer": "Baş Mühendis"
+    },
+    "valuesTitle": "Temel Değerlerimiz",
+    "values": {
+      "innovation": { "title": "Sürekli İnovasyon", "description": "Yapay zekanın kod için yapabileceklerinin sınırlarını her zaman zorluyoruz." },
+      "quality": { "title": "Ödünsüz Kalite", "description": "Geliştiricilerin güvenebileceği araçlar oluşturuyoruz." },
+      "community": { "title": "Topluluk Odaklı", "description": "Kullanıcılarımızı ve açık kaynak katkıda bulunanları dinliyoruz." }
+    }
   }
 }
