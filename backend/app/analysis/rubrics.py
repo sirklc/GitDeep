@@ -194,6 +194,7 @@ DOCUMENTATION = Rubric(
 )
 
 ALL_RUBRICS: tuple[Rubric, ...] = (ARCHITECTURE, SECURITY, ENGAGEMENT, DOCUMENTATION)
+RUBRICS_BY_AXIS: dict[str, Rubric] = {r.axis: r for r in ALL_RUBRICS}
 
 # Matches the per-axis max score already used in the frontend dashboard mock
 # (frontend/src/lib/dashboard-mock.ts): architecture/security out of 30, engagement/documentation out of 20.

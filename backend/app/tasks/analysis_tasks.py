@@ -6,14 +6,15 @@ from celery import chord, group
 from app.analysis.aggregate import build_repo_analysis_result
 from app.analysis.claude_client import AnalysisError, run_axis_analysis
 from app.analysis.repo_context import RepoCloneError, build_repo_context, clone_repo
-from app.analysis.rubrics import ALL_RUBRICS
+from app.analysis.rubrics import RUBRICS_BY_AXIS
 from app.analysis.schemas import AxisResult
 from app.celery_app import celery_app
 from app.db.database import SessionLocal
-from app.db.models import AnalysisJob
+from app.db.models import AnalysisJob, User
+from app.reports.pdf import render_analysis_report_pdf
+from app.services.mailer import send_analysis_report_email
 
 log = structlog.get_logger()
-RUBRICS_BY_AXIS = {r.axis: r for r in ALL_RUBRICS}
 
 
 def _mark_failed(job_id: int, error: str) -> None:
@@ -81,7 +82,11 @@ def aggregate_results_task(axis_payloads: list[dict], job_id: int) -> None:
             db.commit()
             return
 
-        axis_results = [AxisResult(**p["result"]) for p in axis_payloads]
+        axis_order = list(RUBRICS_BY_AXIS)
+        axis_results = sorted(
+            (AxisResult(**p["result"]) for p in axis_payloads),
+            key=lambda a: axis_order.index(a.axis),
+        )
         aggregate = build_repo_analysis_result(job.repo_url, axis_results)
         job.axes = [a.model_dump(mode="json") for a in aggregate.axes]
         job.overall_score = aggregate.overall_score
@@ -89,5 +94,28 @@ def aggregate_results_task(axis_payloads: list[dict], job_id: int) -> None:
         job.status = "completed"
         job.completed_at = datetime.now(timezone.utc)
         db.commit()
+
+        _send_report_email_best_effort(db, job)
     finally:
         db.close()
+
+
+def _send_report_email_best_effort(db, job: AnalysisJob) -> None:
+    if job.user_id is None:
+        log.warning("aggregate.no_user_for_report_email", job_id=job.id)
+        return
+    user = db.get(User, job.user_id)
+    if user is None:
+        log.warning("aggregate.user_not_found_for_report_email", job_id=job.id, user_id=job.user_id)
+        return
+    try:
+        pdf_bytes = render_analysis_report_pdf(job)
+        send_analysis_report_email(
+            to_email=user.email,
+            repo_url=job.repo_url,
+            overall_score=job.overall_score,
+            pdf_bytes=pdf_bytes,
+            locale=user.locale,
+        )
+    except Exception:
+        log.exception("aggregate.report_email_failed", job_id=job.id, user_id=job.user_id)

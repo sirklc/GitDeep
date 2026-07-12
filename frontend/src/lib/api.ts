@@ -74,7 +74,7 @@ export function markNotificationRead(id: number): Promise<MessageOut> {
 }
 
 export function reportDownloadUrl(jobId: string): string {
-    return `${API_URL}/analysis/${jobId}/report`;
+    return `${API_URL}/analysis/jobs/${jobId}/report`;
 }
 
 export type PushSubscriptionPayload = {

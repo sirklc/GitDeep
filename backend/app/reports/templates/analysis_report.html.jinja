@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GitDeep Analysis Report</title>
+<style>
+    @page {
+        size: A4;
+        margin: 2cm 1.8cm;
+        @bottom-center {
+            content: counter(page) " / " counter(pages);
+            font-size: 9px;
+            color: #888;
+        }
+    }
+    body {
+        font-family: "Liberation Sans", Arial, sans-serif;
+        color: #1a1a1a;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+    h1 { font-size: 20px; margin-bottom: 2px; }
+    h2 {
+        font-size: 15px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
+    }
+    .repo-url { color: #555; font-family: monospace; font-size: 11px; }
+    .generated-at { color: #999; font-size: 9px; margin-top: 2px; }
+
+    .overall-block {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin: 18px 0;
+    }
+    .overall-score { font-size: 40px; font-weight: bold; }
+    .overall-max { color: #999; font-size: 14px; }
+
+    .badge {
+        display: inline-block;
+        padding: 1px 7px;
+        border-radius: 10px;
+        font-size: 10px;
+        font-weight: bold;
+        color: #fff;
+    }
+    .badge-green { background: #1a7f37; }
+    .badge-amber { background: #b35900; }
+    .badge-red { background: #b3261e; }
+    .badge-clean { background: #1a7f37; }
+    .badge-issues { background: #b3261e; }
+
+    .executive-summary {
+        background: #f6f6f6;
+        border-left: 3px solid #999;
+        padding: 8px 12px;
+        margin: 12px 0 20px 0;
+    }
+
+    .axis-section { page-break-before: always; }
+    .axis-section:first-of-type { page-break-before: auto; }
+    .axis-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .axis-summary { color: #333; margin-bottom: 10px; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 16px;
+    }
+    th, td {
+        text-align: left;
+        padding: 5px 6px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: top;
+    }
+    th {
+        font-size: 9px;
+        text-transform: uppercase;
+        color: #777;
+        border-bottom: 1px solid #ccc;
+    }
+    td.score-cell { white-space: nowrap; font-family: monospace; }
+    td.file-path { font-family: monospace; font-size: 10px; word-break: break-all; }
+    ul.evidence-list { margin: 4px 0 0 0; padding-left: 16px; }
+    ul.evidence-list li { margin-bottom: 2px; }
+    .evidence-file { font-family: monospace; color: #555; }
+</style>
+</head>
+<body>
+    <h1>GitDeep Analysis Report</h1>
+    <div class="repo-url">{{ repo_url }}</div>
+    <div class="generated-at">Generated {{ generated_at.strftime("%Y-%m-%d %H:%M UTC") }}</div>
+
+    <div class="overall-block">
+        <span class="overall-score">{{ overall_score }}</span>
+        <span class="overall-max">/ 100</span>
+    </div>
+
+    <div class="executive-summary">{{ executive_summary }}</div>
+
+    {% for axis in axes %}
+    {% set pct = (axis.weighted_score / axis.max_score * 100) if axis.max_score else 0 %}
+    <section class="axis-section">
+        <div class="axis-heading">
+            <h2>{{ axis.axis | capitalize }} — {{ axis.weighted_score }} / {{ axis.max_score }}</h2>
+            <span class="badge {{ 'badge-green' if pct >= 80 else ('badge-amber' if pct >= 50 else 'badge-red') }}">
+                {{ pct | round(0, 'floor') | int }}%
+            </span>
+        </div>
+        <p class="axis-summary">{{ axis.summary }}</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 22%">Criterion</th>
+                    <th style="width: 8%">Score</th>
+                    <th>Reasoning &amp; evidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for criterion in axis.criteria %}
+                <tr>
+                    <td>{{ criterion.title }}</td>
+                    <td class="score-cell">{{ criterion.score }} / 10</td>
+                    <td>
+                        {{ criterion.reasoning }}
+                        {% if criterion.evidence %}
+                        <ul class="evidence-list">
+                            {% for e in criterion.evidence %}
+                            <li>
+                                {% if e.file_path %}<span class="evidence-file">{{ e.file_path }}</span> — {% endif %}{{ e.observation }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if axis.file_reports %}
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 35%">File</th>
+                    <th style="width: 12%">Verdict</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in axis.file_reports %}
+                <tr>
+                    <td class="file-path">{{ f.file_path }}</td>
+                    <td><span class="badge badge-{{ f.verdict }}">{{ f.verdict }}</span></td>
+                    <td>{{ f.summary }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </section>
+    {% endfor %}
+</body>
+</html>

@@ -21,7 +21,7 @@ next-env.d.ts
 .env.*.local
 
 # Runtime artifacts
-reports/
+/reports/
 *.pdf
 tmp/
 

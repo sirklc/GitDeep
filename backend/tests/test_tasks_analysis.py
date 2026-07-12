@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import Mock
 
 import pytest
 from sqlalchemy import create_engine
@@ -9,7 +10,7 @@ from sqlalchemy.pool import StaticPool
 from app.analysis.repo_context import RepoCloneError
 from app.analysis.schemas import AxisResult, CriterionResult, FileReport
 from app.db.database import Base
-from app.db.models import AnalysisJob
+from app.db.models import AnalysisJob, User
 from app.tasks import analysis_tasks
 
 
@@ -44,6 +45,28 @@ def patched_session_local(monkeypatch, session_factory):
 def _create_job(session_factory, repo_url="https://github.com/example/repo") -> int:
     session = session_factory()
     job = AnalysisJob(repo_url=repo_url, status="queued")
+    session.add(job)
+    session.commit()
+    session.refresh(job)
+    job_id = job.id
+    session.close()
+    return job_id
+
+
+def _create_user(session_factory, email="dev@example.com", locale="en") -> int:
+    session = session_factory()
+    user = User(email=email, hashed_password="x", locale=locale)
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    user_id = user.id
+    session.close()
+    return user_id
+
+
+def _create_job_with_user(session_factory, user_id: int, repo_url="https://github.com/example/repo") -> int:
+    session = session_factory()
+    job = AnalysisJob(repo_url=repo_url, status="queued", user_id=user_id)
     session.add(job)
     session.commit()
     session.refresh(job)
@@ -142,3 +165,63 @@ def test_orchestrate_analysis_marks_failed_on_clone_error(monkeypatch, session_f
     job = session.get(AnalysisJob, job_id)
     assert job.status == "failed"
     assert "not found" in job.error
+
+
+def test_aggregate_results_task_sends_report_email_on_success(monkeypatch, session_factory):
+    user_id = _create_user(session_factory, email="dev@example.com", locale="en")
+    job_id = _create_job_with_user(session_factory, user_id)
+    payloads = [
+        {"axis": axis, "result": _fake_run_axis_analysis(rubric, "repo", "ctx").model_dump(mode="json")}
+        for axis, rubric in analysis_tasks.RUBRICS_BY_AXIS.items()
+    ]
+
+    fake_render = Mock(return_value=b"%PDF-fake")
+    fake_send = Mock()
+    monkeypatch.setattr(analysis_tasks, "render_analysis_report_pdf", fake_render)
+    monkeypatch.setattr(analysis_tasks, "send_analysis_report_email", fake_send)
+
+    analysis_tasks.aggregate_results_task(payloads, job_id)
+
+    fake_render.assert_called_once()
+    fake_send.assert_called_once()
+    call_kwargs = fake_send.call_args.kwargs
+    assert call_kwargs["to_email"] == "dev@example.com"
+    assert call_kwargs["locale"] == "en"
+    assert call_kwargs["pdf_bytes"] == b"%PDF-fake"
+
+
+def test_aggregate_results_task_email_failure_does_not_change_job_status(monkeypatch, session_factory):
+    user_id = _create_user(session_factory)
+    job_id = _create_job_with_user(session_factory, user_id)
+    payloads = [
+        {"axis": axis, "result": _fake_run_axis_analysis(rubric, "repo", "ctx").model_dump(mode="json")}
+        for axis, rubric in analysis_tasks.RUBRICS_BY_AXIS.items()
+    ]
+
+    monkeypatch.setattr(analysis_tasks, "render_analysis_report_pdf", Mock(return_value=b"%PDF-fake"))
+    monkeypatch.setattr(analysis_tasks, "send_analysis_report_email", Mock(side_effect=Exception("smtp boom")))
+
+    analysis_tasks.aggregate_results_task(payloads, job_id)
+
+    session = session_factory()
+    job = session.get(AnalysisJob, job_id)
+    assert job.status == "completed"
+    assert job.completed_at is not None
+
+
+def test_aggregate_results_task_skips_email_when_no_user_id(monkeypatch, session_factory):
+    job_id = _create_job(session_factory)
+    payloads = [
+        {"axis": axis, "result": _fake_run_axis_analysis(rubric, "repo", "ctx").model_dump(mode="json")}
+        for axis, rubric in analysis_tasks.RUBRICS_BY_AXIS.items()
+    ]
+
+    fake_send = Mock()
+    monkeypatch.setattr(analysis_tasks, "send_analysis_report_email", fake_send)
+
+    analysis_tasks.aggregate_results_task(payloads, job_id)
+
+    session = session_factory()
+    job = session.get(AnalysisJob, job_id)
+    assert job.status == "completed"
+    fake_send.assert_not_called()

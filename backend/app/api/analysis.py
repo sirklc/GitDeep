@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -9,6 +9,7 @@ from app.analysis.schemas import AxisResult
 from app.api.deps import get_current_user
 from app.db.database import get_db
 from app.db.models import AnalysisJob, User
+from app.reports.pdf import render_analysis_report_pdf
 from app.schemas.analysis import AnalysisJobResponse, AnalysisSubmitRequest, AnalysisSubmitResponse
 from app.tasks.analysis_tasks import orchestrate_analysis
 
@@ -59,3 +60,23 @@ def get_job(
     if job is None or job.user_id != user.id:
         raise HTTPException(status_code=404, detail="Analysis job not found")
     return AnalysisJobResponse.from_job(job)
+
+
+@router.get("/jobs/{job_id}/report")
+def get_job_report(
+    job_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Response:
+    job = db.get(AnalysisJob, job_id)
+    if job is None or job.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Analysis job not found")
+    if job.status != "completed":
+        raise HTTPException(status_code=409, detail="Report not available until analysis completes")
+
+    pdf_bytes = render_analysis_report_pdf(job)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="gitdeep-report-{job_id}.pdf"'},
+    )
