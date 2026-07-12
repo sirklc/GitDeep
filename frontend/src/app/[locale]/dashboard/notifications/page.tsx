@@ -1,32 +1,32 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslations } from 'next-intl'
-import { CheckCircle2, AlertTriangle, CreditCard, XCircle, MailCheck } from 'lucide-react'
+import { CheckCircle2, AlertTriangle, ShieldAlert, XCircle, MailCheck } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { mockNotifications as initialNotifications, type NotificationType } from '@/lib/dashboard-mock'
+import { useNotifications } from '@/lib/hooks'
+import { type NotificationType } from '@/lib/api'
+import { PushPermissionButton } from '@/components/push-permission-button'
 
 const typeIcon: Record<NotificationType, React.ElementType> = {
     analysis_completed: CheckCircle2,
+    analysis_blocked: XCircle,
     low_credit: AlertTriangle,
-    payment_success: CreditCard,
-    payment_failed: XCircle,
+    credit_exhausted: ShieldAlert,
 }
 
 const typeColor: Record<NotificationType, string> = {
     analysis_completed: 'text-green-500',
+    analysis_blocked: 'text-red-500',
     low_credit: 'text-yellow-500',
-    payment_success: 'text-accent',
-    payment_failed: 'text-red-500',
+    credit_exhausted: 'text-red-500',
 }
 
 export default function NotificationsPage() {
     const t = useTranslations('dashboardNotifications')
-    const [items, setItems] = useState(initialNotifications)
-
-    const markAllRead = () => setItems((prev) => prev.map((n) => ({ ...n, read: true })))
+    const { items, unreadCount, markAllRead } = useNotifications()
 
     return (
         <div className="space-y-6">
@@ -35,10 +35,13 @@ export default function NotificationsPage() {
                     <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
                     <p className="text-muted-foreground">{t('subtitle')}</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={markAllRead}>
-                    <MailCheck className="mr-2 size-4" />
-                    {t('markAllRead')}
-                </Button>
+                <div className="flex items-center gap-2">
+                    <PushPermissionButton />
+                    <Button variant="outline" size="sm" onClick={markAllRead} disabled={unreadCount === 0}>
+                        <MailCheck className="mr-2 size-4" />
+                        {t('markAllRead')}
+                    </Button>
+                </div>
             </div>
 
             <Card className="bg-surface-raised border-border/50 shadow-xl">
@@ -63,7 +66,7 @@ export default function NotificationsPage() {
                                                 {n.repo && <span className="font-mono text-muted-foreground"> — {n.repo}</span>}
                                             </p>
                                             <p className="text-xs text-muted-foreground mt-1">
-                                                {new Date(n.createdAt).toLocaleString('tr-TR', {
+                                                {new Date(n.created_at).toLocaleString('tr-TR', {
                                                     day: '2-digit',
                                                     month: 'short',
                                                     hour: '2-digit',

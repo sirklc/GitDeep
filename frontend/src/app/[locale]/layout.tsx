@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Fira_Code, Inter, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 
@@ -19,11 +19,41 @@ const firaCode = Fira_Code({
   subsets: ["latin", "latin-ext"],
 });
 
-export const metadata: Metadata = {
-  title: "GitDeep — AI Repo Review",
-  description:
-    "GitHub repo analizini yapay zekâ ile: mimari, güvenlik, topluluk ve dokümantasyon puanlaması.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+
+  return {
+    metadataBase: new URL("https://gitdeep.com"),
+    title: t("title"),
+    description: t("description"),
+    keywords: t("keywords"),
+    alternates: {
+      canonical: "/",
+      languages: {
+        en: "/en",
+        tr: "/tr",
+      },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: "https://gitdeep.com",
+      siteName: "GitDeep",
+      locale: locale === "tr" ? "tr_TR" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -45,7 +75,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${spaceGrotesk.variable} ${firaCode.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${firaCode.variable} h-full antialiased scroll-smooth`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

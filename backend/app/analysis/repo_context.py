@@ -30,6 +30,18 @@ PRIORITY_FILENAMES = (
     "README",
 )
 
+
+def qualifying_filenames_for_axis(axis: str) -> set[str]:
+    """Filenames (outside SOURCE_SUFFIXES) that qualify for per-file reporting
+    on the given axis. Manifests/Dockerfiles carry architecture-relevant
+    signal on every axis; README* only qualifies when the axis is
+    documentation.
+    """
+    readme_names = {name for name in PRIORITY_FILENAMES if name.startswith("README")}
+    manifest_names = set(PRIORITY_FILENAMES) - readme_names
+    return manifest_names | (readme_names if axis == "documentation" else set())
+
+
 BINARY_SUFFIXES = {
     ".png", ".jpg", ".jpeg", ".gif", ".ico", ".webp", ".svg",
     ".pdf", ".zip", ".tar", ".gz", ".woff", ".woff2", ".ttf", ".eot",

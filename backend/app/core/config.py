@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     # Repo analiz pipeline'ı (Faz 3) — mimari eksenini skorlayan Claude çağrısı.
     anthropic_api_key: str = ""
 
+    # Repo analiz pipeline'ı (Faz 4) — Celery broker/result-backend.
+    redis_url: str = "redis://redis:6379/0"
+
     @property
     def allowed_origins_list(self) -> list[str]:
         return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]

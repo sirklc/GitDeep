@@ -14,10 +14,9 @@ export const HeroHeader = () => {
     const [isScrolled, setIsScrolled] = React.useState(false)
 
     const menuItems = [
-        { name: t('features'), href: '/features' },
-        { name: t('solution'), href: '/solution' },
-        { name: t('pricing'), href: '/pricing' },
-        { name: t('about'), href: '/about' },
+        { name: t('features'), href: '#features' },
+        { name: t('solution'), href: '#solution' },
+        { name: t('pricing'), href: '#pricing' },
     ]
 
     React.useEffect(() => {
@@ -100,7 +99,7 @@ export const HeroHeader = () => {
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}
                                     asChild>
-                                    <Link href="#">
+                                    <Link href="/login">
                                         <span>{t('login')}</span>
                                     </Link>
                                 </Button>
@@ -108,7 +107,7 @@ export const HeroHeader = () => {
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}
                                     asChild>
-                                    <Link href="#">
+                                    <Link href="/signup">
                                         <span>{t('signup')}</span>
                                     </Link>
                                 </Button>
@@ -116,7 +115,7 @@ export const HeroHeader = () => {
                                     size="sm"
                                     className={cn(!isScrolled && 'hidden')}
                                     asChild>
-                                    <Link href="#">
+                                    <Link href="/signup">
                                         <span>{t('getStarted')}</span>
                                     </Link>
                                 </Button>

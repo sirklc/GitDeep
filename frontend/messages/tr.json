@@ -214,10 +214,12 @@
     "empty": "Yeni bildiriminiz yok.",
     "types": {
       "analysis_completed": "Analiz tamamlandı",
+      "analysis_blocked": "Kredi yetersiz — analiz durduruldu",
       "low_credit": "Kredi bakiyesi düşük",
-      "payment_success": "Ödeme başarılı",
-      "payment_failed": "Ödeme başarısız"
-    }
+      "credit_exhausted": "Kredi bakiyesi bitti"
+    },
+    "enablePush": "Bildirimlere izin ver",
+    "pushDenied": "Bildirimler engellendi"
   },
   "dashboardSettings": {
     "title": "Hesap Ayarları",
@@ -315,5 +317,10 @@
       "quality": { "title": "Ödünsüz Kalite", "description": "Geliştiricilerin güvenebileceği araçlar oluşturuyoruz." },
       "community": { "title": "Topluluk Odaklı", "description": "Kullanıcılarımızı ve açık kaynak katkıda bulunanları dinliyoruz." }
     }
+  },
+  "seo": {
+    "title": "GitDeep — Yapay Zekâ Destekli Repo İnceleme",
+    "description": "GitHub repo analizini yapay zekâ ile: mimari, güvenlik, topluluk ve dokümantasyon puanlaması.",
+    "keywords": "yapay zeka kod inceleme, github analizi, statik analiz, repo puanlama"
   }
 }

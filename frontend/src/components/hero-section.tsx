@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { AnimatedGroup } from '@/components/motion-primitives/animated-group'
 import { HeroHeader } from '@/components/header'
+import { LogoIcon } from '@/components/logo'
 import { Github } from '@/components/ui/svgs/github'
 import { SupabaseLogoIcon } from '@/components/ui/svgs/supabase-logo-icon'
 import { CloudflareColor } from '@/components/ui/svgs/cloudflare-color'
@@ -165,7 +166,7 @@ export default function HeroSection() {
                                         {/* Sidebar */}
                                         <div className="w-1/4 max-w-[200px] border-r border-border/50 bg-background/50 flex flex-col p-4 gap-4 shrink-0 backdrop-blur-md hidden sm:flex">
                                             <div className="flex items-center gap-2 px-2">
-                                                <div className="size-6 rounded-md bg-foreground text-background flex items-center justify-center font-bold text-xs">GD</div>
+                                                <LogoIcon className="size-6 shrink-0" />
                                                 <span className="font-semibold text-sm tracking-tight">GitDeep</span>
                                             </div>
                                             <div className="flex flex-col gap-1 mt-2">
@@ -297,30 +298,36 @@ export default function HeroSection() {
                                 <ChevronRight className="ml-1 inline-block size-3" />
                             </Link>
                         </div>
-                        <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-x-12 gap-y-8 transition-all duration-500 group-hover:opacity-50 group-hover:blur-sm sm:grid-cols-4 sm:gap-x-16 sm:gap-y-14">
-                            <div className="flex items-center justify-center">
-                                <AwsColor className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <SupabaseLogoIcon className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <VercelIcon className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <Github className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <CloudflareColor className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <Firebase className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <HuggingfaceColor className="h-6 w-auto" />
-                            </div>
-                            <div className="flex items-center justify-center">
-                                <NvidiaColor className="h-6 w-auto" />
+                        <div className="mx-auto mt-12 overflow-hidden transition-all duration-500 group-hover:opacity-50 group-hover:blur-sm relative" style={{ maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)' }}>
+                            <div className="flex w-max animate-[marquee_40s_linear_infinite] gap-12 sm:gap-24 hover:[animation-play-state:paused] py-4">
+                                {[...Array(2)].map((_, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <AwsColor className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <SupabaseLogoIcon className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <VercelIcon className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <Github className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <CloudflareColor className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <Firebase className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <HuggingfaceColor className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <NvidiaColor className="h-10 sm:h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                                        </div>
+                                    </React.Fragment>
+                                ))}
                             </div>
                         </div>
                     </div>

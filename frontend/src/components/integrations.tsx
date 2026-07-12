@@ -16,11 +16,11 @@ export default function IntegrationsSection() {
         <section>
             <div className="bg-muted dark:bg-background py-24 md:py-32">
                 <div className="mx-auto max-w-5xl px-6">
-                    <div className="bg-muted/25 relative mx-auto max-w-[22rem] items-center justify-between space-y-6 pointer-events-none sm:max-w-md"
-                        style={{ maskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%)' }}>
-                        <div role="presentation" className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:32px_32px] opacity-50" />
+                    <div className="bg-muted/25 relative mx-auto max-w-[24rem] items-center justify-between space-y-6 pointer-events-none sm:max-w-lg md:max-w-xl md:space-y-10"
+                        style={{ maskImage: 'radial-gradient(ellipse 60% 60% at 50% 50%, #000 70%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 60% at 50% 50%, #000 70%, transparent 100%)' }}>
+                        <div role="presentation" className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:48px_48px] opacity-50" />
                         <div>
-                            <InfiniteSlider gap={24} speed={20}>
+                            <InfiniteSlider gap={32} speed={25}>
                                 <IntegrationCard><Openai /></IntegrationCard>
                                 <IntegrationCard><GeminiColor /></IntegrationCard>
                                 <IntegrationCard><Cursor /></IntegrationCard>
@@ -32,7 +32,7 @@ export default function IntegrationsSection() {
                             </InfiniteSlider>
                         </div>
                         <div>
-                            <InfiniteSlider gap={24} speed={20} reverse>
+                            <InfiniteSlider gap={32} speed={25} reverse>
                                 <IntegrationCard><ClaudeColor /></IntegrationCard>
                                 <IntegrationCard><Cursor /></IntegrationCard>
                                 <IntegrationCard><GeminiColor /></IntegrationCard>
@@ -44,7 +44,7 @@ export default function IntegrationsSection() {
                             </InfiniteSlider>
                         </div>
                         <div>
-                            <InfiniteSlider gap={24} speed={20}>
+                            <InfiniteSlider gap={32} speed={25}>
                                 <IntegrationCard><Cursor /></IntegrationCard>
                                 <IntegrationCard><ClaudeColor /></IntegrationCard>
                                 <IntegrationCard><Openai /></IntegrationCard>
@@ -56,17 +56,14 @@ export default function IntegrationsSection() {
                             </InfiniteSlider>
                         </div>
                         <div className="absolute inset-0 m-auto flex size-fit justify-center gap-2 pointer-events-auto">
-                            <IntegrationCard className="shadow-black-950/10 size-16 bg-white/25 shadow-xl backdrop-blur-md backdrop-grayscale dark:border-white/10 dark:shadow-white/15" isCenter>
+                            <IntegrationCard className="shadow-black-950/10 size-20 bg-white/25 shadow-xl backdrop-blur-md backdrop-grayscale dark:border-white/10 dark:shadow-white/15" isCenter>
                                 <LogoIcon />
                             </IntegrationCard>
                         </div>
                     </div>
-                    <div className="mx-auto mt-12 max-w-lg space-y-6 text-center">
-                        <h2 className="text-balance text-3xl font-semibold md:text-4xl">{t('title')}</h2>
-                        <p className="text-muted-foreground">{t('description')}</p>
-                        <Button variant="outline" size="sm" asChild>
-                            <Link href="#">{t('getStarted')}</Link>
-                        </Button>
+                    <div className="mx-auto mt-12 max-w-2xl space-y-6 text-center">
+                        <h2 className="text-balance text-4xl font-bold md:text-5xl">{t('title')}</h2>
+                        <p className="text-lg md:text-xl text-muted-foreground">{t('description')}</p>
                     </div>
                 </div>
             </div>
@@ -75,7 +72,7 @@ export default function IntegrationsSection() {
 }
 
 const IntegrationCard = ({ children, className, isCenter = false }: { children: React.ReactNode; className?: string; isCenter?: boolean }) => (
-    <div className={cn('bg-background relative z-20 flex size-12 rounded-full border border-border', className)}>
-        <div className={cn('m-auto size-fit *:size-5', isCenter && '*:size-8')}>{children}</div>
+    <div className={cn('bg-background relative z-20 flex size-14 rounded-full border border-border', className)}>
+        <div className={cn('m-auto size-fit *:size-6', isCenter && '*:size-10')}>{children}</div>
     </div>
 )

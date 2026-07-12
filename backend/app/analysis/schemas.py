@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
@@ -13,9 +15,16 @@ class CriterionResult(BaseModel):
     reasoning: str
 
 
+class FileReport(BaseModel):
+    file_path: str
+    verdict: Literal["clean", "issues"]
+    summary: str
+
+
 class AxisResult(BaseModel):
     axis: str
     criteria: list[CriterionResult]
+    file_reports: list[FileReport]
     weighted_score: float = Field(ge=0, le=100)
     summary: str
 
@@ -57,8 +66,21 @@ def axis_json_schema() -> dict:
                     "additionalProperties": False,
                 },
             },
+            "file_reports": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "file_path": {"type": "string"},
+                        "verdict": {"type": "string", "enum": ["clean", "issues"]},
+                        "summary": {"type": "string"},
+                    },
+                    "required": ["file_path", "verdict", "summary"],
+                    "additionalProperties": False,
+                },
+            },
             "summary": {"type": "string"},
         },
-        "required": ["axis", "criteria", "summary"],
+        "required": ["axis", "criteria", "file_reports", "summary"],
         "additionalProperties": False,
     }

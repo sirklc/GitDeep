@@ -21,7 +21,7 @@ import { LogoIcon } from '@/components/logo'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
-import { mockNotifications } from '@/lib/dashboard-mock'
+import { useCurrentUser, useNotifications } from '@/lib/hooks'
 
 const mainNav = [
     { href: '/dashboard', icon: LayoutDashboard, key: 'overview' },
@@ -46,7 +46,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const t = useTranslations('dashboard')
     const pathname = usePathname()
     const [mobileOpen, setMobileOpen] = useState(false)
-    const unreadCount = mockNotifications.filter((n) => !n.read).length
+    const { unreadCount } = useNotifications()
+    const { user } = useCurrentUser()
 
     const isActive = (href: string) => {
         const clean = stripLocale(pathname)
@@ -152,6 +153,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
+                        {user && (
+                            <Link
+                                href="/dashboard/billing"
+                                className="hidden sm:flex items-center gap-1.5 rounded-full bg-surface-raised border border-border/50 px-3 py-1.5 text-xs font-medium hover:bg-muted/50 transition-colors"
+                            >
+                                <CreditCard className="size-3.5 text-muted-foreground" />
+                                <span className="font-mono">{user.credit_balance}</span>
+                            </Link>
+                        )}
                         <ThemeToggle />
                         <Link
                             href="/dashboard/notifications"

@@ -94,7 +94,7 @@ export default function DashboardPage() {
                         <CreditCard className="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-accent-foreground dark:text-accent">{currentUser.creditBalance}</div>
+                        <div className="text-2xl font-bold">{currentUser.creditBalance}</div>
                     </CardContent>
                 </Card>
                 <Card className="bg-surface-raised border-border/50 backdrop-blur-sm shadow-xl">

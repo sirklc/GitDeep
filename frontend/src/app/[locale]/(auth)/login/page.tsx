@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { useLocale, useTranslations } from 'next-intl'
 import { api, ApiError } from '@/lib/api'
 
@@ -39,9 +40,12 @@ export default function LoginPage() {
             <form onSubmit={onSubmit} className="m-auto h-fit w-full max-w-sm">
                 <div className="p-6">
                     <div>
-                        <Link href="/" aria-label="go home">
-                            <LogoIcon className="size-8" />
-                        </Link>
+                        <div className="flex justify-between items-start">
+                            <Link href="/" aria-label="go home">
+                                <LogoIcon className="size-8" />
+                            </Link>
+                            <ThemeToggle />
+                        </div>
                         <h1 className="mb-1 mt-4 text-xl font-semibold">{t('loginTitle')}</h1>
                         <p className="text-sm text-muted-foreground">{t('loginDescription')}</p>
                     </div>
@@ -101,7 +105,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                <p className="text-accent-foreground text-center text-sm mt-4">
+                <p className="text-muted-foreground text-center text-sm mt-4">
                     {t('noAccountText')}
                     <Button asChild variant="link" className="px-2">
                         <Link href="/signup">{t('noAccountLink')}</Link>

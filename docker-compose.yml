@@ -1,15 +1,62 @@
-# Not: Postgres bilerek burada yok. Veritabanı ayrı bir sunucuda çalışıyor;
-# backend sadece .env'deki DATABASE_URL üzerinden ona ağ üzerinden bağlanır.
-# DATABASE_URL harici sunucuya erişebildiği sürece (VPN/özel ağ/allowlist)
-# bu compose dosyası değişmeden çalışır.
+# Not: db servisi sadece lokal/dev içindir. Ayrı bir DB sunucusu kurulduğunda
+# bu servisi kaldırıp .env'deki DATABASE_URL'i o sunucuya yönlendirin —
+# backend zaten sadece DATABASE_URL üzerinden bağlanıyor, kod değişmez.
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: gitdeep
+      POSTGRES_PASSWORD: gitdeep_password
+      POSTGRES_DB: gitdeep
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gitdeep -d gitdeep"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   backend:
     build: ./backend
     env_file: .env
     ports:
       - "8000:8000"
     depends_on:
-      - mailpit
+      mailpit:
+        condition: service_started
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Repo analiz pipeline'ının Celery broker/result-backend'i (Faz 4).
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # Dört ekseni paralel çalıştıran Celery worker'ı. alembic upgrade head'i
+  # tekrar çalıştırmaz — bu yalnızca backend servisinde olur, iki container
+  # migration'da yarışmasın diye.
+  worker:
+    build: ./backend
+    command: celery -A app.celery_app worker --loglevel=info --concurrency=4
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
@@ -30,3 +77,6 @@ services:
       - "8025:8025" # web arayüzü
       - "1025:1025" # smtp
     restart: unless-stopped
+
+volumes:
+  postgres_data:

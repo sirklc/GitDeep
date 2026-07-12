@@ -8,6 +8,7 @@ import { ArrowLeft, Download, Link2, Check, ShieldAlert, ShieldCheck, BadgeCheck
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { getAnalysisById, type AnalysisAxes } from '@/lib/dashboard-mock'
+import { reportDownloadUrl } from '@/lib/api'
 
 const axisOrder: (keyof AnalysisAxes)[] = ['architecture', 'security', 'engagement', 'documentation']
 
@@ -58,9 +59,11 @@ export default function ReportDetailPage() {
                     <h1 className="text-2xl font-bold tracking-tight font-mono">{job.repo}</h1>
                     <p className="text-muted-foreground mt-1">{job.verdict}</p>
                 </div>
-                <Button variant="outline">
-                    <Download className="mr-2 size-4" />
-                    {t('downloadPdf')}
+                <Button asChild variant="outline">
+                    <a href={reportDownloadUrl(job.id)} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 size-4" />
+                        {t('downloadPdf')}
+                    </a>
                 </Button>
             </div>
 

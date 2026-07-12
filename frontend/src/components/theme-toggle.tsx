@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { flushSync } from 'react-dom'
 
 export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
@@ -19,9 +20,26 @@ export function ThemeToggle() {
         )
     }
 
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark'
+        
+        // If the browser doesn't support View Transitions, just switch instantly
+        if (!document.startViewTransition) {
+            setTheme(newTheme)
+            return
+        }
+
+        // Use View Transitions API for a lag-free, GPU-accelerated crossfade
+        document.startViewTransition(() => {
+            flushSync(() => {
+                setTheme(newTheme)
+            })
+        })
+    }
+
     return (
         <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={toggleTheme}
             className="relative flex size-8 items-center justify-center rounded-full border border-border/50 bg-surface-raised text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors"
             aria-label="Toggle theme"
         >

@@ -1,3 +1,4 @@
+from app.analysis.repo_context import SOURCE_SUFFIXES, qualifying_filenames_for_axis
 from app.analysis.rubrics import Rubric
 
 AXIS_PERSONA = {
@@ -44,7 +45,34 @@ Rules:
   what is wrong, where, and why it matters — or state plainly that it's correct.
 - Do not pad the summary with generic praise. If there is nothing notable to add
   beyond the per-criterion reasoning, keep the summary short.
+
+File-by-file reporting:
+- Beyond the criteria above, produce one `file_reports` entry for every
+  qualifying file you actually opened and read in the repository context —
+  not only files where you found a problem. A qualifying file is
+  {file_report_scope}.
+- Do not report on lockfiles, generated/build output, binary or data-only
+  files, or any file you did not actually read.
+- Every qualifying file present in the repository context must get exactly
+  one entry. If a qualifying file has nothing wrong with it for this axis,
+  set verdict to "clean" and write one sentence saying what it does right
+  (e.g. the pattern it correctly follows) — do not omit it and do not write
+  an empty or generic summary.
+- If a qualifying file has one or more problems relevant to this axis, set
+  verdict to "issues" and summarize the specific problem(s) in 1-3
+  sentences, consistent with (never more lenient than) the criterion
+  evidence above.
+- Do not invent files that are not present in the repository context.
 """
+
+
+def _file_report_scope(axis: str) -> str:
+    extensions = ", ".join(sorted(SOURCE_SUFFIXES))
+    filenames = ", ".join(sorted(qualifying_filenames_for_axis(axis)))
+    return (
+        f"any file with one of these extensions ({extensions}), plus these "
+        f"filenames when present in the repository ({filenames})"
+    )
 
 
 def build_axis_prompt(rubric: Rubric, repo_url: str) -> str:
@@ -54,4 +82,5 @@ def build_axis_prompt(rubric: Rubric, repo_url: str) -> str:
         repo_url=repo_url,
         axis=rubric.axis,
         criteria_list=criteria_list,
+        file_report_scope=_file_report_scope(rubric.axis),
     )

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from app.analysis.prompts import build_axis_prompt
 from app.analysis.rubrics import Rubric
-from app.analysis.schemas import AxisResult, CriterionResult, axis_json_schema
+from app.analysis.schemas import AxisResult, CriterionResult, FileReport, axis_json_schema
 from app.core.config import settings
 
 _client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
@@ -18,6 +18,7 @@ class AnalysisError(Exception):
 class _AxisResultDraft(BaseModel):
     axis: str
     criteria: list[CriterionResult]
+    file_reports: list[FileReport]
     summary: str
 
 
@@ -62,6 +63,7 @@ def run_axis_analysis(rubric: Rubric, repo_url: str, repo_context: str) -> AxisR
     return AxisResult(
         axis=draft.axis,
         criteria=draft.criteria,
+        file_reports=draft.file_reports,
         weighted_score=weighted_score,
         summary=draft.summary,
     )

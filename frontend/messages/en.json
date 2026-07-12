@@ -214,10 +214,12 @@
     "empty": "You're all caught up.",
     "types": {
       "analysis_completed": "Analysis completed",
+      "analysis_blocked": "Insufficient credit — analysis stopped",
       "low_credit": "Low credit balance",
-      "payment_success": "Payment successful",
-      "payment_failed": "Payment failed"
-    }
+      "credit_exhausted": "Credit balance exhausted"
+    },
+    "enablePush": "Enable notifications",
+    "pushDenied": "Notifications blocked"
   },
   "dashboardSettings": {
     "title": "Account Settings",
@@ -315,5 +317,10 @@
       "quality": { "title": "Uncompromising Quality", "description": "Building tools that developers can trust." },
       "community": { "title": "Community Driven", "description": "Listening to our users and open-source contributors." }
     }
+  },
+  "seo": {
+    "title": "GitDeep — AI Repo Review",
+    "description": "AI-powered GitHub repository analysis: architecture, security, community, and documentation scoring.",
+    "keywords": "AI code review, github analysis, static analysis, repository scoring"
   }
 }

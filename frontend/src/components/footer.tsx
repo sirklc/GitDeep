@@ -32,12 +32,11 @@ export default function FooterSection() {
         {
             group: t('groups.product'),
             items: [
-                { title: t('links.features'), href: '/features' },
-                { title: t('links.solution'), href: '/solution' },
+                { title: t('links.features'), href: '#features' },
+                { title: t('links.solution'), href: '#solution' },
                 { title: t('links.customers'), href: '#' },
-                { title: t('links.pricing'), href: '/pricing' },
+                { title: t('links.pricing'), href: '#pricing' },
                 { title: t('links.help'), href: '#' },
-                { title: t('links.about'), href: '/about' },
             ],
         },
         {
@@ -55,7 +54,6 @@ export default function FooterSection() {
         {
             group: t('groups.company'),
             items: [
-                { title: t('links.about'), href: '/about' },
                 { title: t('links.careers'), href: '#' },
                 { title: t('links.blog'), href: '#' },
                 { title: t('links.press'), href: '#' },

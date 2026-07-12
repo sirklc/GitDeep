@@ -37,14 +37,56 @@ export const api = {
     get: <T>(path: string) => request<T>(path),
     post: <T>(path: string, body?: unknown) =>
         request<T>(path, { method: "POST", body: body ? JSON.stringify(body) : undefined }),
+    delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
 
 export type UserOut = {
     id: number;
     email: string;
     locale: string;
+    credit_balance: number;
 };
 
 export type MessageOut = {
     message: string;
 };
+
+export function getMe(): Promise<UserOut> {
+    return api.get<UserOut>("/auth/me");
+}
+
+export type NotificationType = "analysis_completed" | "analysis_blocked" | "low_credit" | "credit_exhausted";
+
+export type NotificationItem = {
+    id: number;
+    type: NotificationType;
+    repo: string | null;
+    read: boolean;
+    created_at: string;
+};
+
+export function getNotifications(): Promise<NotificationItem[]> {
+    return api.get<NotificationItem[]>("/notifications");
+}
+
+export function markNotificationRead(id: number): Promise<MessageOut> {
+    return api.post<MessageOut>(`/notifications/${id}/read`);
+}
+
+export function reportDownloadUrl(jobId: string): string {
+    return `${API_URL}/analysis/${jobId}/report`;
+}
+
+export type PushSubscriptionPayload = {
+    endpoint: string;
+    p256dh: string;
+    auth: string;
+};
+
+export function subscribePush(payload: PushSubscriptionPayload): Promise<MessageOut> {
+    return api.post<MessageOut>("/push/subscribe", payload);
+}
+
+export function unsubscribePush(endpoint: string): Promise<MessageOut> {
+    return api.post<MessageOut>("/push/unsubscribe", { endpoint });
+}
